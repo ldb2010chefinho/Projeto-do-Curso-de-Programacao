@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop</title>
+    <style>
+        #divBill1, #divBill2 {
+          width: 170px;
+          height: 280px;
+          padding: 5px;
+          border: 1px solid #aaaaaa;
+        }
+
+        #boxes{
+            display: flex;
+            justify-content: space-around;
+        }
+    </style>
+</head>
+<body>
+    <h1>Arrasta e solta</h1>
+    <p>Arraste o Bill para o retangulo</p>
+
+    <div id="boxes">
+        <div id="divBill1" ondrop="drop_handler(event)" ondragover="allowDrop(event)">
+        </div>
+
+        <div id="divBill2" ondrop="drop_handler(event)" ondragover="allowDrop(event)">
+        </div>
+    </div>
+
+    <img id="BillImg" src="bill cipher api.png" alt="Imagem do Bill Cipher do Grafity Falls" height="300" draggable="true" ondragstart="drag_handler(event)">
+
+    <script>
+        function drag_handler(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        };
+        
+        function drop_handler(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            ev.target.appendChild(document.getElementById(data)); 
+        };
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+    </script>
+</body>
+</html>

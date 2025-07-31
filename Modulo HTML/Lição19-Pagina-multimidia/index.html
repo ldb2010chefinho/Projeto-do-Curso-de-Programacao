@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimidia Parque de Diversoes</title>
+</head>
+<body>
+    <h1>Criando uma pagina de parque de diversoes</h1>
+    <p>O <strong>objetivo:</strong>Criar uma pagina web simples para praticar a adição de arquvos multimidias</p>
+
+    <Section>
+        <h2>Inserindo imagem</h2>
+        <p>A tag img é usado para inserir imagens</p>
+        <h5>Imagem de forma basica</h5>
+        <img src="src/img/universal-studios-1738318_1920.jpg" alt="Globo da Universal Studios no parque de diversão em Orlando-USA" height="900" width="1200" title="Parque da Universal Studios">
+
+        <h5>Inserindo com acessibilidade</h5>
+        <figure>
+            <img src="src/img/universal-studios-1738318_1920.jpg" alt="Globo da Universal Studios no parque de diversão em Orlando-USA" height="900" width="1200" >
+            <figcaption>Parque da Universal Studios</figcaption>
+        </figure>
+        <h5>Inserindo imagem com <strong>URL</strong></h5>
+        <small>Não e recomendado por questoes de direitos autorais ou a imagem pode ser removida ou alterada pelo proprietario</small>
+        <img src="https://laemorlando.travel/wp-content/uploads/2019/01/universal_orlando_resort-_map.png.webp" alt="Retirado do site lá em Orlando.travel" title="Mapa do Parque da Universal Studios">
+
+        <h5>Inserindo GIF</h5>
+        <img src="src/img/spiderman-6859_128.gif" alt="Foto do homem aranha em uma teia">
+    </Section>
+    <hr>
+    <Section>
+        <h2>Inserindo audio </h2>
+        <p>A tag audio é usado para inserir audios</p>
+        <small>Existem três formatos de áudio suportados em HTML5: MP3, WAV e OGG</small>
+        <p>Pode-se utilizar os atributos autoplay, controls, loop, muted</p>
+        <br>
+        <audio controls>
+            <source src="src/audio/parque-centenario-23146.mp3" type="audio/mp3">
+            <p>O seu navegador não suporta audio HTML</p>
+        </audio>
+    </Section>
+    <hr>
+    <section>
+        <h2>Inserindo video</h2>
+        <p>A tag video é usado para inserir videos</p>
+        <small>Existem três formatos de vídeo suportados em HTML5: MP4, WebM e Ogg.</small>
+        <small>Os navegadores móveis podem suportar formatos adicionais não compatíveis com seus equivalentes de desktop, assim como podem não suportar os mesmos formatos da versão para desktop.</small>
+        <p>Pode-se utilizar os atributos autoplay, controls, loop, muted, height, width, poster</p>
+        <br>
+        <video autoplay loop height="675" width="1200" >
+            <source src="src/video/17115-278832120_small.mp4" type="video/mp4">
+        </video>
+        <br>
+        <h5>Inserindo video do Youtube</h5>
+        <iframe 
+        width="560" 
+        height="315" 
+        src="https://www.youtube.com/embed/fax6tQOvIkw?si=AwwYSxOzwkWs1e_2" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        referrerpolicy="strict-origin-when-cross-origin" 
+        allowfullscreen>
+        </iframe>
+    </section>
+</body>
+</html>

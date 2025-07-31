@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcomponents</title>    
+    <style>
+      .product-card {
+        border: 1px solid #ccc;
+        padding: 16px;
+        margin: 10px;
+        border-radius: 8px;
+        max-width: 250px;
+        text-align: center;
+      }
+      .product-card img {
+        max-width: 100%;
+      }
+    </style>
+</head>
+<body>
+    <!-- Template que será reutilizado -->
+  <template id="product-template">
+    <div class="product-card">
+      <img src="" alt="Imagem do Produto" class="product-image">
+      <h3 class="product-name"></h3>
+      <p class="product-description"></p>
+      <span class="product-price"></span>
+    </div>
+  </template>
+
+  <!-- Seção onde os produtos serão inseridos -->
+  <div id="products-container"></div>
+  <script src="template.js" defer></script>
+</body>
+</html>

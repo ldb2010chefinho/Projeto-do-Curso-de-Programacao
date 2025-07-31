@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API notificação</title>
+</head>
+<body>
+    <h1>Exemplo de Notificação com HTML5</h1>
+
+    <button onclick="notifyMe()">Ativar Notificação</button>
+ 
+    <script>
+        function notifyMe() {
+            if (Notification in window) {
+                Notification.requestPermission().then((permission) =>{
+                    console.log(permission);
+                    if (permission === "granted") {
+                        new Notification("Olá! Isso é uma notificação.");}
+                });
+            } else {
+                alert("Seu navegador não suporta notificação")
+            }
+        }
+    </script>
+</body>
+</html>

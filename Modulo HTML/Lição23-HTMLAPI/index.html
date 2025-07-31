@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML API</title>
+</head>
+<body>
+    <h1>API de armazenamento local</h1>
+    <h2>local storage e session Storage</h2>
+    <h3>O objeto localStorage armazena os dados sem data de expiração. Os dados não serão excluídos quando o navegador for fechado.</h3>
+    <h3>O objeto sessionStorage armazena os dados para apenas uma sessão. Os dados são deletados quando o usuário fecha a aba específica do navegador.</h3>
+    <label for="nome">Insira seu nome</label>
+    <input  id="nome" name="nome" type="text" placeholder="Nome" autocomplete="off" required>
+    <br><br>
+    <label for="numero">Insira um numero</label>
+    <input type="number" id="numero" name="numero" placeholder="Numero" required>
+    <br><br>
+    <button onclick="amarzenar()" value="enviar">Enviar</button>
+    
+        <p>Valor amarzenado localmente: <span id="nomeUsuario"></span></p>
+        <p>Valor armazenado por seção<span id="numeroUsuario"></span></p>
+   
+    <script>
+        if(localStorage.userName){
+            document.getElementById("nomeUsuario").innerText=localStorage.getItem("userName");
+            document.getElementById("numeroUsuario").innerText=sessionStorage.getItem("userNumber");
+        };
+
+            function amarzenar() {
+                var nome_usuario=document.getElementById("nome").value;
+                var numero_usuario=document.getElementById("numero").value;
+
+                localStorage.setItem("userName",nome_usuario);
+                sessionStorage.setItem("userNumber",numero_usuario);
+            };
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API de geolocalização</title>
+</head>
+<body>
+    <h1>Geolocalização</h1>
+    <p>Permite acessar a localização geográfica do dispositivo do usuário.</p>
+    <br>
+    <h4>Vamos descobrir a sua posição atual?</h4>
+    <br>
+    <button onclick="getLocation()">Descobrir posição</button>
+    <br>
+    <p id="coordenada"></p>
+    <p id="tempo"></p>
+    <script>
+        posicao=document.getElementById("coordenada")
+        tempo=document.getElementById("tempo")
+        function getLocation() {
+            if (navigator.geolocation) {
+               navigator.geolocation.getCurrentPosition((position) =>{
+                console.log(position);
+                 posicao.innerHTML= "Latitude: "+ position.coords.latitude+"<br> longitude: "+ position.coords.longitude;
+                 tempo.innerHTML= "Tempo: "+ position.timestamp;
+               }); 
+            }
+            else{
+                posicao.innerHTML= "Geolocation não é suportado pelo navegador"
+            };
+        }
+    
+    </script>
+</body>
+</html>

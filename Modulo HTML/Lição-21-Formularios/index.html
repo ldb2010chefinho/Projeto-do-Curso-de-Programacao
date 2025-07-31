@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+</head>
+<body>
+    <h1>Formularios</h1>
+    <p>Formulario e um tipo de documento  onde podem se inserir as informaçoes como por exmplo:Nome,Senha,Email,etc... Essas informaçaoes são coletadas e manipuladas</p>
+
+    <form>
+
+        <fieldset>
+            <legend><b>Campos de entrada</b></legend>
+            <label for="nome">Insira seu nome</label>
+            <input  id="nome" name="nome" type="text" placeholder="Nome" autocomplete="off" required>
+            <br><br>
+            <label for="email">Insira seu email</label>
+            <input id="email" name="email" type="email" placeholder="Email"  required>
+            <br><br>
+            <label for="senha">Insira sua senha</label>
+            <input id="senha" name="senha" type="password" placeholder="Senha" minlength="8" maxlength="12" pattern="[a-z0-9]" title="Insira uma quantidade minima de 8 e maxima 12 de letras ou numeros" required>
+            <br><br>
+            <label for="idade">Insira sua idade</label>
+            <input type="number" id="idade" name="idade" placeholder="Idade" min="0" max="150" required>
+            <br><br>
+            <label for="data">Insira sua data de nascimento</label>
+            <input type="date" id="data" name="data-nascimento"required>
+            <br><br>
+            <label for="arquivo">Fazer upload do arquivo</label>
+            <input type="file" id="arquivo" name="file" accept="image/*,.pdf" required>
+        </fieldset>
+
+        <fieldset>
+            <legend><b>Campo de texto multilinha</b></legend>
+            <label for="mensagem">Escreva a sua mensagem</label>
+            <br>
+            <textarea id="mensagem" placeholder="Escreva sua mensagem" rows="4" cols="50"></textarea>
+        </fieldset>
+
+        <fieldset>
+            <legend><b>Seleção e opções</b></legend>
+            <h3>Lista suspensa de opções - select</h3>
+            <p>O elemento select define uma lista suspensa.</p>
+
+            <label for="curso"></label>
+            <select id="curso">
+                <option value="Medicina">Medicina</option>
+                <option value="Engenharia">Engenharia</option>
+                <option value="Robotica">Robotica</option>
+                <option value="Direito">Direito</option>
+            </select>
+
+            <h3>Sugestões de entrada para campos - datalist</h3>
+            <p>O elemento datalist especifica uma lista de opções predefinidas para um elemento de entrada.</p>
+            <label for="cidade">Escolha uma cidade</label>
+            <input list="cidade">
+            <datalist id="cidade">
+                <option value="São Paulo">
+                <option value="Barueri">
+                <option value="Bragança Paulista">
+                <option value="Praia Grande">
+                <option value="Santos">
+
+            </datalist>
+        </fieldset>
+
+        <fieldset>
+            <legend><b>Controles e Marcadores</b></legend>
+
+            <h3>Radio Buttons</h3>
+            <p>Escolha a melhor forma de contato:</p>
+            <input type="radio" id="EmailContato" name="EmailContato" value="Email">
+            <label for="EmailContato">Email</label><br>
+            <input type="radio" id="Whatsapp1" name="Whatsapp" value="Whatsapp">
+            <label for="Whatsapp1">Whatsapp</label><br>
+            <input type="radio" id="Telefone1" name="Telefone" value="Telefone">
+            <label for="Telefone1">Telefone</label>
+
+            <h3>Checkbox </h3>
+            <p>Escolha o melhor periodo de contato:</p>
+            <input type="Checkbox" id="Manha" name="manha" value="Manha">
+            <label for="Manha">Manhã</label><br>
+            <input type="checkbox" id="Tarde" name="Tarde" value="Tarde">
+            <label for="Tarde">Tarde</label><br>
+            <input type="checkbox" id="Noite" name="Noite" value="Noite">
+            <label for="Noite">Noite</label>
+        </fieldset>   
+
+        <h3>Button e Input(Reset e Submit)</h3>
+        <p>Tag Button</p>
+        <button type="submit">Enviar</button>
+        <button type="reset">Apagar</button>
+
+        <p>Tag Input</p>
+        <input type="submit" value="Enviar">
+        <input type="reset" value="Apagar">
+    </form>   
+
+    
+</body>
+</html>

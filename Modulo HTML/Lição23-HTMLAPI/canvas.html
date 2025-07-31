@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Canvas</title>
+</head>
+<body>
+    <h1>Canvas</h1>
+    <p>A API Canvas permite desenhar gráficos, imagens e formas diretamente em uma página HTML, usando código JavaScript. Pode ser usada para criar gráficos, animações e até jogos simples.</p>
+    <br>
+    <canvas id="myCanvas" width="600" height="400" style="border: 1px solid darkgreen;"></canvas>
+
+    <script>
+     const canvas = document.getElementById('myCanvas');
+     const ctx = canvas.getContext('2d');
+     
+     // Draw a green square
+     ctx.fillStyle ="green";
+     ctx.fillRect(250, 140, 100, 100);
+     ctx.stroke();   
+     // Draw a blue circle
+     ctx.beginPath()
+     ctx.fillStyle ="blue"
+     ctx.arc(300, 90, 50,0, 2*Math.PI)
+     ctx.stroke();
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Fit</title>
+    <style>
+        .fill{
+            object-fit: fill;
+        }
+
+        img{
+            width: 200px;
+            height:225px;
+            border: 9px solid burlywood;
+        }
+
+        .contain{
+            object-fit: contain;
+        }
+
+        .cover{
+            object-fit: cover;
+        }
+
+        .scale-down{
+            object-fit: scale-down;
+        }
+
+        .none{
+            object-fit: none;
+        }
+
+      
+        
+    </style>
+</head>
+<body>
+    <h1>Propriedade Object-fit</h1>
+    <div>
+        <h2>Sem object-fit</h2>
+            <img src="img/Island-Adventures-Entrada.png" alt="Island-Adventures Orlando Florida EUA">                          
+    </div>
+
+    <div>
+        <h2>Object-fit: fill (valor padrao)</h2>
+            <img src="img/Island-Adventures-Entrada.png" alt="Island-Adventures Orlando Florida EUA" class="fill">                          
+    </div>
+    
+    <div>
+        <h2>Object-fit: contain</h2>
+            <img src="img/Island-Adventures-Entrada.png" alt="Island-Adventures Orlando Florida EUA" class="contain">                          
+    </div>
+    
+    <div>
+        <h2>Object-fit: cover</h2>
+            <img src="img/Island-Adventures-Entrada.png" alt="Island-Adventures Orlando Florida EUA" class="cover">                          
+    </div>
+    
+    <div>
+        <h2>Object-fit: scale-down</h2>
+            <img src="img/Island-Adventures-Entrada.png" alt="Island-Adventures Orlando Florida EUA" class="scale-down">                          
+    </div>
+   
+    <div>
+        <h2>Object-fit: none</h2>
+            <img src="img/Island-Adventures-Entrada.png" alt="Island-Adventures Orlando Florida EUA" class="none">                          
+    </div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Column</title>
+    <style>
+        .container{
+          background-color: darkgreen;
+          display: grid;
+          grid-template-columns: 100px 100px 100px 100px;
+          grid-template-rows: repeat(9, 100px);
+          row-gap: 15px;
+          column-gap: 15px;
+          padding: 15px;
+          margin: 15px;
+          border:5px solid lightgreen;
+          
+        }
+  
+        .container > div{
+          border: 2px solid lightgreen;
+          background-color: wheat;
+        }
+
+        .item1{
+            grid-column-start: 1;
+            grid-column-end: 5;
+        }
+
+        .item2{
+            grid-column-start: 1;
+            grid-column-end: 4;
+        }
+        .item3{
+            grid-column-start: 4;
+            grid-column-end: 5;
+        }
+        .item4{
+            grid-column-start: 1;
+            grid-column-end: 2;
+        }
+        .item5{
+            grid-column-start: 2;
+            grid-column-end: 3;
+        }
+        .item6{
+            grid-column-start: 3;
+            grid-column-end: 4;
+        }
+        .item7{
+            grid-column-start: 4;
+            grid-column-end: 5;
+        }
+        .item8{
+            grid-column-start: 1;
+            grid-column-end: 2;
+        }
+        .item9{
+            grid-column-start: 2;
+            grid-column-end: 5;
+        }
+
+      </style>
+  </head>
+  <body>
+    <p>
+     A propriedade grid-column define quais colunas colocaum item
+    </p>
+      <div class="container">
+          <div class="item1">1</div>
+          <div class="item2">2</div>
+          <div class="item3">3</div>
+          <div class="item4">4</div>
+          <div class="item5">5</div>
+          <div class="item6">6</div>
+          <div class="item7">7</div>
+          <div class="item8">8</div>
+          <div class="item9">9</div>
+      </div>
+  </body>
+  </html>

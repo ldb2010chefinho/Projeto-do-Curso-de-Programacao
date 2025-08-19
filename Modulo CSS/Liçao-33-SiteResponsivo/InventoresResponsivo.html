@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRASIL</title>
+    <link rel="stylesheet" href="InventoresResponsivo.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="container">
+        <nav id="nav">
+            
+                <h3 class="logo">BR</h3>
+                <ul class="nav-list">
+                    <li><a class="nav-link" href="InventoresResponsivo.html">Home</a></li>
+                    <li><a class="nav-link" href="#img-invencao">Invenções</a></li>
+                    <li><a class="nav-link" href="#form">Contato</a></li>
+                  </ul>
+            
+        </nav>
+        <header id="header">
+            <img  src="https://arkade.com.br/wp-content/uploads/2023/02/MadeInBrazilFeaturette_Easy-Resize.com_.jpg" alt="">
+        </header>
+        <aside id="aside">
+            <h3>Categorias</h3>
+            <ul>
+                <li><a class="nav-link" href=""> Alimentos</a></li>
+                <li><a class="nav-link" href=""> Comunicação</a></li>
+                <li><a class="nav-link" href=""> Saúde</a></li>
+                <li><a class="nav-link" href=""> Tecnologia</a></li>
+                <li><a class="nav-link" href=""> Transporte</a></li>
+                <li><a class="nav-link" href=""> Outros</a></li>
+            </ul>
+        </aside>
+        <main id="main">
+            <section id="img-invencao">
+                <div id="img1"><img src="https://mega.ibxk.com.br/2023/01/13/13145306415247.jpg?ims=fit-in/800x500" alt=""></div>
+                <div id="img2"><img src="https://mega.ibxk.com.br/2023/01/13/13145308399248.jpg?ims=fit-in/800x500" alt=""></div>
+                <div id="img3"><img src="https://mega.ibxk.com.br/2023/01/13/13145310360249.jpg?ims=fit-in/800x500" alt=""></div>
+                <div id="img4"><img src="https://mega.ibxk.com.br/2023/01/13/13145312324250.jpg?ims=fit-in/800x500" alt=""></div>
+                <div id="img5"><img src="https://mega.ibxk.com.br/2023/01/13/13145314543251.jpg?ims=fit-in/800x500" alt=""></div>
+                <div id="img6"><img src="https://mega.ibxk.com.br/2023/01/13/13145318097253.jpg?ims=fit-in/800x500" alt=""></div>
+                <div id="img7"><img src="https://mega.ibxk.com.br/2023/01/13/13145320644254.jpg?ims=fit-in/800x500" alt=""></div>
+                <div id="img8"><img src="https://mega.ibxk.com.br/2023/01/13/13145322675255.jpg?ims=fit-in/800x500" alt=""></div>
+                <div id="img9"><img src="https://mega.ibxk.com.br/2023/01/13/13145325523256.jpg?ims=fit-in/800x500" alt=""></div>
+            </section>
+            <section id="inventores-brasileiros">
+                <h3>Inventores brasileiros</h3>
+                <hr>
+                <p>Os inventores brasileiros desempenham um papel fundamental na história da ciência e da tecnologia, com contribuições que refletem a criatividade, engenhosidade e determinação de nosso povo. Ao longo dos anos, diversas invenções e inovações brasileiras transformaram a vida cotidiana e impulsionaram o desenvolvimento em diferentes áreas, desde a medicina até as telecomunicações. Nesta seção, vamos conhecer alguns desses inventores, cujas ideias e descobertas continuam a influenciar o mundo até os dias de hoje.</p>
+                
+                <template id="inventor-template">
+                    <div class="inventor-card">
+                      <img src="" alt="Imagem do Produto" class="inventor-image">
+                    
+                      <h3 class="inventor-name"></h3>
+                      <h4 class="invencao"></h4>
+                      <p class="inventor-description"></p>
+                      <button> <a href="" target="_blank" class="inventorHref">Saber mais</a> </button>
+                    
+                      
+                    </div>
+                </template>
+                
+                  
+                  <div id="inventor-container"></div>
+            </section>
+        </main>
+        <form  id="form">
+            <h3>Entre em contato</h3>
+            <hr>
+            <p>Quer sugerir uma invenção ou ator para gente enviar comentario? Ficaremos felizes com o seu contato :)</p>
+            <form action="InventoresResponsivo.html">
+                <label for="Nome">Nome</label><br>
+                <input type="text" id="Nome" name="nome" placeholder="Insira seu nome"><br><br>
+
+                <label for="Email">E-mail</label><br>
+                <input type="email" id="Email" name="Email" placeholder="Insira seu E-mail"><br><br>
+
+                <label for="Comentario">Sugestão/Comentarios:</label><br>
+                <textarea name="Mensagem" id="Mensagem" rows="12" cols="40" placeholder="Deixe seu comentario"></textarea><br>
+
+                <input type="checkbox" id="Permissao" value="No" name="Permissao">
+                <label for="Permissao">Eu aceito e autorizo receber informações sobre Invenções Brasileiras no meu e-mail.</label><br><br>
+
+                <input type="submit" value="Enviar" id="BtnEnviar">
+            </form>
+        </form>
+        <footer id="footer">
+            <a href="InventoresResponsivo.html"><button id="BtnPra-cima">Subir pra cima</button></a>
+            <div class="Rede-Social">
+                <a href="https://www.youtube.com/@ldb2010chefinho" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://github.com/ldb2010chefinho"><i class="fa-brands fa-github"></i></a>
+            </div>
+            <p id="Copyright">Desenvolvido por: ldb2010chefinho</p>
+        </footer>
+    </div>
+    <script src="InventoresResponsivo.js" defer></script>
+</body>
+</html>

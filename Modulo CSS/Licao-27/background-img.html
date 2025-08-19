@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background</title>
+    <style>
+       #contain{
+            background-image: url(img/Logo-Universal.jpg);
+            background-size: contain;
+            border: 2px solid green;
+        }
+
+        #cover{
+            background-image: url(img/Logo-Universal.jpg);
+            background-size: cover;
+            border: 2px solid green;
+        }
+
+        #sem{
+            background-image: url(img/Logo-Universal.jpg);
+            border: 2px solid green;
+        }
+
+        #repeat{
+            background-image: url(img/Logo-Universal.jpg);
+            border: 2px solid green;
+            height: 1000px;
+            background-repeat: repeat-y;
+        }
+    </style>
+</head>
+<body>
+    <h1>Propriedade background-size</h1>
+    <h2> background-size: contain</h2>
+    <div id="contain">
+     <p>  Universal Studios</p>
+    </div>
+
+    <h2>background-size: cover</h2>
+    <div id="cover">
+        <p>  Universal Studios</p>
+    </div>
+
+    <h2>background-size: sem</h2>
+    <div id="sem">
+        <p>  Universal Studios</p>
+    </div>
+
+    <h2>background-repeat: repeat-y</h2>
+    <div id="repeat">
+        <p>  Universal Studios</p>
+    </div>
+    
+    <h2>Imagem Original</h2>
+    <img src="img/Logo-Universal.jpg" alt="Logo Universal Studios Orlando Florida Eua">
+</body>
+</html>

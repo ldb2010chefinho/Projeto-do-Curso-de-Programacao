@@ -1,0 +1,29 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Knewave&display=swap');
+
+.knewave-regular {
+  font-family: "Knewave", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+@font-face {
+    font-family: Stranger_back_in_the_night ;
+    src: url(/Aula/ModuloCSS/Liçao26-Tipografia-EfeitosVisuais/stranger_back_in_the_night/Stranger_back_in_the_Night.ttf);
+}
+
+p{
+    font-family: Stranger_back_in_the_night, Papyrus, fantasy;
+    font-size: 50px;
+    line-height: 50px;
+    text-align: justify;
+    text-shadow: 2px 2px 10px red ;
+}
+
+h1 {
+    font-family: "Knewave", system-ui;
+    font-weight: 400;
+    font-style: normal;
+  }
+  

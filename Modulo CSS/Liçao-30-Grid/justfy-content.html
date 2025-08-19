@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Justfy Content</title>
+    <style>
+        .container{
+          background-color: darkgreen;
+          display: grid;
+          grid-template-columns: 100px 100px 100px 100px;
+          grid-template-rows: 100px 100px 300px;
+          row-gap: 15px;
+          column-gap: 15px;
+          padding: 15px;
+          margin: 15px;
+          border:5px solid lightgreen;
+          justify-content: space-evenly;
+        }
+  
+        .container > div{
+          border: 2px solid lightgreen;
+          background-color: wheat;
+        }
+      </style>
+  </head>
+  <body>
+    <p>
+      A propriedade justify-content e usada para alinhar toda a grade dentro do conteiner na direcao da fileira (main axis).
+    </p>
+      <div class="container">
+          <div>1</div>
+          <div>2</div>
+          <div>3</div>
+          <div>4</div>
+          <div>5</div>
+          <div>6</div>
+          <div>7</div>
+          <div>8</div>
+          <div>9</div>
+      </div>
+  </body>
+  </html>

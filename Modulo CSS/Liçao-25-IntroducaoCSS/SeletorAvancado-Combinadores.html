@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seletor Avançado Combinador</title>
+
+    <style>
+        #Times p{
+            font-size:  large;
+            color: green;
+        }
+
+        #Herois > p{
+            background-color: rgb(255, 145, 0);
+        }
+
+        #Vilao + p{
+            background-color: red;
+        }
+
+        #Pais ~ p{
+            background-color: turquoise;
+        }
+    </style>
+
+</head>
+<body>
+    <H2>Combinadores: Um combinador é algo que explica o relacionamento entre os seletores.</H2> 
+
+    <h3>Combinador Descendente (espaço)</h3>
+    <p>O combinador descendente aplica estilização a todos os elementos que são descendentes de um elemento especificado</p>
+    <div id="Times">
+        <p>Palmeiras</p>
+        <p>Real Madrid</p>
+        <Section><p>Manchester City</p></Section>
+        <h4>Times</h4>
+    </div>
+        <p>Vasco</p>
+        <p>Portuguesa</p>
+        
+        <hr>
+    <h3>Combinador Filho (>)</h3>
+    <p>O combinador filho seleciona todos os elementos que são filhos de um elemento especificado.</p>
+    <div id="Herois">
+        <p>Motoqueiro Fantasma</p>
+        <p>Pantera Negra</p>
+        <Section><p>Deadpool</p></Section>
+        <h4>Heróis</h4>
+    </div>
+        <p>Wolverine</p>
+        <p>Batman</p>
+
+    <hr>
+
+    <h3>Combinador Irmão Seguinte (+)</h3>
+    <p>O combinador irmão seguinte seleciona um elemento que esteja diretamente após outro elemento específico e tenha o mesmo pai.</p>
+    <div id="Vilao">
+        <p>Venom</p>
+        <p>Coringa</p>
+        <Section><p>Thanos</p></Section>
+        <h4>Vilão</h4>
+    </div>
+        <p>Capitão Gancho</p>
+        <p>Plancton</p>
+
+        <hr>
+
+    <h3>Combinador Irmão Subsequente (~)</h3>
+    <p>O combinador irmão seguinte seleciona um elemento que esteja diretamente após outro elemento específico e tenha o mesmo pai.</p>
+    <div id="Pais">
+        <p>Brasil</p>
+        <p>Portugal</p>
+        <Section><p>EUA
+        </p></Section>
+        <h4>Pais</h4>
+    </div>
+        <p>Honduras</p>
+        <p>França</p>
+
+</body>
+</html>

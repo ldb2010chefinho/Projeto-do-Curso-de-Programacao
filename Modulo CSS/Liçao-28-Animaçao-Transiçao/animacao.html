@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=
+    , initial-scale=1.0">
+    <title>Animação</title>
+    <style>
+        @keyframes TextoSurpresa{
+            from{color: black;}
+            to{ color:darkgreen;}
+        }
+
+        @keyframes Movimento{
+            from{left: 0px;}
+            to{left: 300px;}
+        }
+        #ldb{
+            height: 80px;
+            width: 342px;
+            background-color: black;
+            animation-name: TextoSurpresa;
+            animation-duration: 5s;
+            animation-iteration-count: infinite;
+        }
+
+        p{
+            font-size: 50px;
+        }
+
+        #linear,#ease,#ease-in,#ease-out,#ease-in-out{
+            height: 80px;
+            width: 300px;
+            background-color: darkgreen;
+            position: relative;
+            animation-name: Movimento;
+            animation-duration: 5s;
+            animation-iteration-count: infinite;
+        }
+
+        #linear{
+            animation-timing-function: linear;
+        }
+
+        #ease{
+            animation-timing-function: ease;
+        }
+
+        #ease-in{
+            animation-timing-function: ease-in;
+        }
+
+        #ease-out{
+            animation-timing-function: ease-out;
+        }
+
+        #ease-in-out{
+            animation-timing-function: ease-in-out;
+        }
+    </style>
+
+</head>
+<body>
+    <h1>Animação CSS</h1>
+    <div id="ldb">
+        <p>ldb2010chefinho</p>
+    </div>
+
+    <div id="linear">
+        <p>linear</p>
+    </div>
+
+    <div id="ease">
+        <p>ease</p>
+    </div>
+
+    <div id="ease-in">
+        <p>ease-in</p>
+    </div>
+
+    <div id="ease-out">
+        <p>ease-out</p>
+    </div>
+
+    <div id="ease-in-out">
+        <p>ease-in-out</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .item1{
+            grid-area: header;
+            background-color: aquamarine;
+        }
+
+        .item2{
+            grid-area: article;
+            background-color: lightblue;
+        }
+
+        .item3{
+            grid-area: aside;
+            background-color: lightblue;
+        }
+
+        .item4{
+            grid-area: footer;
+            background-color: aquamarine;
+        }
+
+        .conteiner{
+            display: grid;
+            grid-template-areas: 
+            ' header header'
+            'aside article'
+            'footer footer';
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            background-color: blue;
+            padding: 15px;
+            margin: 15px;
+            border: 5px solid darkblue;
+        }
+        
+        [class*="item"]{
+            padding: 15px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="conteiner">
+        
+        <header class="item1">
+             HEADER
+        </header>
+
+        <article class="item2">
+    <h1>My article</h1>
+
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequuntur vero praesentium voluptatum? Aliquam nesciunt rem tenetur fuga, eum velit mollitia fugit sint debitis similique iure consequuntur neque totam labore maiores?</p>
+
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequuntur vero praesentium voluptatum? Aliquam nesciunt rem tenetur fuga, eum velit mollitia fugit sint debitis similique iure consequuntur neque totam labore maiores?</p>
+</article>
+
+<aside class="item3">
+    <h2>ORTHER THINGS:</h2>
+    <p>ORTHER THINGS ORTHER THINGS ORTHER THINGS ORTHER THINGS ORTHER THINGS ORTHER THINGS ORTHER THINGS ORTHER THINGS ORTHER THINGS ORTHER THINGS ORTHER THINGS ORTHER THINGS ORTHER THINGS ORTHER THINGS ORTHER THINGS ORTHER THINGS ORTHER THINGS ORTHER THINGS</p>
+</aside>
+
+<footer class="item4">
+    Contact:D0N'T.C0NTACT.ME.com
+</footer>
+</div>
+</body>
+</html>

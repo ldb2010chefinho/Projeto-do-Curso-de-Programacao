@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breakpoint</title>
+    <style>
+        #Conteiner{
+            background-color: aquamarine;
+        }
+
+        @media screen and (max-width: 600px){
+           #Conteiner{
+             background-color: red;
+             font-size: 15px;
+            }
+        }
+        
+        @media screen and (600px<= width <= 767px){
+           #Conteiner{
+             background-color: orange;
+             font-size: 25px;
+            }
+        }
+
+        @media screen and (min-width: 768px) and (max-width: 991px){
+           #Conteiner{
+             background-color: yellow;
+             font-size: 35px;
+            }
+        }
+
+        @media screen and (min-width: 992px){
+           #Conteiner{
+             background-color: yellowgreen;
+             font-size: 45px;
+            }
+        }
+
+
+        @media screen and (min-width: 1200px){
+           #Conteiner{
+             background-color: green;
+             font-size: 55px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="Conteiner">
+        <p>Redimencione a janela do navegador</p>
+    </div>
+</body>
+</html>

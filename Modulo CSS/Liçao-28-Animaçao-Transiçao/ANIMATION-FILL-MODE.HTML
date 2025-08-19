@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation-fill-mode</title>
+    <style>
+        @keyframes TextoSurpresa{
+            from{color: black;}
+            to{ color:darkgreen;}
+        }
+
+        #ldb{
+            height: 80px;
+            width: 342px;
+            background-color: black;
+            animation-name: TextoSurpresa;
+            animation-duration: 5s;
+        }
+
+        #ldb2{
+            height: 80px;
+            width: 342px;
+            background-color: black;
+            animation-name: TextoSurpresa;
+            animation-duration: 5s;
+            animation-fill-mode: forwards;
+        }
+
+        p{
+            font-size: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="ldb">
+        <p>ldb2010chefinho</p>
+    </div>
+
+    <div id="ldb2">
+        <p>ldb2010chefinho</p>
+    </div>
+</body>
+</html>

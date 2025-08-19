@@ -1,0 +1,295 @@
+*{
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0%;
+}
+
+.container{
+    display:grid;
+    
+    grid-template-areas:
+    'nav nav nav nav nav nav'
+    'header header header header header header'
+    'aside main main main main main'
+    'aside form form form form form'
+    'footer footer footer footer footer footer';
+    grid-template-columns: 1fr 2fr;
+}
+
+nav{
+    background-color: white;
+    border:2px solid white;
+    grid-area: nav;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5px;
+}
+.nav-list{
+    display: flex;
+    justify-content: end;
+    list-style: none;
+}
+.nav-link{
+    color: green;
+    text-decoration: none;
+    margin: 0  10px;
+}
+
+header{
+    background-color: blue;
+    border:2px solid blue;
+    grid-area: header;
+    width: 100%;
+}
+
+header img{
+    max-width: 100%;
+    margin: auto;
+    display: block;
+    object-fit: fill;
+}
+main{
+    background-color: yellow;
+    border:2px solid yellow;
+    grid-area: main;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    
+}
+
+#img-invencao  img:hover{
+ border: 5px solid blue;
+}
+
+#img-invencao{
+ display: flex;
+ background-color: green;
+ gap: 5px;
+ flex-wrap: wrap;
+ 
+}
+
+#img-invencao img{
+    max-width:150px;
+    max-height:150px;
+    
+}
+
+form{
+    background-color: green;
+    border:2px solid green ;
+    grid-area: form;
+    padding: 5px 15px;
+}
+
+footer{
+    background-color: blue;
+    grid-area: footer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 7px;
+}
+
+#inventor-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.inventor-card{
+    border: 5px solid green;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    padding: 15px 15px;
+    max-width: 200px;
+}
+
+.inventor-card .inventor-image{
+    max-width: 100%;
+}
+
+.inventor-card button{
+    background-color: blue;
+    
+}
+
+.inventor-card .inventorHref{
+    color: white;
+}
+ 
+
+
+#BtnEnviar{
+    background-color: yellow;
+    color: blue;
+    font-weight: bold;
+    padding: 5px 7px;
+}
+
+
+.Rede-Social{
+    display: flex;
+    gap: 5px;
+}
+
+.Rede-Social a i{
+    color: white;
+}
+
+.Rede-Social a i:hover{
+    font-size: larger;
+}
+
+#BtnPra-cima{
+    background-color: white;
+    position: relative;
+    padding: 5px;
+}
+
+#BtnPra-cima:hover{
+    animation-name: SubirBotao;
+    animation-duration: 3s;
+}
+
+#Copyright{
+    color: white;
+    opacity: 0.8;
+}
+
+@keyframes SubirBotao {
+    0% {background-color: blue; top: 0px;}
+    25% {background-color: blue; top: -15px;}
+    50% {background-color: blue; top: -15px;}
+    75% {background-color: blue; top: 0px;}
+    100% {background-color: white; top: 0px;}
+}
+/*Design responsivo*/
+/*Tablet*/
+
+@media (max-width: 992px){
+    .container{
+        grid-template-areas:
+        "nav"
+        "header"
+        "aside"
+        "main"
+        "form"
+        "footer";
+        grid-template-columns: 1fr;
+    }
+
+    #img-invencao{
+        gap: 2px;
+    }
+
+    #img-invencao img{
+        max-width:90%;
+        height:auto;
+        
+    }
+
+    #form input[type= "text"],#form input[type= "email"], #form textarea {
+        width: 80%;
+    }
+}
+
+/*celular*/
+
+@media (max-width: 768px){
+    .container{
+        grid-template-areas:
+        "nav"
+        "header"
+        "main"
+        "form"
+        "footer";
+        grid-template-columns: 1fr;
+    }
+
+    .nav-list{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-link{
+        margin: 10px 0;
+        font-size: 18px;
+    }
+    body{
+        max-width: 100%;
+    }
+
+    .inventor-card{
+        max-width: 100%;
+    }
+
+    aside{
+        display: none;
+    }
+    #img-invencao{
+        gap: 2px;
+        justify-content: center;
+    }
+
+    #img-invencao img{
+        max-width:100%;
+        height:auto;
+      
+    }
+
+    #form input[type= "text"],#form input[type= "email"], #form textarea {
+        width: 100%;
+    }
+}
+
+/*modo paisagem*/
+
+@media (orientation: landscape) and (max-width: 992px){
+    .container{
+        grid-template-areas:
+        "nav"
+        "header"
+        "main"
+        "form"
+        "footer";
+        grid-template-columns: 1fr;
+    }
+
+    
+    body{
+        max-width: 100%;
+    }
+
+    .inventor-card img{
+        max-width: 100%;
+
+    }
+
+    main{
+        background-color: blue;
+    }
+
+    aside{
+        display: none;
+    }
+    #img-invencao{
+        gap: 2px;
+        justify-content: center;
+        max-width: 100%;
+    }
+
+    #img-invencao img{
+        max-width:100%;
+        height:auto;
+      
+    }
+
+    #form input[type= "text"],#form input[type= "email"], #form textarea {
+        width: 100%;
+    }
+}

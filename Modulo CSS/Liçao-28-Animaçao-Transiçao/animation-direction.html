@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Direction</title>
+    <style>
+        @keyframes direcao{
+            0%{background-color: green; left:0px; top:0px;}
+            25%{background-color: blue; left:200px; top:0px;}
+            50%{background-color: blueviolet; left:200px; top:200px;}
+            75%{background-color: purple; left:0px; top:200px;}
+            100%{background-color: green; left:0px; top:0px;}
+        }
+    div{
+        height: 100px;
+        width: 100px;
+        background-color: darkgreen;
+        position: relative;
+        animation-name: direcao;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+        animation-direction: normal;
+    }
+    </style>
+</head>
+<body>
+    <div></div>
+</body>
+</html>

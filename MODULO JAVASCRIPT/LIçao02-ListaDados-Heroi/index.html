@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card dos Herois</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+
+    <div class="hero_card" id="hero_card">
+        <div class="card_inner">
+            <div class="card">
+                <h1>Card de Herói</h1>
+                <img id="heroeImg" src="heroe.png" alt="">
+                <div class="AtributosHeroi">
+                    <label>Nome do herói:</label>
+                    <input type="text" id="nome">
+                </div>
+
+                <div class="AtributosHeroi" id="Poder-Fraquesa">
+                    <div>
+                        <label>Poder Especial:</label>
+                        <input type="text" id="poder">
+                    </div>
+
+                    <div>
+                        <label>Fraqueza:</label>
+                        <input type="text" id="fraqueza"></div>
+                    </div>
+
+                <div class="AtributosHeroi" id="Forca-Defesa">
+                    <div>
+                        <label>Força:</label>
+                        <input type="number" id="forca">
+                    </div>    
+                    <div>
+                        <label>Defesa:</label>
+                        <input type="number" id="defesa">
+                    </div>
+                </div>
+
+                <div class="AtributosHeroi">
+                    <label>Classificado para proxima fase:</label>
+                    <select name="" id="classificado">
+                        <option value="sim">sim</option>
+                        <option value="nao">não</option>
+                    </select>
+                </div>
+
+                <div class="AtributosHeroi">
+                    <label>Inimigo:</label>
+                    <input type="text" id="inimigo">
+                </div>
+                <button id="btnDados" onclick="flip()">Ver tipos de dados</button>
+            </div>
+
+            <div class="card_verso">
+                <h1>Tipos de dados</h1>
+
+                <div class="nome_verso">
+                    <span>nome:</span> <span id="nome_dados"></span>
+                </div>
+
+                <div class="poder_verso">
+                    <span>poder:</span> <span id="poder_dados"></span>
+                </div>
+
+                <div class="fraqueza_verso">
+                    <span>Fraqueza:</span> <span id="fraqueza_dados"></span>
+                </div>
+
+                <div class="forca_verso">
+                    <span>Força:</span> <span id="forca_dados"></span>
+                </div>
+
+                <div class="defesa_verso">
+                    <span>Defesa:</span> <span id="defesa_dados"></span>
+                </div>
+
+                <div class="classificado_verso">
+                    <span>classificado:</span> <span id="classificado_dados"></span>
+                </div>
+
+                <div class="inimigo_verso">
+                    <span>Inimigo:</span> <span id="inimigo_dados"></span>
+                </div>
+
+                <button id="btnCard" onclick="flip()">Voltar ao card</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

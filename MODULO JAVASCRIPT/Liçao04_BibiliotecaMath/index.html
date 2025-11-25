@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Math</title>
+</head>
+<body>
+    <h1>Biblioteca Math</h1>
+    <label >Digite o valor da diametro:</label>
+    <input id="diametro" type="number">
+    <div id="console"></div>
+    <script defer>
+        var c
+        var number = document.getElementById("diametro")
+        var resultado = document.getElementById("console")
+        number.addEventListener("change",function () {
+            c = parseFloat(number.value) * Math.PI 
+            resultado.innerHTML = "O valor da circunferencia é de : "+c
+
+            //ARREDONDAMENTO
+            console.log(Math.round(c))
+            console.log(Math.ceil(c)) 
+            console.log(Math.floor(c)) 
+            console.log(Math.trunc(c))
+            //FIXAR("DIMINUIR") CASAS DECIMAIS 
+            console.log(c.toFixed(1))
+            //RAIZ QUADRADA E POTENCIA
+            console.log(Math.pow(10, 20));
+            console.log(Math.sqrt(20));
+            //RAIZ CUBICA
+            console.log(Math.cbrt(20)) 
+            //VALOR ABSOLUTO (Retorna valor sem sinal)
+            console.log(Math.abs(-20)) 
+            //RANDOM
+            console.log(Math.floor(Math.random()*10)+1)
+            console.log(Math.round(Math.random()*10)) 
+            //VALORES MINIMOS E MAXIMOS
+            console.log(Math.min(0, 10, 20, 30, -10, -20)) 
+            console.log(Math.max(0, 10, 20, 30, -10, -20)) 
+        })
+
+        console.log(c);
+        
+    </script>
+</body>
+</html>

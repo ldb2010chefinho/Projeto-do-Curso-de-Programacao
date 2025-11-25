@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos</title>
+    <script defer src="main.js"></script>
+    
+</head>
+<body id="pages" onload = "change_color()">
+    <h1>Evento em JavaScript</h1>
+    <h2>Evento de página</h2>
+    <p>Recarregue a página para ter uma surpresa.</p>
+    <hr>
+    <div>
+        <h2>Eventos de click</h2>
+        <img id = "lampada"src="img/lamp_turnOff.png" width="25%" alt="">
+        <button id="btn_acender">acender</button>
+    </div>
+    <hr>
+    <div>
+        <h2>Eventos de mouse</h2>
+        <img id="img_cadeado" src="img/lock_close.png" width="25%" alt="">
+    </div>
+    <hr>
+    <div>
+        <h2>Evento de input</h2>
+        <label for="">Coordenada X:</label>
+        <input id="coord_X" type="number">
+        <label for="">Coordenada Y:</label>
+        <input id="coord_Y" type="number">
+
+        <div style="border: 5px solid rgb(0, 0, 0); position: relative;width : 100% ;height : 50vh" >
+            <img id="img_bor boleta" src="img/butterfly.png" width="150px" style="position:absolute">
+        </div>
+    </div>
+    <hr>
+    <div>
+        <h2>Evento de change</h2>
+        <label for="">Escreva algo para o robô falar:</label>
+        <textarea name="message" id="message" cols="75" rows="15"></textarea>
+        <br>
+        <img src="img/chatbot.jpg" width="50%">
+    </div>
+    <hr>
+    <div>
+        <h2>Eventos de keypress</h2>
+        <label for="">Clique dentro da caixa e pressione a seta da direita ou esquerda</label>
+        <input id="keypress">
+        <img id="mao_direita" src="img/right_hand.png" width="25%">
+    </div>
+</body>
+</html>

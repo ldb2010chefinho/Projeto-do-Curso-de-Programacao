@@ -1,0 +1,112 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: aqua;
+    display: flex;
+    justify-content: center;
+}
+
+.hero_card{
+    width: 24rem;
+    height: 100vh;
+    background-color: transparent;
+    perspective: 1000px;
+}
+
+.card_inner{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;   
+}
+
+.hero_card.fliped .card_inner{
+    transform: rotateY(180deg);
+}
+
+.card, .card_verso{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: blue;
+    border: 5px solid black;
+    padding: auto;
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 1rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+.card_verso{
+    transform: rotateY(180deg);
+}
+
+#Poder-Fraquesa ,#Forca-Defesa{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#heroeImg{
+    height: 500px;
+    width: 500px;
+    align-items: center;
+    
+}
+
+.AtributosHeroi{
+    padding: 5px;
+    margin: 5px;
+}
+
+.AtributosHeroi label{
+    color: #C8C8FF;
+    font-weight: bold;
+}
+
+/* #btnDados{
+    background-color: #8080FF;
+    color: blue;
+    padding: 5px;
+    margin: 5px;
+    border: 5px solid black;
+    font-weight: bold;
+} */ 
+
+/* From Uiverse.io by mrhyddenn */ 
+#btnDados, #btnCard {
+  padding: 10px 20px;
+  border: none;
+  font-size: 17px;
+  color: #fff;
+  border-radius: 7px;
+  letter-spacing: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: 0.5s;
+  transition-property: box-shadow;
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+
+#btnDados, #btnCard {
+  background: rgb(0,140,255);
+  box-shadow: 0 0 25px rgb(0,140,255);
+}
+
+#btnDados:hover, #btnCard:hover {
+  box-shadow: 0 0 5px rgb(0,140,255),
+              0 0 25px rgb(0,140,255),
+              0 0 50px rgb(0,140,255),
+              0 0 100px rgb(0,140,255);
+}

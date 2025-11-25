@@ -1,0 +1,22 @@
+#imgRobo{
+    filter: opacity(0%);
+    width: 200px;
+    position: relative;
+    top: 340px ;
+    left: 78px;
+}
+#imgTigre{
+    filter: opacity(0%);
+    width: 200px;
+    position: relative;
+    bottom: 20px ;
+    left: 78px;
+
+}
+#imgPorco{
+    filter: opacity(0%);
+    width: 200px;
+    position: relative;
+    top: 110px ;
+    left: 78px;
+}

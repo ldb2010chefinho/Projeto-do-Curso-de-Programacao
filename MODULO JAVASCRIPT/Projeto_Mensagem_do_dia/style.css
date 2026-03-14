@@ -1,0 +1,46 @@
+body{    
+    background-color: #0F172A;
+    display: flex;
+    justify-content: center;   
+    align-items: center;       
+    overflow: hidden;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#container{
+    background-color: #2563EB;
+    padding: 30px;
+    border-radius: 12px;
+}
+
+#pMensagem{
+    display: flex;
+    justify-content: center;
+    color: #F1F5F9;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#divMensagem{
+    background-color: #7C3AED;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+#btnMensagem{
+    background-color: #34D399;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    color: #0F172A;
+    font-weight: bold;
+    
+}
+
+#btnMensagem:hover{
+    background-color: #10B981;
+}
+
+/*Uso de IA na parte das cores que resolvi mudar!!!

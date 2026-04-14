@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matriz</title>
+    <script>
+        const matriz_herois = [
+        ["Batman","Inteligência e tecnologia","Coringa"],
+        ["Superman","Super força","Lex Luthor"],
+        ["Homem-Aranha","Sentido aranha","Duende Verde"],
+        ["Mulher-Maravilha","Força amazona","Ares"],
+        ["Flash","Super velocidade","Flash Reverso"],
+        ["Thor","Controle do trovão","Loki"],
+        ["Hulk","Força ilimitada","Abominável"],
+        ["Capitão América","Liderança e resistência","Caveira Vermelha"],
+        ["Homem de Ferro","Armadura tecnológica","Mandarim"],
+        ["Pantera Negra","Tecnologia de vibranium","Killmonger"],
+        ["Doutor Estranho","Magia","Dormammu"],
+        ["Aquaman","Controle dos mares","Arraia Negra"],
+        ["Lanterna Verde","Energia do anel","Sinestro"],
+        ["Cyborg","Tecnologia avançada","Grid"],
+        ["Gavião Arqueiro","Precisão com arco","Trick Shot"],
+        ["Viúva Negra","Espionagem","Taskmaster"],
+        ["Tempestade","Controle do clima","Apocalipse"],
+        ["Deadpool","Regeneração","Ajax"],
+        ["Blade","Caçador de vampiros","Deacon Frost"],
+        ["Demolidor","Sentidos ampliados","Rei do Crime"],
+        ["Homem-Formiga","Alterar tamanho","Jaqueta Amarela"],
+        ["Vespa","Voo e energia","Whirlwind"],
+        ["Capitã Marvel","Energia cósmica","Yon-Rogg"],
+        ["Shazam","Poder mágico","Adão Negro"],
+        ["Robin","Agilidade e estratégia","Exterminador"],
+        ["Asa Noturna","Acrobacia","Blockbuster"],
+        ["Supergirl","Super força","Reign"],
+        ["Zatanna","Magia","Felix Faust"],
+        ["Constantine","Ocultismo","Nergal"],
+        ["Ravena","Magia das sombras","Trigon"],
+        ["Estelar","Energia estelar","Blackfire"],
+        ["Mutano","Transformação animal","Irmandade do Mal"],
+        ["Visão","Intangibilidade","Ultron"],
+        ["Feiticeira Escarlate","Manipulação da realidade","Chthon"],
+        ["Mercúrio","Super velocidade","Alto Evolucionário"],
+        ["Cable","Tecnologia futura","Apocalipse"],
+        ["Domino","Sorte extrema","Topaz"],
+        ["Elektra","Artes marciais","Tentáculo"],
+        ["Justiceiro","Arsenal pesado","Billy Russo"],
+        ["Motoqueiro Fantasma","Fogo infernal","Mefisto"],
+        ["Nova","Energia cósmica","Annihilus"],
+        ["Adam Warlock","Poder cósmico","Magus"],
+        ["Silver Surfer","Energia cósmica","Galactus"],
+        ["Havok","Explosões de plasma","Vulcan"],
+        ["Ciclope","Raio óptico","Senhor Sinistro"],
+        ["Jean Grey","Telepatia","Fênix Negra"],
+        ["Tempestade X-Men","Clima","Callisto"],
+        ["Colossus","Corpo de aço","Juggernaut"],
+        ["Noturno","Teleporte","Azazel"],
+        ["Kitty Pryde","Atravessar paredes","Emma Frost"],
+        ["Banshee","Grito sônico","Black Tom"],
+        ["Wolverine","Garras de adamantium","Dentes-de-Sabre"],
+        ["Daken","Garras retráteis","Wolverine"],
+        ["X-23","Garras e agilidade","Kimura"],
+        ["Namor","Força atlante","Attuma"],
+        ["Sentinela","Força solar","Void"],
+        ["Blue Beetle","Armadura alienígena","Reach"],
+        ["Booster Gold","Tecnologia do futuro","Black Beetle"],
+        ["Firestorm","Fusão nuclear","Multiplex"],
+        ["Atom","Manipulação molecular","Chronos"],
+        ["Plastic Man","Elasticidade","Doctor Dome"],
+        ["Vixen","Poder animal","General Maksai"],
+        ["Katana","Espada mística","Soultaker"],
+        ["Red Tornado","Controle do vento","T.O. Morrow"],
+        ["Black Canary","Grito sônico","Lady Shiva"],
+        ["Huntress","Caçadora estratégica","Mandragora"],
+        ["Batwoman","Treinamento militar","Alice"],
+        ["Spoiler","Estratégia","Cluemaster"],
+        ["Orphan","Artes marciais","Lady Shiva"],
+        ["Azrael","Espada flamejante","Bane"],
+        ["Static Shock","Eletricidade","Ebon"],
+        ["Icon","Super força","Holocaust"],
+        ["Rocket","Tecnologia","Shadow Cabinet"],
+        ["Ms Marvel","Elasticidade","Inventor"],
+        ["Moon Knight","Força lunar","Bushman"],
+        ["Shang-Chi","Artes marciais","Zheng Zu"],
+        ["Iron Fist","Punho de energia","Davós"],
+        ["Luke Cage","Pele indestrutível","Diamondback"],
+        ["Jessica Jones","Força e investigação","Kilgrave"],
+        ["America Chavez","Portais dimensionais","Madame Sanctity"],
+        ["Kate Bishop","Arco e estratégia","Madame Masque"],
+        ["Speedball","Energia cinética","Nitro"],
+        ["Cloak","Teleporte sombrio","D'Spayre"],
+        ["Dagger","Luz divina","Darkforce"],
+        ["Beta Ray Bill","Trovão","Surtur"],
+        ["Korg","Força rochosa","Sakaarianos"],
+        ["Mantis","Empatia","Ego"],
+        ["Gamora","Espada galáctica","Thanos"],
+        ["Drax","Força brutal","Ronan"],
+        ["Star-Lord","Tecnologia espacial","J'son"],
+        ["Rocket Raccoon","Armas pesadas","High Evolutionary"],
+        ["Groot","Controle vegetal","Draconianos"],
+        ["Nebula","Combate espacial","Thanos"],
+        ["Yondu","Flecha controlada","Ravagers"],
+        ["Red Guardian","Força soviética","Crimson Dynamo"],
+        ["White Tiger","Poder místico","Kraven"],
+        ["Spider-Gwen","Sentido aranha","Matt Murdock"],
+        ["Miles Morales","Camuflagem","Prowler"],
+        ["Spider-Man 2099","Garras futuristas","Tyler Stone"],
+        ["Ironheart","Armadura tecnológica","The Hood"]
+];
+
+        console.log(matriz_herois[0][2]);
+        console.log(matriz_herois[1][2]);
+        console.log(matriz_herois[1][1]);
+        console.log(matriz_herois[2][0]);
+
+        //PERCORRER MATRIZ
+        for (let i = 0; i < 10; i++) {
+            console.log("Nome:"+matriz_herois[i][0]
+            +" |Poder: "+matriz_herois[i][1]
+            +" |Inimigo: "+matriz_herois[i][2]);
+            
+            
+        }
+        
+        //Contando linhas e colunas
+        console.log("Numeros de linhas: "+ matriz_herois.length);
+        console.log("Numeros de colunas: "+ matriz_herois[0].length);
+
+        
+
+
+        
+    </script>
+</head>
+<body>
+    <h1>Matriz</h1>
+</body>
+</html>

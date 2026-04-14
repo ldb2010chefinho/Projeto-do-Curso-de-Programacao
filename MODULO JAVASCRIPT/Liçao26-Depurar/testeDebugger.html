@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Debugger</title>
+    <script>
+        function hello(name) {
+            let message = "Bem vindo "+name;
+            show(message, 2)
+        }
+        function show(phrase, type) {
+            switch (type) {
+                case 1:
+                    console.log(phrase);
+                    break;
+                case 2 :
+                    alert(phrase)
+                    break
+                default:
+                    document.write(phrase);
+            }
+        }
+        hello("Lucca")
+        function testar() {
+            console.log("breaknfcgfwr3g3");
+        }
+        testar()
+    </script>
+</head>
+<body>
+    <h1>Teste do Debugger</h1>
+</body>
+</html>

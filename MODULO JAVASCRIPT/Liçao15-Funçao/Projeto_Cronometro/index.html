@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronometro</title>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div>
+        <div id="cronometro">00:00:00:00</div>
+        <button id="btnIniciar" action="iniciar">Iniciar</button>
+        <button id="btnPausar">Pausar</button>
+        <button id="btnResetar">Resetar</button>
+        <hr>
+        <h3>Configure o cronometro</h3>
+        <h4>Tipo:</h4>
+        <form>
+            <input type="radio" id="form_crescente" value="crescente" name="tipo" checked>
+            <label > CRESCENTE</label><br>
+            <input type="radio" id="form_decrescente" value="decrescente" name="tipo">
+            <label > DECRESCENTE</label><br>
+        </form>
+    </div>
+<label for="">Valor Inicial:</label><br>
+<input type="number" id="input_valorInicial" value="0">
+</body>
+</html>

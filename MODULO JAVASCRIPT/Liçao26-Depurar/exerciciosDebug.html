@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercício de Depuração</title>
+</head>
+<body>
+    <h3>Carrinho de Compras</h3>
+    <p>Preço: <span id="preco">100</span></p>
+    <p>Quantidade: <input type="number" id="qtd" value="2"></p>
+    <button id="btnCalcular">Calcular Total</button>
+    <p>Total: R$ <span id="total">0</span></p>
+
+    <script>
+        const btn = document.getElementById('btnCalcular');
+        let user;//User nao esta definido, só foi declarado
+        //console.log(user.name);
+        btn.addEventListener('click', function() {            
+            const precoV = document.getElementById('preco').innerText;//Esta mostrando o codigo da span
+            
+            const qtd = document.getElementById('qtd').value;
+            
+            const total = parseFloat(precoV) *parseInt(qtd); 
+            
+            console.log("Preço:", precoV);
+            console.log("Quantidade:", qtd);
+            console.log("Total:", total);
+            
+            
+            document.getElementById('total').innerText = total.toFixed(2);
+        });
+    </script>
+</body>
+</html>

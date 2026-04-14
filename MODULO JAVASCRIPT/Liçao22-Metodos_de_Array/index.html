@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Métodos de Array</title>
+    <script>
+        const liga_frutas = ["Super Maçã","Banana Invisivel","As uvas super poderosas","O PeraMan"]
+        
+        liga_frutas.push("Wolverino")// Wolverine + pEpino
+        liga_frutas.unshift("Capitão Molho")//Coloca o primeiro da lista
+        liga_frutas[liga_frutas.length] = "BacateMan, O Abacate das Trevas"
+        liga_frutas.push("Quarteto Frutastico")
+        console.log(liga_frutas[7]);
+
+        //O último herói da lista ficou nervoso por ser o último e brigou com o primeiro da lista. O primeiro da lista não quis trocar de posição, então o herói do final pediu para sair. Use o comando abaixo para removê-lo:
+        liga_frutas.pop();
+        liga_frutas.shift();//Tira o primeiro da lista
+
+        //Outros integrantes estão insatisfeitos com as decisões da liga e pedirão para sair. Eles estão na posição 2 e 3, mas já tem novos heróis para substituí-los. Use o comando:
+        liga_frutas.splice(2,0, "A Laranja Maravilha","Homen Abacnidio")
+        liga_frutas.at(4)
+        liga_frutas.at(-1)//ULTIMATO ELEMENTO
+        const combatentes = liga_frutas.slice(0,5)//SELECIONA O INTERVALO
+        console.log(combatentes);
+        console.log(liga_frutas.indexOf("Banana Invisivel", 2));//-1 = NÃO ENCONTROU
+        console.log(liga_frutas.includes("A Laranja Maravilha"));
+        liga_frutas.sort();
+        liga_frutas.reverse();
+        //NUMEROS NÃO SE APLICAM
+        //console.log(
+        //liga_frutas.toString(),
+        //liga_frutas.join("--- ")
+        //);
+        const herois = ["Batman","Superman","Wolverine","Mulher Maravilha","Homem Aranha","Quarteto Fantastico"]
+        
+
+        liga_TOTAL = liga_frutas.concat(herois);
+        console.log(liga_TOTAL);
+        
+        console.log(liga_frutas);
+        console.log(liga_frutas.length);
+        
+
+        
+    </script>
+</head>
+<body>
+    <h1>Metodo de Array</h1>
+    <h2>Lista de herois</h2>
+    <img src="LigaFrutas.png" style="width: 50%; height: 75%;">
+</body>
+</html>

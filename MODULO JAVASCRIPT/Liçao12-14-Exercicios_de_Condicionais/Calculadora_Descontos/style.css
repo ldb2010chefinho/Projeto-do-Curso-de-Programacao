@@ -1,0 +1,170 @@
+/* ========================== */
+/* RESET ÚNICO */
+/* ========================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f5f5f5;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  min-height: 100vh;
+  color: #111;
+}
+
+/* TITULO */
+h1 {
+  margin: 20px;
+}
+
+/* ========================== */
+/* MENU DROPDOWN ESTILO AMAZON */
+/* ========================== */
+
+.menu {
+  margin: 20px;
+  width: 260px;
+}
+
+.menu .item {
+  background: #fff;
+  border: 1px solid #d5d5d5;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  padding: 12px;
+  cursor: pointer;
+  position: relative;
+}
+
+.menu .item:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.menu .link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #111;
+  font-weight: 600;
+}
+
+.menu svg {
+  width: 18px;
+  fill: #444;
+  transition: .2s;
+}
+
+.item:hover svg {
+  transform: rotate(180deg);
+}
+
+/* SUBMENU */
+.submenu {
+  background: white;
+  border: 1px solid #d5d5d5;
+  border-radius: 6px;
+  margin-top: 10px;
+  padding: 8px 0;
+  display: none;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  z-index: 10;
+}
+
+.item:hover .submenu {
+  display: block;
+}
+
+.submenu-categoria {
+  padding: 12px 16px;
+  transition: .2s;
+}
+
+.submenu-categoria:hover {
+  background: #f0f0f0;
+}
+
+.submenu-link {
+  color: #111;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.submenu-link i {
+  color: #555;
+}
+
+/* ========================== */
+/* INPUT DE CÁLCULO */
+/* ========================== */
+
+.subscribe-form {
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+}
+
+.subscribe-input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.subscribe-input:focus {
+  border-color: #007185;
+  outline: none;
+}
+
+.subscribe-btn {
+  padding: 12px 20px;
+  background: #ffd814;
+  border: 1px solid #f2c200;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.subscribe-btn:hover {
+  background: #f7ca00;
+}
+
+/* ========================== */
+/* RESULTADOS */
+/* ========================== */
+
+h2 {
+  margin: 20px 20px 2px 20px;
+}
+
+p {
+  margin: 0 20px 15px 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* ========================== */
+/* AJUSTE DO HR */
+/* ========================== */
+
+hr {
+  margin: 15px 0;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+
+footer {
+  margin: 0 20px 15px 20px;
+  margin-top: 100px;
+  font-weight: bolder;
+  position: absolute;
+  bottom: 0;
+}

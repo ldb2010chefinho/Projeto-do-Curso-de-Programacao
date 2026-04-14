@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aventuras na Fazenda</title>
+    
+</head>
+<body>
+    <h1>Aventuras na Fazenda</h1>
+    <p id="animais"></p>
+    <script defer>
+        const lista_animais = document.getElementById("animais")
+
+        let lista_emoji = [	"128022","128004","128017","128019"]
+
+        for (let i = 0; i < lista_emoji.length; i++) {
+            const element = lista_emoji[i];
+            console.log(String.fromCodePoint(element));
+            lista_animais.innerHTML += String.fromCodePoint(element)
+        }
+        lista_emoji.forEach(function(animais){
+            console.log(String.fromCodePoint(animais).repeat(7));
+        })
+
+        const array2 = lista_emoji.map(function(value, index, array){
+            return String.fromCodePoint(value).repeat(2);
+        })
+        console.log(array2);
+        
+    </script>
+</body>
+</html>

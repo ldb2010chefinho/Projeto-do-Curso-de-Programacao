@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Descontos</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+    <!-- JS -->
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <h1>Calculadora de Descontos</h1>
+
+    <!-- MENU -->
+    <div class="menu">
+        <div class="item">
+            <a href="#" class="link">
+                <span> Escolha a Categoria </span>
+                <svg viewBox="0 0 360 360" xml:space="preserve">
+                    <g id="SVGRepo_iconCarrier">
+                        <path id="XMLID_225_" d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"></path>
+                    </g>
+                </svg>
+            </a>
+
+            <div class="submenu">
+
+                <div id="sub-eletronicos" class="submenu-categoria">
+                    <a href="#" class="submenu-link"> Eletronicos <i class="fa-solid fa-headphones"></i></a>
+                </div>
+
+                <div id="sub-livros" class="submenu-categoria">
+                    <a href="#" class="submenu-link"> Livros <i class="fa-solid fa-book"></i></a>
+                </div>
+
+                <div id="sub-roupas" class="submenu-categoria">
+                    <a href="#" class="submenu-link"> Roupas <i class="fa-solid fa-vest"></i></a>
+                </div>
+
+                <div id="sub-outros" class="submenu-categoria">
+                    <a href="#" class="submenu-link"> Outras Categorias <i class="fa-solid fa-ellipsis"></i></a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <hr>
+
+    <!-- INPUT -->
+    <form class="subscribe-form">
+        <input id="calcular-input" type="number" placeholder="digite o valor do produto" class="subscribe-input">
+        <button id="calcular-btn" class="subscribe-btn">Calcular</button>
+    </form>
+
+    <h2>Total com Desconto:</h2>
+    <p id="totalDesconto"></p>
+
+    <h2>Valor de desconto:</h2>
+    <p id="valorDesconto"></p>
+
+    <h2>Porcentagem de desconto:</h2>
+    <p id="porcentagemDesconto"></p>
+
+
+<footer>Feito pelo Lucca</footer>
+</body>
+</html>

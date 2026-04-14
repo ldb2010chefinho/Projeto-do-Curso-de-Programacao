@@ -1,0 +1,109 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: 'Galantis';
+    src: url('Galantis.otf') format('opentype');
+}
+
+h1 {
+    font-family: 'Galantis', Arial, sans-serif;
+}
+
+body {
+    background: #2e1a5f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background: #eee;
+    padding: 25px;
+    border-radius: 10px;
+    width: 50%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    color: #4b2c7a;
+    margin-bottom: 15px;
+}
+
+.input-area {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+#guestName {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 10px;
+}
+
+.input-area button {
+    background: #5a0f7a;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+
+#actions {
+    margin-bottom: 15px;
+    display: none;
+}
+
+#actions button {
+    background: #7a4ba0;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+ul {
+    list-style: none;
+    
+}
+
+ul li {
+    list-style: none;
+    font-size: 17px;
+    padding: 10px 40px 10px 10px;
+    margin-bottom: 5px;
+    user-select: none;
+    cursor: pointer;
+    background: #f9ebfd;
+    position: relative;
+    border-radius: 40px;
+
+}
+
+ul li span {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 30px;
+    height: 30px;
+    font-size: 22px;
+    color: #ff0000;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+ul li span:hover {
+    background: #ff0000;
+    color: white;
+}

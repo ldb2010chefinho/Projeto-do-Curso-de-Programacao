@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="pt-BR" data-pagina="bug">
+<head>
+  <meta charset="utf-8">
+  <!--
+    CAÇA AO BUG (QR code 2): mesmo site, já consertado, com UM erro escondido.
+    A viewport de 340px faz qualquer celular se comportar como uma tela pequena.
+    -->
+  <!--
+    (Explicação da página principal:) A página COMEÇA quebrada: "width=980" faz o celular fingir que é uma tela
+    de computador de 980px (é exatamente o que ele faz quando a meta viewport
+    não existe). O CONSERTO 1 troca isso, ao vivo, para:
+      width=device-width, initial-scale=1
+  -->
+  <meta name="viewport" id="vp" content="width=340">
+  <title>Lanchonete Pixel</title>
+
+  <script>
+    /* Roda ANTES de desenhar a página, para ela já nascer no estágio certo.
+       Estágio = quantos consertos já foram aplicados (0 a 9).
+       ?s=N na URL força um estágio (plano B); senão usa o último salvo. */
+    /* Página da Caça ao bug (bug.html): começa sempre no estágio 8 e finge
+       ser uma tela de 340px, para o erro aparecer em qualquer celular. */
+    window.PAGINA_BUG = document.documentElement.dataset.pagina === 'bug';
+    window.viewportPara = function (s) {
+      if (s === 0) return 'width=980';
+      if (window.PAGINA_BUG && s === 8) return 'width=340';
+      return 'width=device-width, initial-scale=1';
+    };
+    (function () {
+      var q = new URLSearchParams(location.search).get('s');
+      var salvo = 0;
+      try { salvo = +(localStorage.getItem('lp-estagio') || 0); } catch (e) {}
+      var s = q !== null ? +q : (window.PAGINA_BUG ? 8 : salvo);
+      if (!(s >= 0 && s <= 9)) s = 0;
+      if (window.PAGINA_BUG && s < 8) s = 8;
+      window.ESTAGIO_INICIAL = s;
+      document.getElementById('vp').setAttribute('content', window.viewportPara(s));
+      var classes = [];
+      for (var i = 1; i <= s; i++) classes.push('f' + i);
+      document.documentElement.className = classes.join(' ');
+    })();
+  </script>
+
+  <style>
+    /* =====================================================================
+       COMO ESTE CSS FUNCIONA
+       O <html> recebe uma classe para cada conserto já aplicado:
+       f1 (viewport), f2 (Flexbox), f3 (Grid), f4 (media query),
+       f5 (imagens), f6 (clamp), f7 (container query), f8 (bug), f9 (final).
+       Assim dá para ver cada conserto mudando o site, um de cada vez.
+       ===================================================================== */
+
+    /* ---------- BASE: cores e componentes (valem sempre) ---------- */
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; --k: 1; --vx: 0px; --vy: 0px; --vw: 100vw; --vh: 100vh; }
+    body { margin: 0; font-family: "Trebuchet MS", system-ui, sans-serif; background: #fff6ea; color: #2b1a0f; line-height: 1.4; font-size: 16px; }
+    a { color: inherit; text-decoration: none; }
+    h2 { margin: 0 0 12px; font-size: 22px; }
+    .topo { background: #c9302c; color: #fff; }
+    .logo { font-weight: 800; font-size: 20px; white-space: nowrap; }
+    .logo span { display: inline-block; width: 14px; height: 14px; background: #ffc93c; margin-right: 8px; vertical-align: -1px; }
+    .menu a { font-weight: 600; }
+    .btn-menu { background: #ffc93c; color: #2b1a0f; border: 0; border-radius: 8px; padding: 8px 14px; font: 700 16px "Trebuchet MS", sans-serif; cursor: pointer; }
+    .hero h1 { margin: 0 0 10px; line-height: 1.05; }
+    .hero p { margin: 0; color: #7a5a44; }
+    .hero img { display: block; border-radius: 12px; }
+    .btn-pedido { display: inline-block; margin-top: 14px; background: #ffc93c; color: #2b1a0f; font-weight: 800; padding: 12px 22px; border-radius: 999px; }
+    .card { background: #fff; border: 2px solid #f0dcc2; border-radius: 12px; padding: 14px; }
+    .card h3 { margin: 0 0 4px; font-size: 17px; }
+    .card p { margin: 0; color: #7a5a44; font-size: 14px; }
+    .preco { font-weight: 800; color: #c9302c; }
+    .card .preco { color: #c9302c; }
+    .lateral h2 { margin-bottom: 10px; }
+    .card-promo { background: #2b1a0f; color: #ffe9b8; border-radius: 12px; padding: 14px; gap: 12px; }
+    .card-promo img { display: block; border-radius: 8px; }
+    .card-promo h3 { margin: 0 0 4px; color: #ffc93c; font-size: 19px; }
+    .card-promo p { margin: 0; }
+    .card-promo .preco { color: #ffc93c; margin-top: 6px; }
+    .rodape { padding: 20px 20px 110px; color: #7a5a44; font-size: 13px; }
+
+    /* ---------- ESTÁGIO 0: layout feito SÓ para computador ----------
+       Larguras fixas em px. No celular isso não cabe de jeito nenhum. */
+    body { width: 1100px; }
+    .topo { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; }
+    .menu { display: flex; gap: 28px; }
+    .btn-menu { display: none; }
+    .hero { display: grid; grid-template-columns: 1fr 520px; gap: 32px; align-items: center; padding: 32px 40px; }
+    .hero h1 { font-size: 44px; }
+    .hero img { width: 520px; height: auto; }
+    .layout { display: grid; grid-template-columns: 740px 1fr; gap: 32px; padding: 0 40px 32px; }
+    .cardapio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card-promo { display: grid; }
+    .card-promo img { width: 100%; height: auto; }
+
+    /* ---------- CONSERTO 1: meta viewport ----------
+       Não tem CSS: o JavaScript troca a <meta name="viewport"> lá em cima. */
+
+    /* ---------- CONSERTO 2a: Flexbox ----------
+       O corpo para de ter largura fixa e o menu quebra linha quando não cabe. */
+    .f2 body { width: auto; }
+    .f2 .topo { flex-wrap: wrap; gap: 8px 16px; padding: 14px 20px; }
+    .f2 .menu { flex-wrap: wrap; gap: .5rem 1rem; }
+
+    /* ---------- CONSERTO 2b: Grid ----------
+       Página em uma coluna e cardápio com auto-fit (o navegador calcula
+       quantas colunas de no mínimo 220px cabem). */
+    .f3 .hero { grid-template-columns: 1fr; gap: 16px; padding: 20px; }
+    .f3 .hero h1 { font-size: 56px; } /* fica enorme no celular: problema do Ato 3 */
+    .f3 .layout { grid-template-columns: 1fr; gap: 20px; padding: 0 20px 20px; }
+    .f3 .cardapio { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+
+    /* ---------- CONSERTO 2c: media query (mobile-first) ----------
+       Celular primeiro: o menu vira botão. A partir de 768px o menu volta
+       e o conteúdo ganha uma barra lateral. */
+    .f4 .menu { display: none; }
+    .f4 .btn-menu { display: block; }
+    .f4.menu-aberto .menu { display: flex; flex-direction: column; flex-basis: 100%; gap: .6rem; padding: 6px 0 4px; }
+    @media (min-width: 768px) {
+      .f4 .menu { display: flex; }
+      .f4 .btn-menu { display: none; }
+      .f4 .layout { grid-template-columns: 3fr 1fr; }
+      .f4 .hero { grid-template-columns: 1fr 1fr; align-items: center; }
+    }
+
+    /* ---------- CONSERTO 3a: imagens flexíveis ----------
+       A imagem nunca fica mais larga que a caixa, e mantém a proporção. */
+    .f5 img { max-width: 100%; height: auto; }
+
+    /* ---------- CONSERTO 3b: tipografia fluida ----------
+       Mínimo 1.5rem, ideal 5vw, máximo 3rem. Sem breakpoint. */
+    .f6 .hero h1 { font-size: clamp(1.5rem, 5vw, 3rem); }
+
+    /* ---------- CONSERTO 3c: container query ----------
+       O card olha o tamanho da CAIXA onde está, não da tela.
+       (Limite de 300px aqui para dar para ver a mudança no celular.) */
+    .f7 .area-do-card { container-type: inline-size; }
+    @container (min-width: 300px) {
+      .f7 .card-promo { grid-template-columns: 1fr 2fr; align-items: center; }
+    }
+
+    /* ---------- CAÇA AO BUG (só no estágio 8) ----------
+       344px + 8px de cada lado = 360px: abaixo disso o botão sai da tela. */
+    .f8:not(.f9) .hero { padding-left: 8px; padding-right: 8px; }
+    .f8:not(.f9) .btn-pedido { width: 344px; text-align: center; }
+
+    /* =====================================================================
+       AVISOS (só aparecem no momento em que o site muda)
+       --k aumenta tudo quando a página está "encolhida" (sem viewport),
+       para o aviso continuar legível no celular.
+       ===================================================================== */
+    /* --vx, --vy, --vw, --vh = a parte da página que está na tela agora (o JS atualiza) */
+
+    .aviso { position: fixed; left: calc(var(--vx) + var(--vw) / 2); top: calc(var(--vy) + 14px * var(--k)); z-index: 60; width: min(calc(var(--vw) * .92), calc(360px * var(--k)));
+      transform: translate(-50%, -140%); opacity: 0; padding: calc(14px * var(--k)) calc(16px * var(--k));
+      border-radius: calc(16px * var(--k)); background: #0a1326; color: #e8efff; box-shadow: 0 18px 40px rgba(10, 19, 38, .4);
+      font-family: "Trebuchet MS", system-ui, sans-serif; transition: transform .55s cubic-bezier(.16, 1, .3, 1), opacity .4s; pointer-events: none; }
+    .aviso.mostra { transform: translate(-50%, 0); opacity: 1; }
+    .aviso small { display: block; font: 700 calc(11px * var(--k)) / 1.2 ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; color: #43e0a6; }
+    .aviso strong { display: block; font-size: calc(18px * var(--k)); margin-top: calc(4px * var(--k)); }
+    .aviso span { display: block; font-size: calc(14px * var(--k)); color: #b8cfff; margin-top: calc(2px * var(--k)); }
+    .aviso.bug small { color: #ff6679; }
+
+    /* contorno verde piscando no pedaço do site que acabou de ser consertado */
+    .consertado { animation: consertado 1.8s ease-out; }
+    @keyframes consertado {
+      0% { outline: 4px solid #43e0a6; outline-offset: 2px; box-shadow: 0 0 0 0 rgba(67, 224, 166, .7); }
+      70% { outline: 4px solid rgba(67, 224, 166, .6); outline-offset: 6px; box-shadow: 0 0 0 22px rgba(67, 224, 166, 0); }
+      100% { outline: 4px solid transparent; outline-offset: 6px; }
+    }
+    .pixel { position: fixed; z-index: 70; width: 12px; height: 12px; pointer-events: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topo">
+    <a class="logo" href="#"><span></span>Lanchonete Pixel</a>
+    <button class="btn-menu" type="button" aria-expanded="false">☰ Menu</button>
+    <nav class="menu"><a href="#">Início</a><a href="#cardapio">Cardápio</a><a href="#promo">Promoções</a><a href="#contato">Contato</a></nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>Hambúrguer artesanal, montado pixel por pixel</h1>
+      <p>Pedidos de terça a domingo.</p>
+      <a class="btn-pedido" href="#cardapio">Fazer pedido</a>
+    </div>
+    <img src="burger.svg" width="900" height="560" alt="Hambúrguer artesanal da Lanchonete Pixel">
+  </section>
+
+  <main class="layout">
+    <section id="cardapio">
+      <h2>Cardápio</h2>
+      <div class="cardapio">
+        <article class="card"><h3>Pixel Burger</h3><p>Pão brioche, blend 160g, queijo</p><p class="preco">R$ 29,90</p></article>
+        <article class="card"><h3>Cheese Byte</h3><p>Duplo cheddar e cebola caramelizada</p><p class="preco">R$ 32,90</p></article>
+        <article class="card"><h3>Batata 8-bit</h3><p>Porção crocante com páprica</p><p class="preco">R$ 16,90</p></article>
+        <article class="card"><h3>Milk-shake RGB</h3><p>Morango, baunilha e chocolate</p><p class="preco">R$ 18,90</p></article>
+        <article class="card"><h3>Refri Retrô</h3><p>Lata 350ml</p><p class="preco">R$ 7,90</p></article>
+        <article class="card"><h3>Veggie Vetor</h3><p>Hambúrguer de grão-de-bico</p><p class="preco">R$ 27,90</p></article>
+      </div>
+    </section>
+    <aside class="lateral" id="promo">
+      <div class="area-do-card">
+        <article class="card-promo">
+          <img src="burger.svg" width="900" height="560" alt="">
+          <div><h3>Promoção do dia</h3><p>Combo Pixel: burger + batata + refri</p><p class="preco">R$ 39,90</p></div>
+        </article>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="rodape" id="contato">© Lanchonete Pixel · site de demonstração de um trabalho escolar</footer>
+
+  <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+
+  <script>
+  /* =====================================================================
+     SINCRONIA COM A APRESENTAÇÃO
+     A apresentação publica o estágio atual (0 a 9) num canal gratuito do
+     ntfy.sh. Cada celular fica "ouvindo" esse canal e aplica o conserto
+     sozinho. Ninguém precisa tocar em nada.
+     ===================================================================== */
+  const CANAL = 'lanchonete-pixel-ldb-oterimxu';   // o mesmo nome está na apresentação
+
+  const ESTAGIOS = [
+    { t: 'Site quebrado',                d: 'Do jeito que estava no começo' },
+    { t: 'Conserto 1 · meta viewport',   d: 'O texto ficou no tamanho certo', alvo: '.hero h1' },
+    { t: 'Conserto 2 · Flexbox',         d: 'O menu quebra linha quando não cabe', alvo: '.topo' },
+    { t: 'Conserto 2 · Grid',            d: 'O cardápio calcula quantas colunas cabem', alvo: '.cardapio' },
+    { t: 'Conserto 2 · media query',     d: 'Na tela pequena, o menu vira botão', alvo: '.btn-menu' },
+    { t: 'Conserto 3 · max-width: 100%', d: 'A foto não estoura mais a tela', alvo: '.hero img' },
+    { t: 'Conserto 3 · clamp()',         d: 'O título cresce e encolhe com a tela', alvo: '.hero h1' },
+    { t: 'Conserto 3 · container query', d: 'O card se adapta à caixa onde está', alvo: '.card-promo' },
+    { t: 'Caça ao bug',                  d: 'Tem UM erro escondido. Quem achar primeiro grita!' },
+    { t: 'Site consertado',              d: 'Um site. Todas as telas.', alvo: 'body' }
+  ];
+
+  // nome curto de cada estágio, para a barra de baixo
+  const CURTO = ['site quebrado', 'viewport', 'flexbox', 'grid', 'media query', 'max-width', 'clamp()', 'container query', 'caça ao bug', 'consertado'];
+
+  const raiz = document.documentElement;
+  const PAGINA_BUG = window.PAGINA_BUG, viewportPara = window.viewportPara;
+  const meta = document.getElementById('vp');
+  const params = new URLSearchParams(location.search);
+  const FIXO = params.get('fixo') === '1';        // ?fixo=1 desliga a sincronia (plano B)
+  const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let atual = window.ESTAGIO_INICIAL;
+  let conectado = false;
+
+  /* Escala da barra: sem viewport a página fica "encolhida" e a barra
+     sumiria de tão pequena. --k compensa isso. */
+  function ajustarEscala() {
+    const vv = window.visualViewport;
+    let k = 1, x = 0, y = 0, w = innerWidth, h = innerHeight;
+    if (vv) {
+      k = Math.max(1, 1 / vv.scale);          // página encolhida (escala < 1) → barra maior
+      x = vv.offsetLeft; y = vv.offsetTop; w = vv.width; h = vv.height;
+    } else if (screen.width < 900 && raiz.clientWidth > screen.width * 1.2) {
+      k = raiz.clientWidth / screen.width;
+    }
+    raiz.style.setProperty('--k', k.toFixed(2));
+    raiz.style.setProperty('--vx', x + 'px'); raiz.style.setProperty('--vy', y + 'px');
+    raiz.style.setProperty('--vw', w + 'px'); raiz.style.setProperty('--vh', h + 'px');
+  }
+
+  function pintarBarra() { /* sem barra na tela: a mudança é surpresa */ }
+
+  /* Troca a meta viewport ao vivo. Se o navegador não obedecer
+     (alguns celulares antigos), recarrega a página uma vez. */
+  function trocarViewport(s) {
+    meta.setAttribute('content', viewportPara(s));
+    const ligada = s >= 1 && !(PAGINA_BUG && s === 8);
+    if (PAGINA_BUG) { setTimeout(ajustarEscala, 700); return; }
+    setTimeout(() => {
+      ajustarEscala();
+      const cw = raiz.clientWidth, sw = screen.width;
+      const errado = ligada ? (sw < 900 && cw > sw * 1.3) : (sw < 900 && cw < 900);
+      if (!errado) return;
+      let ultimo = 0;
+      try { ultimo = +(sessionStorage.getItem('lp-recarga') || 0); } catch (e) {}
+      if (Date.now() - ultimo > 10000) {
+        try { sessionStorage.setItem('lp-recarga', Date.now()); } catch (e) {}
+        location.reload();
+      }
+    }, 700);
+  }
+
+  function avisar(s, voltando) {
+    const el = document.getElementById('aviso');
+    const e = ESTAGIOS[s];
+    el.classList.toggle('bug', s === 8);
+    el.innerHTML = '<small>' + (voltando ? 'Voltando' : (s === 8 ? 'Desafio' : (s === 0 ? 'Ao vivo' : 'Consertado ao vivo'))) + '</small>' +
+                   '<strong>' + e.t + '</strong><span>' + e.d + '</span>';
+    el.classList.add('mostra');
+    clearTimeout(avisar.t);
+    avisar.t = setTimeout(() => el.classList.remove('mostra'), 4200);
+  }
+
+  function destacar(seletor) {
+    if (!seletor || calmo) return;
+    const el = document.querySelector(seletor);
+    if (!el || el.offsetParent === null && seletor !== 'body') return;
+    if (seletor !== 'body') el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+    el.classList.remove('consertado'); void el.offsetWidth; el.classList.add('consertado');
+    setTimeout(() => el.classList.remove('consertado'), 1900);
+  }
+
+  /* Festa de pixels quando o site fica pronto */
+  function festa() {
+    if (calmo) return;
+    const cores = ['#c9302c', '#ffc93c', '#43e0a6', '#52d5ff', '#3a72ff'];
+    const k = parseFloat(getComputedStyle(raiz).getPropertyValue('--k')) || 1;
+    for (let i = 0; i < 36; i++) {
+      const p = document.createElement('i');
+      p.className = 'pixel';
+      p.style.background = cores[i % cores.length];
+      p.style.left = (innerWidth / 2) + 'px'; p.style.top = (innerHeight / 2) + 'px';
+      p.style.width = p.style.height = (10 * k) + 'px';
+      document.body.appendChild(p);
+      const ang = Math.random() * Math.PI * 2, dist = (120 + Math.random() * 220) * k;
+      p.animate([
+        { transform: 'translate(-50%,-50%) scale(0)', opacity: 1 },
+        { transform: `translate(calc(-50% + ${Math.cos(ang) * dist}px), calc(-50% + ${Math.sin(ang) * dist}px)) scale(1) rotate(${Math.random() * 360}deg)`, opacity: 1, offset: .6 },
+        { transform: `translate(calc(-50% + ${Math.cos(ang) * dist * 1.1}px), calc(-50% + ${Math.sin(ang) * dist * 1.1 + 160 * k}px)) scale(.6)`, opacity: 0 }
+      ], { duration: 1600 + Math.random() * 600, easing: 'cubic-bezier(.2,.7,.2,1)' }).onfinish = () => p.remove();
+    }
+  }
+
+  /* Aplica um estágio (0 a 9). "animar" mostra o aviso e o destaque. */
+  function aplicar(s, animar) {
+    if (!(s >= 0 && s <= 9) || s === atual) return;
+    if (PAGINA_BUG && s < 8) return;              // a página do bug só sai do bug quando ele é consertado
+    const antes = atual;
+    atual = s;
+    if (!PAGINA_BUG) { try { localStorage.setItem('lp-estagio', s); } catch (e) {} }
+    const mudaViewport = viewportPara(s) !== viewportPara(antes);
+
+    const trocar = () => {
+      const classes = [];
+      for (let i = 1; i <= s; i++) classes.push('f' + i);
+      if (raiz.classList.contains('menu-aberto')) classes.push('menu-aberto');
+      raiz.className = classes.join(' ');
+      if (mudaViewport) trocarViewport(s);
+    };
+
+    if (animar && !mudaViewport && !calmo && document.startViewTransition) document.startViewTransition(trocar);
+    else trocar();
+
+    ajustarEscala();
+    pintarBarra();
+    if (animar) {
+      avisar(s, s < antes);
+      setTimeout(() => destacar(ESTAGIOS[s].alvo), mudaViewport ? 800 : 450);
+      if (s === 9 && s > antes) setTimeout(festa, 300);
+      try { navigator.vibrate && navigator.vibrate(60); } catch (e) {}
+    }
+  }
+
+  /* Escuta o canal. As mensagens antigas (de até 3h) chegam primeiro;
+     esperamos 300ms e aplicamos só a mais recente. */
+  let espera = 5000, pendente = null, timerPendente, aquecido = false;
+  function receber(s) {
+    pendente = s;
+    clearTimeout(timerPendente);
+    timerPendente = setTimeout(() => { aplicar(pendente, aquecido); }, aquecido ? 0 : 300);
+  }
+  function conectar() {
+    const es = new EventSource('https://ntfy.sh/' + CANAL + '/sse?since=3h');
+    es.addEventListener('open', () => {
+      conectado = true; espera = 5000; pintarBarra();
+      setTimeout(() => { aquecido = true; }, 900);
+    });
+    es.onmessage = (e) => {
+      try {
+        const d = JSON.parse(e.data);
+        if (d.event !== 'message') return;
+        const m = JSON.parse(d.message);
+        if (typeof m.s === 'number') receber(m.s);
+      } catch (erro) {}
+    };
+    es.onerror = () => {
+      es.close();
+      conectado = false; aquecido = false; pintarBarra();
+      // tenta de novo devagar (5s, 10s, 20s… até 30s) para não sobrecarregar a rede da escola
+      setTimeout(conectar, espera + Math.random() * 2000);
+      espera = Math.min(espera * 2, 30000);
+    };
+  }
+
+  /* Botão ☰ Menu (aparece depois do conserto da media query) */
+  document.querySelector('.btn-menu').addEventListener('click', (e) => {
+    const aberto = raiz.classList.toggle('menu-aberto');
+    e.currentTarget.setAttribute('aria-expanded', aberto);
+  });
+
+  /* Para testar no computador: lanchonete.aplicar(5) no console */
+  window.lanchonete = { aplicar: (s) => aplicar(s, true) };
+
+  ajustarEscala();
+  pintarBarra();
+  addEventListener('resize', ajustarEscala);
+  if (window.visualViewport) {
+    visualViewport.addEventListener('resize', ajustarEscala);
+    visualViewport.addEventListener('scroll', ajustarEscala);
+  }
+  if (!FIXO) conectar();
+  </script>
+</body>
+</html>

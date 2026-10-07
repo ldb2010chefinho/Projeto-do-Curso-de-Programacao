@@ -26,7 +26,10 @@
     (function () {
       var q = new URLSearchParams(location.search).get('s');
       var salvo = 0;
-      try { salvo = +(localStorage.getItem('lp-estagio') || 0); } catch (e) {}
+      try {
+        var g = JSON.parse(localStorage.getItem('lp-estagio2') || 'null');
+        if (g && Date.now() - g.t < 45 * 60 * 1000) salvo = +g.s;   // só vale se for da apresentação de agora
+      } catch (e) {}
       var s = q !== null ? +q : (window.PAGINA_BUG ? 8 : salvo);
       if (!(s >= 0 && s <= 9)) s = 0;
       if (window.PAGINA_BUG && s < 8) s = 8;
@@ -235,11 +238,8 @@
     { t: 'Site consertado',              d: 'Um site. Todas as telas.', alvo: 'body' }
   ];
 
-  // nome curto de cada estágio, para a barra de baixo
-  const CURTO = ['site quebrado', 'viewport', 'flexbox', 'grid', 'media query', 'max-width', 'clamp()', 'container query', 'caça ao bug', 'consertado'];
-
   const raiz = document.documentElement;
-  const PAGINA_BUG = window.PAGINA_BUG, viewportPara = window.viewportPara;
+  const EH_BUG = window.PAGINA_BUG, vpPara = window.viewportPara;
   const meta = document.getElementById('vp');
   const params = new URLSearchParams(location.search);
   const FIXO = params.get('fixo') === '1';        // ?fixo=1 desliga a sincronia (plano B)
@@ -268,9 +268,9 @@
   /* Troca a meta viewport ao vivo. Se o navegador não obedecer
      (alguns celulares antigos), recarrega a página uma vez. */
   function trocarViewport(s) {
-    meta.setAttribute('content', viewportPara(s));
-    const ligada = s >= 1 && !(PAGINA_BUG && s === 8);
-    if (PAGINA_BUG) { setTimeout(ajustarEscala, 700); return; }
+    meta.setAttribute('content', vpPara(s));
+    const ligada = s >= 1 && !(EH_BUG && s === 8);
+    if (EH_BUG) { setTimeout(ajustarEscala, 700); return; }
     setTimeout(() => {
       ajustarEscala();
       const cw = raiz.clientWidth, sw = screen.width;
@@ -329,11 +329,11 @@
   /* Aplica um estágio (0 a 9). "animar" mostra o aviso e o destaque. */
   function aplicar(s, animar) {
     if (!(s >= 0 && s <= 9) || s === atual) return;
-    if (PAGINA_BUG && s < 8) return;              // a página do bug só sai do bug quando ele é consertado
+    if (EH_BUG && s < 8) return;              // a página do bug só sai do bug quando ele é consertado
     const antes = atual;
     atual = s;
-    if (!PAGINA_BUG) { try { localStorage.setItem('lp-estagio', s); } catch (e) {} }
-    const mudaViewport = viewportPara(s) !== viewportPara(antes);
+    if (!EH_BUG) { try { localStorage.setItem('lp-estagio2', JSON.stringify({ s: s, t: Date.now() })); } catch (e) {} }
+    const mudaViewport = vpPara(s) !== vpPara(antes);
 
     const trocar = () => {
       const classes = [];
@@ -356,21 +356,29 @@
     }
   }
 
-  /* Escuta o canal. As mensagens antigas (de até 3h) chegam primeiro;
+  /* Escuta o canal. As mensagens dos últimos 45 min chegam primeiro;
      esperamos 300ms e aplicamos só a mais recente. */
-  let espera = 5000, pendente = null, timerPendente, aquecido = false;
+  let espera = 3000, pendente = null, timerPendente, aquecido = false;
+  let es = null, timerReconexao = null, ultimoSinal = Date.now();
   function receber(s) {
     pendente = s;
     clearTimeout(timerPendente);
     timerPendente = setTimeout(() => { aplicar(pendente, aquecido); }, aquecido ? 0 : 300);
   }
   function conectar() {
-    const es = new EventSource('https://ntfy.sh/' + CANAL + '/sse?since=3h');
+    clearTimeout(timerReconexao);
+    if (es) es.close();
+    aquecido = false;
+    es = new EventSource('https://ntfy.sh/' + CANAL + '/sse?since=45m');
+    ultimoSinal = Date.now();
     es.addEventListener('open', () => {
-      conectado = true; espera = 5000; pintarBarra();
+      conectado = true; espera = 3000; ultimoSinal = Date.now(); pintarBarra();
       setTimeout(() => { aquecido = true; }, 900);
     });
+    // o servidor manda um "estou vivo" a cada ~45s; serve para perceber conexão travada
+    es.addEventListener('keepalive', () => { ultimoSinal = Date.now(); });
     es.onmessage = (e) => {
+      ultimoSinal = Date.now();
       try {
         const d = JSON.parse(e.data);
         if (d.event !== 'message') return;
@@ -381,11 +389,25 @@
     es.onerror = () => {
       es.close();
       conectado = false; aquecido = false; pintarBarra();
-      // tenta de novo devagar (5s, 10s, 20s… até 30s) para não sobrecarregar a rede da escola
-      setTimeout(conectar, espera + Math.random() * 2000);
-      espera = Math.min(espera * 2, 30000);
+      // tenta de novo (3s, 6s, 12s… até 20s) sem sobrecarregar a rede da escola
+      timerReconexao = setTimeout(conectar, espera + Math.random() * 1500);
+      espera = Math.min(espera * 2, 20000);
     };
   }
+
+  /* Celular bloqueado ou outro app aberto: a conexão cai. Quando a pessoa volta
+     para a página, reconecta NA HORA e pega a etapa atual (sem recarregar). */
+  function voltouParaPagina() {
+    if (FIXO || document.visibilityState !== 'visible') return;
+    if (!conectado || Date.now() - ultimoSinal > 20000) { espera = 3000; conectar(); }
+  }
+  document.addEventListener('visibilitychange', voltouParaPagina);
+  addEventListener('pageshow', voltouParaPagina);
+  addEventListener('online', () => { if (!FIXO) { espera = 3000; conectar(); } });
+  // vigia: se passar 75s sem nenhum sinal do servidor, a conexão travou: reconecta
+  setInterval(() => {
+    if (!FIXO && document.visibilityState === 'visible' && Date.now() - ultimoSinal > 75000) conectar();
+  }, 15000);
 
   /* Botão ☰ Menu (aparece depois do conserto da media query) */
   document.querySelector('.btn-menu').addEventListener('click', (e) => {
@@ -395,6 +417,11 @@
 
   /* Para testar no computador: lanchonete.aplicar(5) no console */
   window.lanchonete = { aplicar: (s) => aplicar(s, true) };
+  /* modo ensaio: a página de ensaio do app manda o estágio por mensagem */
+  addEventListener('message', (e) => {
+    const d = e.data;
+    if (d && d.lanchonete === 'estagio' && typeof d.s === 'number') aplicar(d.s, true);
+  });
 
   ajustarEscala();
   pintarBarra();

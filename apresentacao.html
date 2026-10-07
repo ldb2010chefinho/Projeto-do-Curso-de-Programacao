@@ -2166,7 +2166,6 @@ HOOKS.units = () => { if(!once.units) setupUnits(); };
 const slides = $$('.slide'); let cur = -1, maxStage = 0;
 const STATUS_TEXT = ['quebrado','viewport ok','estrutura ok','detalhes ok','testado'];
 const STAGE_TOAST = {1:'Conserto 1 aplicado: o site cabe na tela', 2:'Conserto 2 aplicado: a estrutura se reorganiza', 3:'Conserto 3 aplicado: os detalhes', 4:'Teste final: bug encontrado'};
-const EASE_IO = 'cubic-bezier(.77,0,.18,1)', EASE_OUT = 'cubic-bezier(.2,.7,.2,1)';
 slides.forEach(s => { s._frags = $$('[data-frag]', s).sort((a,b)=>a.dataset.frag-b.dataset.frag); s._fi = 0; });
 
 /* títulos grandes entram palavra por palavra */
@@ -2214,7 +2213,6 @@ function entrance(s, base){
 
 /* transição suave: o slide atual sai rápido, o próximo entra deslizando.
    Só opacity e transform, que a placa de vídeo anima sem travar. */
-const scan = $('#scan');
 const T_OUT = 300, T_IN_DELAY = 140, T_IN = 640;
 function transition(from, to, dir){
   if(REDUCED || !from) return 0;
@@ -2309,6 +2307,11 @@ const LIVE = (() => {
       : 'O site nos celulares segue os slides sozinho. Use os botões abaixo só se precisar forçar uma etapa.';
   }
   function enviar(s){
+    // modo ensaio: dentro da página de ensaio, avisa o celular simulado ao lado (sem internet)
+    if(window.parent !== window){
+      try { window.parent.postMessage({ lanchonete: 'estagio', s }, '*'); } catch(e){}
+      rede = 'ok'; confirmado = true; pintar(); return;
+    }
     const id = ++envio; confirmado = false;
     rede = 'sending'; pintar();
     const tentar = (n) => fetch('https://ntfy.sh/' + CANAL, { method:'POST', body: JSON.stringify({ s, t: Date.now() }) })
@@ -2346,7 +2349,7 @@ const LIVE = (() => {
     es.onerror = () => { es.close(); ouvindo = false; setTimeout(escutar, 8000); };
   }
   let confirmado = false;
-  escutar();
+  if(window.parent === window) escutar();
   function abrir(open){
     open = open ?? panel.hidden;
     panel.hidden = !open; pill.setAttribute('aria-expanded', open);

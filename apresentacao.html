@@ -476,6 +476,18 @@ kbd{font-family:var(--f-mono);font-size:var(--fs-sm);padding:6px 10px;border-rad
 .finale h2{font-size:var(--fs-2xl);font-weight:800;letter-spacing:-.045em}
 .finale h2 .accent{color:var(--cyan)}
 
+/* ---------- VOZES: uma cor discreta para quem conduz cada slide ----------
+   Só quem apresenta sabe o que significa. Sem nomes na tela. */
+:root{--voz:var(--cyan);--voz-bg:var(--cyan);--voz-next:var(--cyan)}
+.voz-line{position:fixed;left:0;right:0;top:calc(var(--top-h) + env(safe-area-inset-top,0px) - 1px);height:3px;z-index:21;pointer-events:none;
+  background:var(--voz-bg);box-shadow:0 0 14px var(--voz);opacity:.9;transition:background .6s var(--ease),box-shadow .6s var(--ease)}
+.voz{display:inline-flex;align-items:center;gap:7px;margin-left:2px}
+.voz i{display:block;border-radius:50%;transition:background .5s,border-color .5s,transform .4s var(--ease)}
+.voz .agora{width:11px;height:11px;background:var(--voz-bg);box-shadow:0 0 10px var(--voz)}
+.voz .prox{width:8px;height:8px;border:2px solid var(--voz-next);opacity:.85}
+.voz.troca .prox{animation:vozPulse 1.2s ease-in-out infinite}
+@keyframes vozPulse{50%{transform:scale(1.45)}}
+.progress{background:var(--voz-bg)!important;transition:width .5s var(--ease),background .6s var(--ease)}
 /* ---------- ÚLTIMO CAPÍTULO: PLOT TWIST (Bootstrap) ---------- */
 :root{--bs:#7952b3;--bs2:#b9a2f0}
 /* A. rebobinar: os 8 consertos do dia */
@@ -1702,7 +1714,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 <section class="slide twist-slide" data-act="Último capítulo · Plot twist" data-stage="4" data-fix="10" data-fix-manual="1">
   <div class="inner twist">
     <p class="tw-q">E se alguém já tivesse escrito<br>tudo isso <span class="accent">por você?</span></p>
-    <div class="tw-reveal" data-frag="1" data-onshow="plottwist">
+    <div class="tw-reveal" data-frag="1" data-onshow="plottwist" data-voz="L">
       <div>
         <span class="tw-label" id="twLabel">PLOT TWIST</span>
         <h2 class="tw-word" id="twWord">Bootstrap</h2>
@@ -1731,7 +1743,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
           <code class="bsx-bs">row-cols-1<br>row-cols-sm-2<br>row-cols-lg-3</code>
           <span class="bsx-note">1 coluna no celular, 2 a partir de sm, 3 a partir de lg.</span>
         </li>
-        <li class="bsx-row" data-frag="3" data-onshow="bsx" data-peca="layout" data-w="1200">
+        <li class="bsx-row" data-frag="3" data-onshow="bsx" data-peca="layout" data-w="1200" data-voz="T">
           <span class="bsx-prob">Faltava a barra lateral</span>
           <span class="bsx-ours"><code>grid-template-columns: 3fr 1fr</code></span>
           <code class="bsx-bs">col-md-9<br>+ col-md-3</code>
@@ -1743,7 +1755,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
           <code class="bsx-bs">img-fluid</code>
           <span class="bsx-note">É exatamente o mesmo CSS que a gente escreveu no Conserto 3.</span>
         </li>
-        <li class="bsx-row" data-frag="5" data-onshow="bsx" data-peca="botao" data-w="340">
+        <li class="bsx-row" data-frag="5" data-onshow="bsx" data-peca="botao" data-w="340" data-voz="M">
           <span class="bsx-prob">O botão saía da tela</span>
           <span class="bsx-ours"><code><s>width: 344px</s></code></span>
           <code class="bsx-bs">w-100</code>
@@ -1845,12 +1857,14 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </div>
 
 <!-- ============ BARRA INFERIOR ============ -->
+<i class="voz-line" aria-hidden="true"></i>
 <footer class="botbar">
   <div class="track" id="track"></div>
   <div class="progress" id="progress"></div>
   <button class="navbtn" id="prevBtn" aria-label="Slide anterior">←</button>
   <button class="navbtn" id="nextBtn" aria-label="Próximo slide">→</button>
   <span class="counter" id="counter">1 / 1</span>
+  <span class="voz" id="voz" aria-hidden="true" title="Cor de quem conduz agora · anel: quem conduz o próximo"><i class="agora"></i><i class="prox"></i></span>
   <button class="timer" id="timer" title="Cronômetro da apresentação">⏱ 00:00</button>
   <button class="navbtn sm" id="ovBtn" title="Ver todos os slides (G)">Slides</button>
   <button class="navbtn sm" id="fsBtn" title="Tela cheia (F)">Tela cheia</button>
@@ -2464,6 +2478,7 @@ function go(n, dir){
   $$('[data-live]', to).forEach(h => { if(h._type && !h._typed && dir > 0){ h._typed = true; typing = true; setTimeout(() => h._type(), d + 650); } });
   enterFix(n, dir, typing, d);
   try{ history.replaceState(null,'','#s'+(n+1)); }catch(e){}
+  if(typeof pintarVoz === 'function') pintarVoz();
   if(!$('#overview').hidden) paintOverview();
 }
 function autoHooks(s){
@@ -2478,8 +2493,35 @@ function autoHooks(s){
   if(s.querySelector('#dtMini')) HOOKS.testes();
   if(s.querySelector('#bsxStage')){ const api = bsxSetup(); if(api && !s.querySelector('.bsx-row.on')){ $$('#bsxList .bsx-row').forEach(x => x.classList.remove('sel')); api.setWidth(1200); api.show(1200); api.destacar(''); } }
 }
-function next(){ const s=slides[cur]; if(s._fi < s._frags.length){ showFrag(s, s._fi); s._fi++; } else if(cur < slides.length-1) go(cur+1, 1); }
-function prev(){ const s=slides[cur]; if(s._fi > 0){ s._fi--; s._frags[s._fi].classList.remove('on'); } else if(cur > 0) go(cur-1, -1); }
+
+/* =========================================================
+   VOZES: quem conduz cada slide (mesma divisão do roteiro).
+   L = Lucca (verde), T = Letícia (azul), M = Miguel (amarelo), A = os três.
+   Tons tirados da própria paleta dos slides (--ok, azul elétrico clareado, --warn).
+   Um fragmento com data-voz troca a cor no meio do slide.
+   ========================================================= */
+const VOZ_POR_SLIDE = 'LTMTLTMLMTMLTM' + 'LTMLTMLTMLT' + 'MLTMTLMTLMTL' + 'MA' + 'MTLT' + '--';
+const VOZ_COR = { L:'#43e0a6', T:'#5b8cff', M:'#ffd25c' };
+const VOZ_TODOS = 'linear-gradient(90deg,#43e0a6,#5b8cff,#ffd25c)';
+function vozEm(n, fi){
+  const s = slides[n]; if(!s) return '-';
+  let v = VOZ_POR_SLIDE[n] || '-';
+  for(let i = 0; i < fi && i < s._frags.length; i++){ const fv = s._frags[i].dataset.voz; if(fv) v = fv; }
+  return v;
+}
+function pintarVoz(){
+  const s = slides[cur], agora = vozEm(cur, s._fi);
+  const prox = s._fi < s._frags.length ? vozEm(cur, s._fi + 1) : vozEm(cur + 1, 0);
+  const r = document.documentElement.style;
+  const solido = v => VOZ_COR[v] || '#e8efff';
+  r.setProperty('--voz', solido(agora));
+  r.setProperty('--voz-bg', agora === 'A' ? VOZ_TODOS : (VOZ_COR[agora] || 'var(--line)'));
+  r.setProperty('--voz-next', prox === 'A' ? '#e8efff' : (VOZ_COR[prox] || 'var(--line)'));
+  $('#voz').classList.toggle('troca', prox !== agora && prox !== '-');
+}
+
+function next(){ const s=slides[cur]; if(s._fi < s._frags.length){ showFrag(s, s._fi); s._fi++; } else if(cur < slides.length-1) go(cur+1, 1); pintarVoz(); }
+function prev(){ const s=slides[cur]; if(s._fi > 0){ s._fi--; s._frags[s._fi].classList.remove('on'); } else if(cur > 0) go(cur-1, -1); pintarVoz(); }
 
 /* =========================================================
    5c. CELULARES AO VIVO

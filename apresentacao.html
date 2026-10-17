@@ -1737,25 +1737,25 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
           <code class="bsx-bs">navbar-expand-md</code>
           <span class="bsx-note">Abaixo de 768px o menu fica atrás do botão ☰. Toquem nele no celular!</span>
         </li>
-        <li class="bsx-row" data-frag="2" data-onshow="bsx" data-peca="cardapio" data-w="375" data-w2="1200">
+        <li class="bsx-row" data-frag="2" data-onshow="bsx" data-peca="cardapio" data-w="375" data-w2="1200" data-voz="T">
           <span class="bsx-prob">O cardápio ficava apertado</span>
           <span class="bsx-ours"><code>repeat(auto-fit, minmax(220px, 1fr))</code></span>
           <code class="bsx-bs">row-cols-1<br>row-cols-sm-2<br>row-cols-lg-3</code>
           <span class="bsx-note">1 coluna no celular, 2 a partir de sm, 3 a partir de lg.</span>
         </li>
-        <li class="bsx-row" data-frag="3" data-onshow="bsx" data-peca="layout" data-w="1200" data-voz="T">
+        <li class="bsx-row" data-frag="3" data-onshow="bsx" data-peca="layout" data-w="1200">
           <span class="bsx-prob">Faltava a barra lateral</span>
           <span class="bsx-ours"><code>grid-template-columns: 3fr 1fr</code></span>
           <code class="bsx-bs">col-md-9<br>+ col-md-3</code>
           <span class="bsx-note">O grid do Bootstrap tem 12 colunas: 9 + 3 = 12.</span>
         </li>
-        <li class="bsx-row" data-frag="4" data-onshow="bsx" data-peca="foto" data-w="375">
+        <li class="bsx-row" data-frag="4" data-onshow="bsx" data-peca="foto" data-w="375" data-voz="M">
           <span class="bsx-prob">A foto estourava a tela</span>
           <span class="bsx-ours"><code>max-width: 100%; height: auto</code></span>
           <code class="bsx-bs">img-fluid</code>
           <span class="bsx-note">É exatamente o mesmo CSS que a gente escreveu no Conserto 3.</span>
         </li>
-        <li class="bsx-row" data-frag="5" data-onshow="bsx" data-peca="botao" data-w="340" data-voz="M">
+        <li class="bsx-row" data-frag="5" data-onshow="bsx" data-peca="botao" data-w="340">
           <span class="bsx-prob">O botão saía da tela</span>
           <span class="bsx-ours"><code><s>width: 344px</s></code></span>
           <code class="bsx-bs">w-100</code>
@@ -2500,7 +2500,7 @@ function autoHooks(s){
    Tons tirados da própria paleta dos slides (--ok, azul elétrico clareado, --warn).
    Um fragmento com data-voz troca a cor no meio do slide.
    ========================================================= */
-const VOZ_POR_SLIDE = 'LTMTLTMLMTMLTM' + 'LTMLTMLTMLT' + 'MLTMTLMTLMTL' + 'MA' + 'MTLT' + '--';
+const VOZ_POR_SLIDE = 'LTMTLTMLMTMLTM' + 'LTMMTMLTLLT' + 'MLTMTLMTLMTL' + 'MA' + 'MTLT' + '--';
 const VOZ_COR = { L:'#43e0a6', T:'#5b8cff', M:'#ffd25c' };
 const VOZ_TODOS = 'linear-gradient(90deg,#43e0a6,#5b8cff,#ffd25c)';
 function vozEm(n, fi){

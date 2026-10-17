@@ -4,7 +4,7 @@ Site de demonstração da apresentação sobre Design Responsivo.
 Ele se conserta **sozinho, ao vivo**, conforme os slides avançam.
 
 ## Como funciona
-A apresentação publica o estágio atual (0 a 9) no canal gratuito
+A apresentação publica o estágio atual (0 a 10) no canal gratuito
 `ntfy.sh/lanchonete-pixel-ldb-oterimxu`. Cada celular que abriu o site fica
 ouvindo esse canal e aplica o conserto sem ninguém tocar em nada.
 
@@ -20,6 +20,7 @@ ouvindo esse canal e aplica o conserto sem ninguém tocar em nada.
 | 7 | container query | Card da promoção fica lado a lado |
 | 8 | Caça ao bug | Botão "Fazer pedido" sai da tela abaixo de 360px |
 | 9 | Final | Site consertado |
+| 10 | Plot twist | O site vira a versão feita com Bootstrap (`bootstrap.html`) |
 
 ## Arquivos
 | Arquivo | Para quê |
@@ -28,5 +29,7 @@ ouvindo esse canal e aplica o conserto sem ninguém tocar em nada.
 | `bug.html` | Atalho para o modo Caça ao bug (QR code 2) |
 | `viewport.html`, `final.html` | Atalhos fixos, sem sincronia (plano B) |
 | `apresentacao.html` | A apresentação (é ela que comanda os celulares) |
+| `bootstrap.html` | O mesmo site feito só com classes do Bootstrap 5.3.7 (0 linhas de CSS nosso) |
+| `bootstrap.min.css`, `bootstrap.bundle.min.js` | Bootstrap 5.3.7 (licença MIT), aqui para funcionar sem CDN |
 
-Plano B sem internet: `?s=N&fixo=1` abre qualquer estágio sem sincronia.
+Plano B sem internet: `?s=N&fixo=1` abre qualquer estágio sem sincronia (`?s=10&fixo=1` = plot twist).

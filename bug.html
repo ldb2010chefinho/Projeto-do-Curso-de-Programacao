@@ -18,6 +18,7 @@
   <script>
     /* Roda ANTES de desenhar a página, para ela já nascer no estágio certo.
        Estágio = quantos consertos já foram aplicados (0 a 9).
+       O estágio 10 é o PLOT TWIST: o site vira a versão feita com Bootstrap.
        ?s=N na URL força um estágio (plano B); senão usa o último salvo. */
     /* Página da Caça ao bug (bug.html): começa sempre no estágio 8 e finge
        ser uma tela de 340px, para o erro aparecer em qualquer celular. */
@@ -35,7 +36,7 @@
         if (g && Date.now() - g.t < 45 * 60 * 1000) salvo = +g.s;   // só vale se for da apresentação de agora
       } catch (e) {}
       var s = q !== null ? +q : (window.PAGINA_BUG ? 8 : salvo);
-      if (!(s >= 0 && s <= 9)) s = 0;
+      if (!(s >= 0 && s <= 10)) s = 0;
       if (window.PAGINA_BUG && s < 8) s = 8;
       window.ESTAGIO_INICIAL = s;
       document.getElementById('vp').setAttribute('content', window.viewportPara(s));
@@ -50,7 +51,8 @@
        COMO ESTE CSS FUNCIONA
        O <html> recebe uma classe para cada conserto já aplicado:
        f1 (viewport), f2 (Flexbox), f3 (Grid), f4 (media query),
-       f5 (imagens), f6 (clamp), f7 (container query), f8 (bug), f9 (final).
+       f5 (imagens), f6 (clamp), f7 (container query), f8 (bug), f9 (final),
+       f10 (plot twist: aparece a versão feita com Bootstrap, bootstrap.html).
        Assim dá para ver cada conserto mudando o site, um de cada vez.
        ===================================================================== */
 
@@ -147,6 +149,14 @@
     .f8:not(.f9) .hero { padding-left: 8px; padding-right: 8px; }
     .f8:not(.f9) .btn-pedido { width: 344px; text-align: center; }
 
+    /* ---------- PLOT TWIST (estágio 10) ----------
+       A versão Bootstrap (bootstrap.html) abre numa "janela" que cobre a tela
+       inteira. Ela fica num iframe para o CSS do Bootstrap não se misturar
+       com o nosso. Voltando os slides, ela some e o site original volta. */
+    .twist { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; z-index: 50; background: #f8f9fa; display: none; }
+    .f10 .twist { display: block; }
+    .f10 body { overflow: hidden; }
+
     /* =====================================================================
        AVISOS (só aparecem no momento em que o site muda)
        --k aumenta tudo quando a página está "encolhida" (sem viewport),
@@ -218,12 +228,15 @@
 
   <footer class="rodape" id="contato">© Lanchonete Pixel · site de demonstração de um trabalho escolar</footer>
 
+  <!-- PLOT TWIST: a versão Bootstrap carrega aqui (só a partir da Caça ao bug) -->
+  <iframe class="twist" id="twist" title="Lanchonete Pixel, versão feita com Bootstrap"></iframe>
+
   <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
 
   <script>
   /* =====================================================================
      SINCRONIA COM A APRESENTAÇÃO
-     A apresentação publica o estágio atual (0 a 9) num canal gratuito do
+     A apresentação publica o estágio atual (0 a 10) num canal gratuito do
      ntfy.sh. Cada celular fica "ouvindo" esse canal e aplica o conserto
      sozinho. Ninguém precisa tocar em nada.
      ===================================================================== */
@@ -239,7 +252,8 @@
     { t: 'Conserto 3 · clamp()',         d: 'O título cresce e encolhe com a tela', alvo: '.hero h1' },
     { t: 'Conserto 3 · container query', d: 'O card se adapta à caixa onde está', alvo: '.card-promo' },
     { t: 'Caça ao bug',                  d: 'Tem UM erro escondido. Quem achar primeiro grita!' },
-    { t: 'Site consertado',              d: 'Um site. Todas as telas.', alvo: 'body' }
+    { t: 'Site consertado',              d: 'Um site. Todas as telas.', alvo: 'body' },
+    { t: 'Plot twist!',                  d: 'E se alguém já tivesse escrito tudo isso?' }
   ];
 
   const raiz = document.documentElement;
@@ -293,7 +307,7 @@
     const el = document.getElementById('aviso');
     const e = ESTAGIOS[s];
     el.classList.toggle('bug', s === 8);
-    el.innerHTML = '<small>' + (voltando ? 'Voltando' : (s === 8 ? 'Desafio' : (s === 0 ? 'Ao vivo' : 'Consertado ao vivo'))) + '</small>' +
+    el.innerHTML = '<small>' + (voltando ? 'Voltando' : (s === 10 ? 'Último capítulo' : (s === 8 ? 'Desafio' : (s === 0 ? 'Ao vivo' : 'Consertado ao vivo')))) + '</small>' +
                    '<strong>' + e.t + '</strong><span>' + e.d + '</span>';
     el.classList.add('mostra');
     clearTimeout(avisar.t);
@@ -309,10 +323,10 @@
     setTimeout(() => el.classList.remove('consertado'), 1900);
   }
 
-  /* Festa de pixels quando o site fica pronto */
+  /* Festa de pixels quando o site fica pronto (no plot twist, em roxo) */
   function festa() {
     if (calmo) return;
-    const cores = ['#c9302c', '#ffc93c', '#43e0a6', '#52d5ff', '#3a72ff'];
+    const cores = atual === 10 ? ['#7952b3', '#a98eda', '#ffc107', '#ffffff', '#563d7c'] : ['#c9302c', '#ffc93c', '#43e0a6', '#52d5ff', '#3a72ff'];
     const k = parseFloat(getComputedStyle(raiz).getPropertyValue('--k')) || 1;
     for (let i = 0; i < 36; i++) {
       const p = document.createElement('i');
@@ -330,9 +344,25 @@
     }
   }
 
-  /* Aplica um estágio (0 a 9). "animar" mostra o aviso e o destaque. */
+  /* PLOT TWIST: carrega a versão Bootstrap com antecedência (a partir da
+     Caça ao bug), para ela aparecer na hora certa sem demora. */
+  const twist = document.getElementById('twist');
+  function prepararTwist() {
+    if (!twist.getAttribute('src')) twist.setAttribute('src', 'bootstrap.html');
+  }
+  /* revelação: um círculo que cresce do centro e cobre a tela */
+  function revelarTwist() {
+    if (calmo || !twist.animate) return;
+    twist.animate([
+      { clipPath: 'circle(0% at 50% 50%)', filter: 'saturate(3) hue-rotate(90deg)' },
+      { clipPath: 'circle(30% at 50% 50%)', filter: 'saturate(2) hue-rotate(-60deg)', offset: .35 },
+      { clipPath: 'circle(150% at 50% 50%)', filter: 'none' }
+    ], { duration: 1100, easing: 'cubic-bezier(.7,0,.2,1)' });
+  }
+
+  /* Aplica um estágio (0 a 10). "animar" mostra o aviso e o destaque. */
   function aplicar(s, animar) {
-    if (!(s >= 0 && s <= 9) || s === atual) return;
+    if (!(s >= 0 && s <= 10) || s === atual) return;
     if (EH_BUG && s < 8) return;              // a página do bug só sai do bug quando ele é consertado
     const antes = atual;
     atual = s;
@@ -347,15 +377,18 @@
       if (mudaViewport) trocarViewport(s);
     };
 
-    if (animar && !mudaViewport && !calmo && document.startViewTransition) document.startViewTransition(trocar);
+    if (s >= 8) prepararTwist();
+    const viraTwist = s === 10 && antes < 10;
+    if (animar && !mudaViewport && !calmo && !viraTwist && antes !== 10 && document.startViewTransition) document.startViewTransition(trocar);
     else trocar();
+    if (viraTwist && animar) revelarTwist();
 
     ajustarEscala();
     pintarBarra();
     if (animar) {
       avisar(s, s < antes);
       setTimeout(() => destacar(ESTAGIOS[s].alvo), mudaViewport ? 800 : 450);
-      if (s === 9 && s > antes) setTimeout(festa, 300);
+      if ((s === 9 || s === 10) && s > antes) setTimeout(festa, s === 10 ? 700 : 300);
       try { navigator.vibrate && navigator.vibrate(60); } catch (e) {}
     }
   }
@@ -427,6 +460,7 @@
     if (d && d.lanchonete === 'estagio' && typeof d.s === 'number') aplicar(d.s, true);
   });
 
+  if (atual >= 8) prepararTwist();
   ajustarEscala();
   pintarBarra();
   addEventListener('resize', ajustarEscala);

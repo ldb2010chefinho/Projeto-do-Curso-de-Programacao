@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <!-- O Bootstrap também precisa da meta viewport: ele não substitui o Conserto 1 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lanchonete Pixel · versão Bootstrap</title>
+  <!--
+    PLOT TWIST: o MESMO site da Lanchonete Pixel, mas feito com Bootstrap 5.3.7.
+    Nesta página não existe nenhuma linha de CSS escrita por nós:
+    nada de <style>, nada de style="". Tudo é classe do Bootstrap.
+    (bootstrap.min.css e bootstrap.bundle.min.js estão nesta mesma pasta,
+     então a página funciona até sem internet.)
+  -->
+  <link rel="stylesheet" href="bootstrap.min.css">
+</head>
+<body class="bg-body-tertiary">
+
+  <!-- Aviso do plot twist -->
+  <div class="alert alert-warning rounded-0 border-0 mb-0 text-center py-2" role="status">
+    <strong>Plot twist!</strong> Este site agora é feito com <strong>Bootstrap</strong>.
+    <span class="d-block small">0 linhas de CSS escritas por nós.</span>
+  </div>
+
+  <!-- MENU: navbar-expand-md = abaixo de 768px o menu vira ☰ sozinho
+       (o botão abre e fecha com o JavaScript do Bootstrap) -->
+  <nav class="navbar navbar-expand-md bg-danger" data-bs-theme="dark" data-peca="menu">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">Lanchonete Pixel</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+              aria-controls="menu" aria-expanded="false" aria-label="Abrir o menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="menu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="#">Início</a></li>
+          <li class="nav-item"><a class="nav-link" href="#cardapio">Cardápio</a></li>
+          <li class="nav-item"><a class="nav-link" href="#promo">Promoções</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- DESTAQUE: uma coluna no celular, duas a partir de md (768px) -->
+  <header class="container py-4">
+    <div class="row g-4 align-items-center">
+      <div class="col-12 col-md-6">
+        <h1 class="display-5 fw-bold">Hambúrguer artesanal, montado pixel por pixel</h1>
+        <p class="lead text-body-secondary">Pedidos de terça a domingo.</p>
+        <!-- w-100 = width: 100%: o botão nunca passa da largura da tela (o bug da Caça ao bug) -->
+        <a class="btn btn-warning btn-lg fw-bold rounded-pill w-100" href="#cardapio" data-peca="botao">Fazer pedido</a>
+      </div>
+      <div class="col-12 col-md-6">
+        <!-- img-fluid = max-width: 100%; height: auto (o mesmo CSS do Conserto 3) -->
+        <img src="burger.svg" width="900" height="560" class="img-fluid rounded-4" data-peca="foto"
+             alt="Hambúrguer artesanal da Lanchonete Pixel">
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO + BARRA LATERAL: col-md-9 e col-md-3 (9 + 3 = 12 colunas) -->
+  <main class="container pb-4">
+    <div class="row g-4">
+      <section class="col-12 col-md-9" id="cardapio" data-peca="layout">
+        <h2 class="h4 fw-bold">Cardápio</h2>
+        <!-- row-cols: 1 coluna no celular, 2 a partir de sm, 3 a partir de lg -->
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3" data-peca="cardapio">
+          <div class="col"><article class="card h-100"><div class="card-body"><h3 class="h6 fw-bold mb-1">Pixel Burger</h3><p class="small text-body-secondary mb-1">Pão brioche, blend 160g, queijo</p><p class="fw-bold text-danger mb-0">R$ 29,90</p></div></article></div>
+          <div class="col"><article class="card h-100"><div class="card-body"><h3 class="h6 fw-bold mb-1">Cheese Byte</h3><p class="small text-body-secondary mb-1">Duplo cheddar e cebola caramelizada</p><p class="fw-bold text-danger mb-0">R$ 32,90</p></div></article></div>
+          <div class="col"><article class="card h-100"><div class="card-body"><h3 class="h6 fw-bold mb-1">Batata 8-bit</h3><p class="small text-body-secondary mb-1">Porção crocante com páprica</p><p class="fw-bold text-danger mb-0">R$ 16,90</p></div></article></div>
+          <div class="col"><article class="card h-100"><div class="card-body"><h3 class="h6 fw-bold mb-1">Milk-shake RGB</h3><p class="small text-body-secondary mb-1">Morango, baunilha e chocolate</p><p class="fw-bold text-danger mb-0">R$ 18,90</p></div></article></div>
+          <div class="col"><article class="card h-100"><div class="card-body"><h3 class="h6 fw-bold mb-1">Refri Retrô</h3><p class="small text-body-secondary mb-1">Lata 350ml</p><p class="fw-bold text-danger mb-0">R$ 7,90</p></div></article></div>
+          <div class="col"><article class="card h-100"><div class="card-body"><h3 class="h6 fw-bold mb-1">Veggie Vetor</h3><p class="small text-body-secondary mb-1">Hambúrguer de grão-de-bico</p><p class="fw-bold text-danger mb-0">R$ 27,90</p></div></article></div>
+        </div>
+      </section>
+      <aside class="col-12 col-md-3" id="promo">
+        <article class="card text-bg-dark h-100">
+          <img src="burger.svg" width="900" height="560" class="card-img-top img-fluid" alt="">
+          <div class="card-body">
+            <span class="badge text-bg-warning mb-2">Promoção do dia</span>
+            <p class="card-text mb-1">Combo Pixel: burger + batata + refri</p>
+            <p class="fw-bold text-warning mb-0">R$ 39,90</p>
+          </div>
+        </article>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="container pb-5 small text-body-secondary" id="contato">
+    © Lanchonete Pixel · site de demonstração de um trabalho escolar
+  </footer>
+
+  <script src="bootstrap.bundle.min.js"></script>
+  <script>
+    /* Só para a apresentação: quando o slide pede, contorna a peça do site
+       que está sendo explicada (usando classes do Bootstrap, sem CSS nosso). */
+    const CONTORNO = ['border', 'border-4', 'border-info', 'rounded-3'];
+    addEventListener('message', (e) => {
+      const d = e.data;
+      if (!d || typeof d.bsDestacar !== 'string') return;
+      document.querySelectorAll('[data-peca]').forEach(el => el.classList.remove(...CONTORNO));
+      const el = d.bsDestacar && document.querySelector('[data-peca="' + d.bsDestacar + '"]');
+      if (!el) { scrollTo({ top: 0, behavior: 'smooth' }); return; }
+      el.classList.add(...CONTORNO);
+      // rola só ESTA página (scrollIntoView rolaria também o slide de fora)
+      const r = el.getBoundingClientRect();
+      scrollTo({ top: scrollY + r.top - (innerHeight - r.height) / 2, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

@@ -454,6 +454,12 @@ kbd{font-family:var(--f-mono);font-size:var(--fs-sm);padding:6px 10px;border-rad
 .flip{position:relative;transform-style:preserve-3d;transition:transform 1.1s var(--ease);transform:rotateY(180deg)}
 .flip.shown{transform:none}
 .flip .face,.flip .back{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+/* durante a animação de entrada (opacidade), o navegador "achata" o 3D e mostraria a frente:
+   por isso a frente fica escondida até o giro chegar no meio (0,5s) */
+.flip .face{transition:visibility 0s .5s}
+.flip:not(.shown) .face{visibility:hidden;transition-delay:0s}
+.flip .back{transition:visibility 0s .5s}
+.flip.shown .back{visibility:hidden}
 .flip .back{position:absolute;inset:0;transform:rotateY(180deg);border-radius:inherit;display:grid;place-items:center;background:linear-gradient(160deg,#1b2a4d,#0a1224);box-shadow:inset 0 0 0 1px rgba(160,190,255,.18);font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;color:var(--faint);text-transform:uppercase}
 .dev-tablet{--tw:min(clamp(190px,22vw,330px),calc((100vh - 330px) * .75));width:var(--tw);aspect-ratio:3/4;border-radius:22px;background:linear-gradient(160deg,#1b2a4d,#0a1224);padding:12px;box-shadow:0 30px 60px -20px rgba(0,0,0,.7),inset 0 0 0 1px rgba(160,190,255,.18)}
 .dev-tablet .screen,.dev-laptop .screen{border-radius:12px}

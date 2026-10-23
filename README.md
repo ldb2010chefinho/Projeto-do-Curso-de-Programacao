@@ -33,3 +33,7 @@ ouvindo esse canal e aplica o conserto sem ninguém tocar em nada.
 | `bootstrap.min.css`, `bootstrap.bundle.min.js` | Bootstrap 5.3.7 (licença MIT), aqui para funcionar sem CDN |
 
 Plano B sem internet: `?s=N&fixo=1` abre qualquer estágio sem sincronia (`?s=10&fixo=1` = plot twist).
+
+## No computador e zoom
+- Aberto num computador, o site aparece dentro de um celular desenhado (`?moldura=0` desliga).
+- No celular, o zoom só é liberado no estágio 0 (faz parte do problema). Do Conserto 1 em diante ele fica travado, e qualquer zoom é desfeito a cada conserto.

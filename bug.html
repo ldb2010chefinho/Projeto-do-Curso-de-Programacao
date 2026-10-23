@@ -12,7 +12,7 @@
     não existe). O CONSERTO 1 troca isso, ao vivo, para:
       width=device-width, initial-scale=1
   -->
-  <meta name="viewport" id="vp" content="width=340">
+  <meta name="viewport" id="vp" content="width=340, maximum-scale=1, user-scalable=no">
   <title>Lanchonete Pixel</title>
 
   <script>
@@ -23,11 +23,26 @@
     /* Página da Caça ao bug (bug.html): começa sempre no estágio 8 e finge
        ser uma tela de 340px, para o erro aparecer em qualquer celular. */
     window.PAGINA_BUG = document.documentElement.dataset.pagina === 'bug';
+    /* ZOOM: no estágio 0 a turma PODE dar zoom (faz parte do problema que
+       ela precisa sentir). Do Conserto 1 em diante o zoom fica travado, para
+       ninguém "sair" da página com um dedo e deixar de ver os consertos. */
+    var TRAVA_ZOOM = ', maximum-scale=1, user-scalable=no';
     window.viewportPara = function (s) {
       if (s === 0) return 'width=980';
-      if (window.PAGINA_BUG && s === 8) return 'width=340';
-      return 'width=device-width, initial-scale=1';
+      if (window.PAGINA_BUG && s === 8) return 'width=340' + TRAVA_ZOOM;
+      return 'width=device-width, initial-scale=1' + TRAVA_ZOOM;
     };
+    /* MOLDURA: aberto num computador (mouse e tela grande), o site aparece
+       dentro de um celular desenhado. O celular desenhado é um iframe desta
+       mesma página com ?embed=1, que se comporta como um celular de verdade.
+       ?moldura=0 na URL desliga a moldura. */
+    (function () {
+      var q = new URLSearchParams(location.search);
+      window.EMBED = q.get('embed') === '1';
+      var computador = matchMedia('(hover: hover) and (pointer: fine)').matches && screen.width >= 900;
+      window.MOLDURA = !window.EMBED && window.top === window.self && computador && q.get('moldura') !== '0';
+      if (window.EMBED) document.documentElement.style.scrollbarWidth = 'none';   // sem barra de rolagem dentro do celular desenhado
+    })();
     (function () {
       var q = new URLSearchParams(location.search).get('s');
       var salvo = 0;
@@ -39,6 +54,7 @@
       if (!(s >= 0 && s <= 10)) s = 0;
       if (window.PAGINA_BUG && s < 8) s = 8;
       window.ESTAGIO_INICIAL = s;
+      if (window.MOLDURA) { document.documentElement.className = 'moldura'; return; }
       document.getElementById('vp').setAttribute('content', window.viewportPara(s));
       var classes = [];
       for (var i = 1; i <= s; i++) classes.push('f' + i);
@@ -157,6 +173,20 @@
     .f10 .twist { display: block; }
     .f10 body { overflow: hidden; }
 
+    /* ---------- MOLDURA (só no computador) ----------
+       Fundo azul-escuro da apresentação e um celular desenhado no meio. */
+    .moldura body { width: auto !important; min-height: 100vh; overflow: hidden; display: grid; place-items: center;
+      background: radial-gradient(900px 600px at 50% 0%, #13224a, #060a14 70%); }
+    .moldura body > :not(#moldura) { display: none !important; }
+    #moldura { display: grid; place-items: center; }
+    .m-celular { position: relative; padding: 14px; border-radius: 54px; background: linear-gradient(160deg, #1b2a4d, #0a1224);
+      box-shadow: 0 40px 90px rgba(0, 0, 0, .55), inset 0 0 0 1px rgba(160, 190, 255, .18); }
+    .m-celular::after { content: ""; position: absolute; top: 24px; left: 50%; width: 92px; height: 24px; transform: translateX(-50%);
+      background: #050912; border-radius: 99px; z-index: 2; }
+    .m-tela { position: relative; overflow: hidden; border-radius: 40px; background: #fff6ea; }
+    .m-tela iframe { position: absolute; top: 0; left: 0; border: 0; transform-origin: 0 0; background: #fff6ea;
+      transition: transform .6s cubic-bezier(.16, 1, .3, 1); }
+
     /* =====================================================================
        AVISOS (só aparecem no momento em que o site muda)
        --k aumenta tudo quando a página está "encolhida" (sem viewport),
@@ -235,6 +265,43 @@
 
   <script>
   /* =====================================================================
+     MOLDURA DE CELULAR (computador)
+     A tela tem 390 x 844 "pixels de celular". O iframe dentro dela recebe a
+     largura que o celular de verdade teria em cada estágio (980px sem a meta
+     viewport, 390px depois do conserto) e é encolhido para caber na tela,
+     exatamente como o navegador do celular faz.
+     ===================================================================== */
+  if (window.MOLDURA) (function () {
+    const LARG = 390, ALT = 844;
+    const q = new URLSearchParams(location.search); q.set('embed', '1');
+    const m = document.createElement('div'); m.id = 'moldura';
+    m.innerHTML = '<div class="m-celular"><div class="m-tela"><iframe id="mTela" title="Lanchonete Pixel no celular"></iframe></div></div>';
+    document.body.appendChild(m);
+    const tela = m.querySelector('.m-tela'), fr = m.querySelector('iframe');
+    let largura = 980;                       // largura que a página "acha" que tem
+    function encaixar() {
+      const h = Math.min(innerHeight * 0.88, 880), k = h / ALT;   // tamanho da tela na janela
+      tela.style.width = (LARG * k) + 'px'; tela.style.height = h + 'px';
+      const esc = (LARG * k) / largura;
+      fr.style.width = largura + 'px'; fr.style.height = (h / esc) + 'px';
+      fr.style.transform = 'scale(' + esc + ')';
+    }
+    addEventListener('message', (e) => {
+      if (e.source !== fr.contentWindow || !e.data || typeof e.data.lanchoneteVp !== 'string') return;
+      const w = /width=(\d+)/.exec(e.data.lanchoneteVp);
+      largura = w ? +w[1] : LARG;
+      encaixar();
+    });
+    addEventListener('resize', encaixar);
+    fr.src = location.pathname + '?' + q.toString();
+    encaixar();
+  })();
+  </script>
+
+  <script>
+  (function () {
+  if (window.MOLDURA) return;     // na moldura, quem sincroniza é o celular desenhado
+  /* =====================================================================
      SINCRONIA COM A APRESENTAÇÃO
      A apresentação publica o estágio atual (0 a 10) num canal gratuito do
      ntfy.sh. Cada celular fica "ouvindo" esse canal e aplica o conserto
@@ -268,6 +335,12 @@
   /* Escala da barra: sem viewport a página fica "encolhida" e a barra
      sumiria de tão pequena. --k compensa isso. */
   function ajustarEscala() {
+    if (window.EMBED) {                     // dentro da moldura: a "tela" tem 390px
+      raiz.style.setProperty('--k', Math.max(1, innerWidth / 390).toFixed(2));
+      raiz.style.setProperty('--vx', '0px'); raiz.style.setProperty('--vy', '0px');
+      raiz.style.setProperty('--vw', innerWidth + 'px'); raiz.style.setProperty('--vh', innerHeight + 'px');
+      return;
+    }
     const vv = window.visualViewport;
     let k = 1, x = 0, y = 0, w = innerWidth, h = innerHeight;
     if (vv) {
@@ -285,8 +358,22 @@
 
   /* Troca a meta viewport ao vivo. Se o navegador não obedecer
      (alguns celulares antigos), recarrega a página uma vez. */
+  /* Se alguém deu zoom, volta para o tamanho normal (no iPhone, que não
+     obedece o bloqueio de zoom, isso também resolve). */
+  function desfazerZoom() {
+    const vv = window.visualViewport;
+    if (window.EMBED || !vv || vv.scale <= 1.02 || atual === 0) return;
+    const certo = vpPara(atual);
+    meta.setAttribute('content', certo.replace('initial-scale=1', 'initial-scale=1.0'));
+    setTimeout(() => meta.setAttribute('content', certo), 350);
+  }
+  function avisarMoldura() {
+    if (window.EMBED) { try { parent.postMessage({ lanchoneteVp: vpPara(atual) }, '*'); } catch (e) {} }
+  }
+
   function trocarViewport(s) {
     meta.setAttribute('content', vpPara(s));
+    avisarMoldura();
     const ligada = s >= 1 && !(EH_BUG && s === 8);
     if (EH_BUG) { setTimeout(ajustarEscala, 700); return; }
     setTimeout(() => {
@@ -385,6 +472,7 @@
 
     ajustarEscala();
     pintarBarra();
+    desfazerZoom();
     if (animar) {
       avisar(s, s < antes);
       setTimeout(() => destacar(ESTAGIOS[s].alvo), mudaViewport ? 800 : 450);
@@ -461,6 +549,7 @@
   });
 
   if (atual >= 8) prepararTwist();
+  avisarMoldura();
   ajustarEscala();
   pintarBarra();
   addEventListener('resize', ajustarEscala);
@@ -469,6 +558,7 @@
     visualViewport.addEventListener('scroll', ajustarEscala);
   }
   if (!FIXO) conectar();
+  })();
   </script>
 </body>
 </html>

@@ -436,6 +436,7 @@ input[type=range]{width:100%;accent-color:var(--cyan)}
 .tabs button{border:1px solid var(--line);background:var(--surface);border-radius:8px 8px 0 0;padding:8px 16px;font-family:var(--f-mono);font-size:var(--fs-xs);border-bottom:0}
 .tabs button[aria-selected="true"]{background:#081122;color:var(--cyan)}
 .fw-code .code{border-top-left-radius:0}
+.fw-solo .code{border-top-left-radius:var(--r)}
 .under{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .punch{font-family:var(--f-display);font-size:var(--fs-lg);font-weight:700;color:var(--sky)}
 
@@ -1577,13 +1578,8 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
     <p class="big-q" style="font-size:var(--fs-md);max-width:none">Quem já ouviu falar de Bootstrap? E de Tailwind?</p>
     <div class="split" style="align-items:start">
       <div class="stack" style="gap:0">
-        <div class="tabs" role="tablist"><button role="tab" aria-selected="true" data-fw="bs">Bootstrap</button><button role="tab" aria-selected="false" data-fw="tw">Tailwind</button></div>
-        <div class="fw-code">
-<pre class="code" data-lang="html" id="fw-bs">&lt;div class="row"&gt;
-  &lt;div class="col-12 col-md-6"&gt;Cardápio&lt;/div&gt;
-  &lt;div class="col-12 col-md-6"&gt;Promoções&lt;/div&gt;
-&lt;/div&gt;</pre>
-<pre class="code" data-lang="html" id="fw-tw" hidden>&lt;div class="grid grid-cols-1 md:grid-cols-2 gap-4"&gt;
+        <div class="fw-code fw-solo">
+<pre class="code" data-lang="html" id="fw-tw">&lt;div class="grid grid-cols-1 md:grid-cols-2 gap-4"&gt;
   &lt;div&gt;Cardápio&lt;/div&gt;
   &lt;div&gt;Promoções&lt;/div&gt;
 &lt;/div&gt;</pre>
@@ -1684,7 +1680,8 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
      A turma acha que acabou ("Um site. Todas as telas."). A apresentação
      rebobina tudo o que foi feito à mão e revela o Bootstrap. Na revelação,
      o site no celular de todo mundo vira a versão feita com Bootstrap
-     (etapa 10, bootstrap.html). O último slide passa a vez para o próximo grupo.
+     (etapa 10, bootstrap.html). Nenhum código do Bootstrap aparece: quem mostra
+     o Bootstrap por dentro é o próximo grupo. O último slide passa a vez.
      ===================================================================== -->
 
 <!-- ================= A. REBOBINAR ================= -->
@@ -1722,59 +1719,6 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
       </div>
       <div class="phone tw-phone"><div class="screen" data-bsframe="375" data-title="Lanchonete Pixel com Bootstrap"></div></div>
     </div>
-  </div>
-</section>
-
-<!-- ================= C. CADA PROBLEMA, UMA CLASSE ================= -->
-<section class="slide" data-act="Último capítulo · Plot twist" data-stage="4">
-  <div class="inner" style="gap:clamp(12px,2vh,22px)">
-    <div class="eyebrow">Cada problema de hoje, uma classe do Bootstrap</div>
-    <div class="bsx">
-      <ol class="bsx-list" id="bsxList">
-        <li class="bsx-row" data-frag="1" data-onshow="bsx" data-peca="menu" data-w="375">
-          <span class="bsx-prob">O menu não cabia</span>
-          <span class="bsx-ours"><code>flex-wrap</code> + <code>@media</code> + JavaScript do botão</span>
-          <code class="bsx-bs">navbar-expand-md</code>
-          <span class="bsx-note">Abaixo de 768px o menu fica atrás do botão ☰. Toquem nele no celular!</span>
-        </li>
-        <li class="bsx-row" data-frag="2" data-onshow="bsx" data-peca="cardapio" data-w="375" data-w2="1200" data-voz="T">
-          <span class="bsx-prob">O cardápio ficava apertado</span>
-          <span class="bsx-ours"><code>repeat(auto-fit, minmax(220px, 1fr))</code></span>
-          <code class="bsx-bs">row-cols-1<br>row-cols-sm-2<br>row-cols-lg-3</code>
-          <span class="bsx-note">1 coluna no celular, 2 a partir de sm, 3 a partir de lg.</span>
-        </li>
-        <li class="bsx-row" data-frag="3" data-onshow="bsx" data-peca="layout" data-w="1200">
-          <span class="bsx-prob">Faltava a barra lateral</span>
-          <span class="bsx-ours"><code>grid-template-columns: 3fr 1fr</code></span>
-          <code class="bsx-bs">col-md-9<br>+ col-md-3</code>
-          <span class="bsx-note">O grid do Bootstrap tem 12 colunas: 9 + 3 = 12.</span>
-        </li>
-        <li class="bsx-row" data-frag="4" data-onshow="bsx" data-peca="foto" data-w="375" data-voz="M">
-          <span class="bsx-prob">A foto estourava a tela</span>
-          <span class="bsx-ours"><code>max-width: 100%; height: auto</code></span>
-          <code class="bsx-bs">img-fluid</code>
-          <span class="bsx-note">É exatamente o mesmo CSS que a gente escreveu no Conserto 3.</span>
-        </li>
-        <li class="bsx-row" data-frag="5" data-onshow="bsx" data-peca="botao" data-w="340">
-          <span class="bsx-prob">O botão saía da tela</span>
-          <span class="bsx-ours"><code><s>width: 344px</s></code></span>
-          <code class="bsx-bs">w-100</code>
-          <span class="bsx-note"><code>w-100</code> = <code>width: 100%</code>: o botão nunca passa da tela.</span>
-        </li>
-        <li class="bsx-row" data-frag="6" data-onshow="bsx" data-peca="" data-w="375">
-          <span class="bsx-prob">O site aparecia encolhido</span>
-          <span class="bsx-ours"><code>&lt;meta name="viewport"&gt;</code></span>
-          <code class="bsx-bs keep">continua<br>obrigatória</code>
-          <span class="bsx-note">O próprio Bootstrap pede a meta viewport. O Conserto 1 não tem atalho.</span>
-        </li>
-      </ol>
-      <div class="live-view bsx-view">
-        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="file">bootstrap.html</span><span class="sp"></span><output id="bsxOut">1200px</output></div>
-        <div class="stage" id="bsxStage"><p class="bsx-fallback">A versão Bootstrap aparece aqui quando a apresentação é aberta pelo GitHub Pages ou pela pasta do site.</p></div>
-        <label class="range"><span>Largura</span><input type="range" id="bsxRange" min="320" max="1280" value="1200"><output id="bsxOut2">1200px</output></label>
-      </div>
-    </div>
-    <p class="punch bsx-punch" data-frag="7">0 linhas de CSS escritas por nós. Por baixo de cada classe: Flexbox e media queries.</p>
   </div>
 </section>
 
@@ -1828,10 +1772,6 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
       <li><div>clamp() <span>— MDN Web Docs</span><span class="check">conferir</span></div></li>
       <li><div>Grid system <span>— Bootstrap</span><span class="check">conferir</span></div></li>
       <li><div>Breakpoints <span>— Bootstrap</span></div></li>
-      <li><div>Get started with Bootstrap (meta viewport) <span>— Bootstrap</span></div></li>
-      <li><div>Navbar <span>— Bootstrap</span></div></li>
-      <li><div>Images (.img-fluid) <span>— Bootstrap</span></div></li>
-      <li><div>Sizing (.w-100) <span>— Bootstrap</span></div></li>
       <li><div>Responsive design <span>— Tailwind CSS</span><span class="check">conferir</span></div></li>
     </ol>
   </div>
@@ -2239,7 +2179,6 @@ function setupFw(){
     `<div class="g"><div>Cardápio</div><div>Promoções</div></div>`), 900, 'shrink');
   const r=$('#fwRange'); r.oninput = () => { fr.setWidth(+r.value); $('#fwOut').value=$('#fwOut2').value=r.value+'px'; };
 }
-$$('[data-fw]').forEach(b => b.onclick = () => { $$('[data-fw]').forEach(x=>x.setAttribute('aria-selected', x===b)); $('#fw-bs').hidden = b.dataset.fw!=='bs'; $('#fw-tw').hidden = b.dataset.fw!=='tw'; });
 
 /* caça ao bug */
 function setupBug(){
@@ -2500,7 +2439,7 @@ function autoHooks(s){
    Tons tirados da própria paleta dos slides (--ok, azul elétrico clareado, --warn).
    Um fragmento com data-voz troca a cor no meio do slide.
    ========================================================= */
-const VOZ_POR_SLIDE = 'LTMTLTMLMTMLTM' + 'LTMMTMLTLLT' + 'MLTMTLMTLMTL' + 'MA' + 'MTLT' + '--';
+const VOZ_POR_SLIDE = 'LTMTLTMLMTMLTM' + 'LTMMTMLTLLT' + 'MLTMTLMTLMTL' + 'MA' + 'MTT' + '--';
 const VOZ_COR = { L:'#43e0a6', T:'#5b8cff', M:'#ffd25c' };
 const VOZ_TODOS = 'linear-gradient(90deg,#43e0a6,#5b8cff,#ffd25c)';
 function vozEm(n, fi){

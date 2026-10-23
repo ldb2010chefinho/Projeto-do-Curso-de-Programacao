@@ -1733,25 +1733,6 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
   </div>
 </section>
 
-<!-- ================= PERGUNTAS ================= -->
-<section class="slide" data-act="Apêndice · Perguntas" data-stage="4">
-  <div class="inner">
-    <div class="eyebrow">Perguntas</div>
-    <div class="qa">
-      <details><summary>Por que usaram o dado mundial e não o do Brasil?</summary><p class="ans todo">[colar a resposta do roteiro]</p></details>
-      <details><summary>Design responsivo e design adaptativo são a mesma coisa?</summary><p class="ans todo">[colar a resposta do roteiro]</p></details>
-      <details><summary>Sem a meta viewport o CSS responsivo funciona?</summary><p class="ans">Sem ela, o navegador do celular finge ser uma tela de computador de ~980px e encolhe a página. A meta viewport faz ele usar a largura real da tela.</p></details>
-      <details><summary>Quando usar Flexbox e quando usar Grid?</summary><p class="ans">Flexbox: uma dimensão (linha ou coluna), como o menu. Grid: duas dimensões (linhas e colunas), como a página inteira, a grade de cards e o cardápio.</p></details>
-      <details><summary>Quais breakpoints usar?</summary><p class="ans">Onde o conteúdo começa a ficar ruim, e não “a largura do iPhone”.</p></details>
-      <details><summary>Mobile-first CSS é a mesma coisa que a indexação mobile-first do Google?</summary><p class="ans">Não. Mobile-first CSS é escrever o CSS começando pela tela pequena. Indexação mobile-first é o Google usar a versão mobile do site para indexar e ranquear.</p></details>
-      <details><summary><code>rem</code> e <code>em</code>: qual a diferença?</summary><p class="ans"><code>em</code> é relativa à fonte do próprio elemento; <code>rem</code>, à fonte da raiz (<code>html</code>).</p></details>
-      <details><summary>Container queries funcionam em todo navegador?</summary><p class="ans todo">[colar a resposta do roteiro]</p></details>
-      <details><summary>Vale a pena aprender CSS se existe Bootstrap e Tailwind?</summary><p class="ans">Por baixo dos frameworks estão Flexbox, Grid e media queries. Quem entende o CSS entende qualquer framework.</p></details>
-      <details><summary>O DevTools substitui o teste no celular real?</summary><p class="ans">Não. O simulador não reproduz o toque, o desempenho do aparelho nem a tela no sol.</p></details>
-    </div>
-  </div>
-</section>
-
 <!-- ================= FONTES ================= -->
 <section class="slide" data-act="Apêndice · Fontes" data-stage="4">
   <div class="inner">
@@ -2439,7 +2420,7 @@ function autoHooks(s){
    Tons tirados da própria paleta dos slides (--ok, azul elétrico clareado, --warn).
    Um fragmento com data-voz troca a cor no meio do slide.
    ========================================================= */
-const VOZ_POR_SLIDE = 'LTMTLTMLMTMLTM' + 'LTMMTMLTLLT' + 'MLTMTLMTLMTL' + 'MA' + 'MTT' + '--';
+const VOZ_POR_SLIDE = 'LTMTLTMLMTMLTM' + 'LTMMTMLTLLT' + 'MLTMTLMTLMTL' + 'MA' + 'MTT' + '-';
 const VOZ_COR = { L:'#43e0a6', T:'#5b8cff', M:'#ffd25c' };
 const VOZ_TODOS = 'linear-gradient(90deg,#43e0a6,#5b8cff,#ffd25c)';
 function vozEm(n, fi){

@@ -708,6 +708,13 @@ body:is([data-clima="4"],[data-clima="5"]) .clima-fx{opacity:1;animation:tfFlick
 
 /* textos falhando perto do fim + fala do Bug mais pesada */
 .bug-fala.grave{border-color:#ff2a1f;background:#140405;color:#ffd2cb;text-shadow:-1px 0 rgba(255,42,31,.8),1px 0 rgba(82,213,255,.6);box-shadow:0 0 0 1px rgba(255,42,31,.4),0 10px 40px rgba(194,43,30,.55)}
+
+.bug-susto b, .apagao b{position:absolute;left:0;right:0;bottom:12%;text-align:center;font:900 clamp(2rem,1rem + 4vw,5rem)/1 "Courier New",monospace;color:#ff2a1f;
+  text-transform:uppercase;text-shadow:5px 0 #52d5ff,-5px 0 #ff2a1f,0 0 40px #ff2a1f;z-index:1;padding:.35em 16px;background:linear-gradient(transparent,rgba(0,0,0,.85) 20%,rgba(0,0,0,.85) 80%,transparent)}
+.apagao b{opacity:0}
+.apagao.on b{animation:apagTxt 3.8s steps(1) forwards}
+@keyframes apagTxt{0%,68%{opacity:0}69%,90%{opacity:1}91%,100%{opacity:0}}
+.bug-susto.on{animation-duration:1.25s}
 /* ---------- ÚLTIMO CAPÍTULO: PLOT TWIST (Bootstrap) ---------- */
 :root{--bs:#7952b3;--bs2:#b9a2f0}
 /* A. rebobinar: os 8 consertos do dia */
@@ -2065,11 +2072,11 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 <i class="clima-fx" aria-hidden="true"></i>
 <i class="terror-fx" aria-hidden="true"></i>
 <canvas class="bug-passeio" id="bugPasseio" width="52" height="42" aria-hidden="true"></canvas>
-<div class="apagao" id="apagao" aria-hidden="true"><canvas width="26" height="21"></canvas></div>
+<div class="apagao" id="apagao" aria-hidden="true"><canvas width="26" height="21"></canvas><b>OLHEM O CARDÁPIO NO CELULAR.</b></div>
 <i class="bug-tint" aria-hidden="true"></i>
 <canvas class="bug-cameo" id="bugCameo" width="52" height="42" aria-hidden="true"></canvas>
 <p class="bug-fala" id="bugFala" aria-live="polite"></p>
-<div class="bug-susto" id="bugSusto" aria-hidden="true"><canvas width="52" height="42"></canvas></div>
+<div class="bug-susto" id="bugSusto" aria-hidden="true"><canvas width="52" height="42"></canvas><b>EU SEI QUEM VOCÊS SÃO.</b></div>
 <i class="bordas" aria-hidden="true"></i>
 <i class="jg-flash" id="jgFlash" aria-hidden="true"></i>
 <footer class="botbar">
@@ -2769,7 +2776,7 @@ const RODADA = (() => {
 const LIVE = (() => {
   const CANAL = 'lanchonete-pixel-ldb-oterimxu';   // o mesmo nome está no site (index.html)
   const NOMES = ['Site quebrado','Conserto 1 · meta viewport','Conserto 2 · Flexbox','Conserto 2 · Grid','Conserto 2 · media query','Conserto 3 · max-width: 100%','Conserto 3 · clamp()','Conserto 3 · container query','Caça ao bug','Site consertado','Plot twist · Bootstrap'];
-  let atual = null, envio = 0, rede = 'idle', jogo = null, bug = 0, cod = 0, tEnvio = null, apag = 0, vit = '';   // jogo = tela do Jogo do Bug · bug = nível de falha (0 a 4)
+  let atual = null, envio = 0, rede = 'idle', jogo = null, bug = 0, cod = 0, tEnvio = null, apag = 0, vit = '', cardapio = false;   // jogo = tela do Jogo do Bug · bug = nível de falha (0 a 4)
   const pill = $('#livePill'), txt = $('#liveTxt'), panel = $('#livePanel'), grid = $('#lpGrid'), msg = $('#lpMsg');
   $('#lpCanal').textContent = 'ntfy.sh/' + CANAL;
   grid.innerHTML = NOMES.map((n,i) => `<button data-s="${i}" aria-pressed="false"><small>etapa ${i}</small>${esc(n)}</button>`).join('');
@@ -2793,7 +2800,7 @@ const LIVE = (() => {
     }
     const id = ++envio; confirmado = false;
     rede = 'sending'; pintar();
-    const extra = Object.assign({}, cod ? { k: cod, r: RODADA } : {}, apag && Date.now() - apag < 4000 ? { a: apag } : {}, vit ? { v: vit } : {}); apag = 0; vit = '';
+    const extra = Object.assign({}, cod ? { k: cod, r: RODADA } : {}, apag && Date.now() - apag < 4000 ? { a: apag } : {}, vit ? { v: vit } : {}, cardapio ? { cd: 1, pf: window.FUGA ? FUGA.perfisLista() : [] } : {}); apag = 0; vit = '';
     const tentar = (n) => fetch('https://ntfy.sh/' + CANAL, { method:'POST', body: JSON.stringify(Object.assign({ s, t: Date.now() }, jogo ? { j: jogo } : {}, bug ? { b: bug } : {}, extra)) })
       .then(r => { if(!r.ok) throw new Error(r.status); if(id === envio){ rede = 'ok'; pintar(); } })
       .catch(() => { if(id !== envio) return; rede = 'off'; pintar(); if(n < 4) setTimeout(() => { if(id === envio) tentar(n + 1); }, 2000 * 2 ** n); });
@@ -2851,8 +2858,10 @@ const LIVE = (() => {
   function setCodigo(n){ if(n === cod) return; cod = n; if(atual !== null) enviar(); }
   /* apagão: todos os celulares apagam junto com a apresentação */
   function apagao(){ apag = Date.now(); if(atual !== null) enviarJa(); }
+  function setCardapio(on){ on = !!on; if(on === cardapio) return; cardapio = on; if(atual !== null) enviar(); }
+  function cardapioMudou(){ if(cardapio && atual !== null) enviar(); }
   function vitima(id){ vit = id + ':' + Date.now().toString(36); if(atual !== null) enviarJa(); }
-  return { set, get: () => atual, abrir, setJogo, setBug, setCodigo, apagao, vitima };
+  return { set, get: () => atual, abrir, setJogo, setBug, setCodigo, apagao, vitima, setCardapio, cardapioMudou };
 })();
 
 
@@ -3005,6 +3014,7 @@ window.FUGA = (() => {
     }
     if(m.tp === 'p' && !perfis.some(x => x.id === m.id)){
       perfis.push({ id: m.id, n: limpaNome(m.n), b: Number.isInteger(m.b) && m.b > 0 && m.b <= 100 ? m.b : null, ap: m.ap === 'iPhone' || m.ap === 'Android' ? m.ap : '' });
+      if(perfis.length <= 8) LIVE.cardapioMudou();
     }
     if(m.tp === 'a' && Number.isInteger(m.q) && Number.isInteger(m.o) && m.o >= 0 && m.o < 4){
       (respostas[m.q] = respostas[m.q] || {});
@@ -3028,6 +3038,7 @@ window.FUGA = (() => {
     tarde(){ return fila.filter(p => p.tarde || (!tirados.has(p.id) && !finalistas().some(f => f.id === p.id))).length; },
     total(){ return fila.filter(p => !tirados.has(p.id)).length; },
     respostas: q => respostas[q] || {},
+    perfisLista(){ return perfis.slice(0, 8).map(p => ({ i: p.id, n: p.n, b: p.b, ap: p.ap })); },
     sortearPerfil(){ const l = perfis.filter(p => !usados.has(p.id)); if(!l.length) return null; const p = l[Math.floor(Math.random() * l.length)]; usados.add(p.id); return p; },
     aoMudar(fn){ aoMudar = fn; }
   };
@@ -3247,8 +3258,9 @@ window.BUGNIVEL = (() => {
   if(susto) animarBug($('canvas', susto), () => susto.classList.contains('on') ? { falha: true } : null);
   function assustar(){
     if(REDUCED || !susto) return;
+    if(window.CLIMA) CLIMA.rugido(0);
     susto.classList.remove('on'); void susto.offsetWidth; susto.classList.add('on');
-    setTimeout(() => susto.classList.remove('on'), 800);
+    setTimeout(() => susto.classList.remove('on'), 1300);
   }
   function aplicar(nv){
     const antes = +(document.body.dataset.bug || 0);
@@ -3351,10 +3363,13 @@ window.CLIMA = (() => {
     const g = cara.getContext('2d'); g.clearRect(0, 0, 26, 21); g.drawImage(tmp, 9, 0, 26, 21, 0, 0, 26, 21);
     requestAnimationFrame(loopCara);
   }
-  function rugido(){
+  /* o áudio é "acordado" na primeira tecla/clique: assim o som sai na hora certa, sem atraso */
+  function acordarAudio(){ try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if(ac.state === 'suspended') ac.resume(); } catch(e){} }
+  addEventListener('keydown', acordarAudio); addEventListener('pointerdown', acordarAudio);
+  function rugido(atraso){
     try {
-      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
-      const t = ac.currentTime, len = ac.sampleRate * .9, buf = ac.createBuffer(1, len, ac.sampleRate), d = buf.getChannelData(0);
+      acordarAudio();
+      const t = ac.currentTime + (atraso || 0), len = ac.sampleRate * .9, buf = ac.createBuffer(1, len, ac.sampleRate), d = buf.getChannelData(0);
       for(let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2);
       const ruido = ac.createBufferSource(), gr = ac.createGain(); ruido.buffer = buf; ruido.connect(gr); gr.connect(ac.destination); gr.gain.value = .22; ruido.start(t);
       const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sawtooth'; o.connect(g); g.connect(ac.destination);
@@ -3364,10 +3379,10 @@ window.CLIMA = (() => {
   }
   function apagao(){
     if(REDUCED || !ap || ocupado) return;
-    ocupado = true; LIVE.apagao();
+    ocupado = true; LIVE.setCardapio(true); LIVE.apagao();   // o recado "olhem o cardápio" vai junto com o apagão
     ap.classList.remove('on'); void ap.offsetWidth; ap.classList.add('on');
     t0 = performance.now(); requestAnimationFrame(loopCara);
-    setTimeout(rugido, 2600);                  // o som vem junto com o pulo da cara
+    rugido(2.62);                              // o som é agendado no relógio do áudio: sai junto com o pulo da cara
     setTimeout(() => { ap.classList.remove('on'); ocupado = false; }, 3900);
   }
 
@@ -3443,6 +3458,7 @@ window.CLIMA = (() => {
     if(novo !== clima){
       const subiu = novo > clima; clima = novo;
       if(clima) document.body.dataset.clima = clima; else delete document.body.dataset.clima;
+      if(!clima) LIVE.setCardapio(false);
       agendar(); agendarTelao();
       if(subiu && clima >= 2) setTimeout(passear, 2500);   // mudou de nível: o Bug dá uma volta para avisar
     }
@@ -3457,7 +3473,7 @@ window.CLIMA = (() => {
     if(e.key === 'v' || e.key === 'V') telao();      // V = o Bug fala de alguém agora
   });
   sync();
-  return { sync, apagao, passear, telao };
+  return { sync, apagao, passear, telao, rugido };
 })();
 
 

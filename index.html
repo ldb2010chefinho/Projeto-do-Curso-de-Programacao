@@ -211,6 +211,44 @@
     .jogo .jr.low { color: #ff3b2f; }
     .jogo .jf { margin: 0; font-size: 44px; line-height: 1; font-weight: 700; color: var(--c, #43e0a6); text-shadow: 0 0 30px currentColor; font-family: system-ui, sans-serif; }
     .jogo .jf small { display: block; margin-bottom: 10px; font-size: 13px; letter-spacing: .2em; color: #8d8676; text-transform: uppercase; text-shadow: none; font-family: "Courier New", monospace; }
+
+    .jogo canvas { width: 190px; }
+    .jogo .jhp { display: flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #8d8676; }
+    .jogo .jhp canvas { width: 40px; filter: none; }
+    .jogo .jhp b { display: block; width: 120px; height: 8px; border: 1px solid #4c0d08; border-radius: 3px; overflow: hidden; background: #140c0e; }
+    .jogo .jhp i { display: block; height: 100%; background: #c22b1e; transition: width .8s; }
+
+    /* ---------- O SITE "BUGANDO" AOS POUCOS (nível 1 a 4, vem da apresentação) ---------- */
+    .bug-anda { position: fixed; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); left: 0; width: 64px; height: auto; aspect-ratio: 44 / 36;
+      z-index: 57; pointer-events: none; image-rendering: pixelated; transform: translateX(-120%); filter: drop-shadow(0 0 10px rgba(194, 43, 30, .6)); }
+    .bug-anda.vai { animation: bugAnda 6s linear forwards; }
+    @keyframes bugAnda { 0% { transform: translateX(-120%) } 45% { transform: translateX(45vw) } 52% { transform: translateX(45vw) skewX(16deg); filter: hue-rotate(160deg) }
+      58% { transform: translateX(46vw); filter: drop-shadow(0 0 10px rgba(194, 43, 30, .6)) } 100% { transform: translateX(110vw) } }
+    @keyframes pgRGB { 0%, 90%, 100% { text-shadow: none; translate: 0 } 92% { text-shadow: -3px 0 rgba(255, 59, 47, .9), 3px 0 rgba(82, 213, 255, .9); translate: 3px 0 }
+      95% { text-shadow: 3px 0 rgba(255, 59, 47, .9), -3px 0 rgba(82, 213, 255, .9); translate: -2px 0 } }
+    @keyframes pgTear { 0%, 92%, 100% { clip-path: none; translate: 0 } 93% { clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%, 0 60%, 100% 60%, 100% 100%, 0 100%); translate: -10px 0 } 96% { translate: 8px 0 } }
+    @keyframes pgJit { 0%, 100% { translate: 0 } 50% { translate: 3px -2px } }
+    @keyframes pgInv { 0%, 88%, 100% { filter: none } 90% { filter: invert(1) hue-rotate(180deg) } 93% { filter: none } 95% { filter: invert(1) } }
+    @keyframes pgShake { 0%, 100% { translate: 0 } 33% { translate: -3px 2px } 66% { translate: 3px -1px } }
+    @keyframes pgTinta { 0%, 100% { opacity: 0 } 50% { opacity: .35 } }
+    html[data-bug="2"] .hero h1 { animation: pgRGB 6s steps(1) infinite; }
+    html[data-bug="2"] .card:nth-child(3) { rotate: 2.5deg; translate: 0 4px; }
+    html[data-bug="3"] .hero h1 { animation: pgRGB 3s steps(1) infinite; }
+    html[data-bug="3"] .topo { animation: pgTear 5s steps(1) infinite; }
+    html[data-bug="3"] .btn-pedido { animation: pgJit .5s steps(2) infinite; }
+    html[data-bug="3"] .card:nth-child(3) { rotate: 3deg; translate: 0 6px; }
+    html[data-bug="3"] .card:nth-child(5) { rotate: -3deg; translate: 18px 0; }
+    html[data-bug="3"] .hero img { animation: pgInv 4s steps(1) infinite; }
+    html[data-bug="4"] .hero h1 { animation: pgRGB 1.2s steps(1) infinite; }
+    html[data-bug="4"] :is(.topo, .hero, .layout, .rodape) { animation: pgShake .2s steps(2) infinite, pgTear 2s steps(1) infinite; }
+    html[data-bug="4"] .card:nth-child(odd) { rotate: -4deg; translate: 14px 0; }
+    html[data-bug="4"] .card:nth-child(even) { rotate: 3deg; translate: -10px 4px; }
+    html[data-bug="4"] .hero img { animation: pgInv 1.5s steps(1) infinite; }
+    .bug-tinta { position: fixed; inset: 0; z-index: 56; pointer-events: none; opacity: 0;
+      background: radial-gradient(ellipse at center, transparent 30%, rgba(194, 43, 30, .7)), repeating-linear-gradient(0deg, rgba(0, 0, 0, .18) 0 1px, transparent 1px 3px); }
+    html[data-bug="3"] .bug-tinta { animation: pgTinta 4s ease-in-out infinite; }
+    html[data-bug="4"] .bug-tinta { animation: pgTinta 1.2s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) { html[data-bug] * { animation: none !important; } }
     .jogo.entra { animation: jgEntra .9s steps(6); }
     @keyframes jgEntra { 0% { opacity: 0 } 20% { opacity: 1; filter: invert(1) } 35% { filter: none; transform: translate(-6px, 3px) } 55% { transform: translate(5px, -4px) } 100% { transform: none } }
     .jogo.sai { animation: jgSai .8s steps(8) forwards; }
@@ -290,6 +328,9 @@
   <!-- PLOT TWIST: a versão Bootstrap carrega aqui (só a partir da Caça ao bug) -->
   <iframe class="twist" id="twist" title="Lanchonete Pixel, versão feita com Bootstrap"></iframe>
 
+  <!-- O BUG andando pela tela e a "tinta" de falha (aparecem conforme a apresentação avança) -->
+  <canvas class="bug-anda" id="bugAnda" width="44" height="36" aria-hidden="true"></canvas>
+  <div class="bug-tinta" aria-hidden="true"></div>
   <!-- O JOGO DO BUG: aparece sozinho quando a apresentação chega no jogo -->
   <div class="jogo" id="jogo" hidden aria-live="polite"><div class="jc" id="jogoC"></div></div>
 
@@ -518,32 +559,122 @@
      O JOGO DO BUG: a apresentação manda, junto com a etapa, o que mostrar
      ("j"). Sem "j", a tela do jogo some e o site volta.
      ===================================================================== */
-  function desenharBug(cv, aceso){
-  /* "O Bug": inseto de pixels que vaza para fora da viewport (linha tracejada) */
-  const MAPA = ['....4.......4.......','.....4.....4........','......55555.........','.....5355535........','4...555555555....4..','.4.11122222111.4....','..1122222222211.....','441122212222211144..','..1122212222211.....','.4111222122221114...','4..11112221111...4..','....111111111.......','.....4.....4........','....4.......4.......'];
-  const g = cv.getContext('2d'), BORDA = 14; g.clearRect(0, 0, cv.width, cv.height);
-  const cor = { '1':'#7a1a12', '2':'#c22b1e', '3': aceso ? '#ff3b2f' : '#3a1210', '4':'#e9e2d0', '5':'#1a1418' };
-  MAPA.forEach((linha, y) => [...linha].forEach((v, x) => {
-    if(v === '.') return;
-    const fora = x > BORDA;                       // pedaço que vazou da tela
-    g.fillStyle = cor[v];
-    g.fillRect(x + 1, y + 2 + (fora ? 1 : 0), 1, 1);
-    if(fora){ g.fillStyle = 'rgba(82,213,255,.55)'; g.fillRect(x + 2, y + 2, 1, 1); }
-  }));
-  g.fillStyle = '#52d5ff';                        // borda da viewport, tracejada
-  for(let y = 0; y < 18; y += 2) g.fillRect(BORDA + 1.5, y, .5, 1);
-  g.fillStyle = '#2a2630'; g.fillRect(1, 17, 21, 1);   // barra de rolagem lateral
-  g.fillStyle = '#8d8676'; g.fillRect(1, 17, 13, 1);
-}
+  /* =====================================================================
+     "O BUG" (mascote do jogo, personagem original)
+     Um besouro de pixels cujo casco é uma janela de navegador. A parte direita
+     VAZA da viewport (linha tracejada azul) e aparece deslocada e "fantasma",
+     como um layout quebrado. Uma barra de rolagem lateral fica embaixo dele.
+     op = { dano: 0..1 (rachaduras), some: 0..1 (desintegra em pixels) }
+     ===================================================================== */
+  function desenharBug(cv, t, op) {
+    op = op || {};
+    var W = 44, H = 36, CX = 19, VX = 30;
+    if (cv.width !== W) { cv.width = W; cv.height = H; }
+    var g = cv.getContext('2d');
+    var off = desenharBug._a || (desenharBug._a = document.createElement('canvas'));
+    var fan = desenharBug._b || (desenharBug._b = document.createElement('canvas'));
+    off.width = fan.width = W; off.height = fan.height = H;
+    var o = off.getContext('2d');
+    function px(x, y, c) { o.fillStyle = c; o.fillRect(Math.round(x), Math.round(y), 1, 1); }
+    var passo = Math.floor(t / 170) % 2;
+    var aceso = (t % 2300) > 160;                 // pisca de vez em quando
+    var OSSO = '#efe6d2', CASCO = '#9a2016', CLARO = '#d8402f', BORDA = '#4c0d08', ESCURO = '#17121a';
+  
+    // antenas (pontas vermelhas, como cursores)
+    var bal = Math.round(Math.sin(t / 260));
+    [[-1, 1], [1, 1]].forEach(function (lado) {
+      var s = lado[0];
+      for (var i = 0; i < 6; i++) px(CX + s * (2 + i), 5 - Math.floor(i / 1.6) + (i > 3 ? bal * s * 0 : 0) - (i === 5 ? bal : 0), i === 5 ? '#ff3b2f' : OSSO);
+    });
+    // pernas: 3 de cada lado, alternando o passo
+    [15, 21, 27].forEach(function (y, k) {
+      var sobe = ((k + passo) % 2) ? -1 : 1;
+      for (var s = -1; s <= 1; s += 2) {
+        var x0 = CX + s * 10;
+        px(x0 + s * 1, y, OSSO); px(x0 + s * 2, y, OSSO); px(x0 + s * 3, y + sobe * 0, OSSO);
+        px(x0 + s * 4, y + sobe, OSSO); px(x0 + s * 5, y + sobe * 2, OSSO);
+      }
+    });
+    // casco (elipse) com contorno, brilho e a divisão do meio
+    for (var y = 11; y <= 31; y++) for (var x = CX - 11; x <= CX + 11; x++) {
+      var dx = (x - CX) / 11, dy = (y - 21) / 10, d = dx * dx + dy * dy;
+      if (d > 1) continue;
+      var c = CASCO;
+      if (d > 0.78) c = BORDA; else if (dx + dy < -0.85) c = CLARO;
+      if (x === CX && y > 16) c = '#2a0706';
+      px(x, y, c);
+    }
+    // barra de título de janela no casco, com os 3 botões
+    for (var x2 = CX - 8; x2 <= CX + 8; x2++) { px(x2, 14, '#2b2230'); px(x2, 15, '#2b2230'); }
+    px(CX - 7, 14, '#ff5a4f'); px(CX - 5, 14, '#ffbf52'); px(CX - 3, 14, '#43e0a6');
+    // "</>" gravado no casco
+    var G = { '<': [[2,0],[1,1],[0,2],[1,3],[2,4]], '/': [[2,0],[2,1],[1,2],[0,3],[0,4]], '>': [[0,0],[1,1],[2,2],[1,3],[0,4]] };
+    ['<', '/', '>'].forEach(function (ch, i) { G[ch].forEach(function (p) { px(CX - 6 + i * 4 + p[0], 20 + p[1], '#f6c9b8'); }); });
+    // cabeça e olhos
+    for (var y3 = 6; y3 <= 12; y3++) for (var x3 = CX - 6; x3 <= CX + 6; x3++) {
+      var a = (x3 - CX) / 6.2, b = (y3 - 9.5) / 3.6; if (a * a + b * b <= 1) px(x3, y3, ESCURO);
+    }
+    var olho = aceso ? '#ff3b2f' : '#3a1210';
+    [[CX - 4, 8], [CX + 2, 8]].forEach(function (e) { px(e[0], e[1], olho); px(e[0] + 1, e[1], olho); px(e[0], e[1] + 1, olho); px(e[0] + 1, e[1] + 1, olho); if (aceso) px(e[0], e[1], '#ffd2c8'); });
+    px(CX - 2, 12, OSSO); px(CX + 2, 12, OSSO);       // pinças
+    // rachaduras (dano)
+    var R = [[CX+4,13],[CX+5,14],[CX+5,15],[CX+6,16],[CX+5,17],[CX+6,18],[CX+7,19],[CX+6,20],[CX+7,21],[CX+8,22],[CX-6,24],[CX-5,25],[CX-6,26],[CX-4,27],[CX-5,28],[CX-3,29],[CX+3,26],[CX+4,27],[CX+2,28],[CX+3,29]];
+    var nR = Math.floor((op.dano || 0) * R.length);
+    for (var r = 0; r < nR; r++) px(R[r][0], R[r][1], '#0b0809');
+  
+    // monta: parte dentro da viewport normal; parte de fora deslocada + fantasma azul
+    g.clearRect(0, 0, W, H);
+    g.drawImage(off, 0, 0, VX, H, 0, 0, VX, H);
+    var f = fan.getContext('2d'); f.clearRect(0, 0, W, H);
+    f.drawImage(off, VX, 0, W - VX, H, VX, 0, W - VX, H);
+    f.globalCompositeOperation = 'source-atop'; f.fillStyle = 'rgba(82,213,255,.85)'; f.fillRect(0, 0, W, H); f.globalCompositeOperation = 'source-over';
+    g.globalAlpha = .55; g.drawImage(fan, 2, 1); g.globalAlpha = 1;
+    g.drawImage(off, VX, 0, W - VX, H, VX + 1, 2, W - VX, H);
+    // falha: uma faixa horizontal escorrega de vez em quando
+    if ((t % 1700) < 140 || op.falha) {
+      var fy = 8 + Math.floor((t / 140) % 18);
+      var tira = g.getImageData(0, fy, W, 3); g.clearRect(0, fy, W, 3); g.putImageData(tira, (t % 2) ? 2 : -2, fy);
+    }
+    // borda da viewport (tracejada) e barra de rolagem lateral
+    g.fillStyle = '#52d5ff'; for (var yy = 0; yy < H - 3; yy += 3) g.fillRect(VX, yy, 1, 2);
+    g.fillStyle = '#2a2630'; g.fillRect(2, H - 2, W - 4, 1);
+    g.fillStyle = '#8d8676'; g.fillRect(2, H - 2, VX - 4, 1);
+    // desintegra em pixels (fim do jogo)
+    if (op.some > 0) {
+      var img = g.getImageData(0, 0, W, H), dd = img.data;
+      for (var i2 = 0; i2 < W * H; i2++) {
+        var h = ((i2 * 2654435761) >>> 0) % 1000 / 1000;
+        if (h < op.some) dd[i2 * 4 + 3] = 0;
+      }
+      g.putImageData(img, 0, 0);
+    }
+  }
+  /* anima um canvas do Bug (~9 quadros por segundo); op pode ser uma função */
+  function animarBug(cv, op) {
+    var vivo = true, ultimo = 0, t0 = performance.now();
+    var calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function loop(agora) {
+      if (!vivo) return;
+      if (agora - ultimo > 110) {
+        ultimo = agora;
+        var o = typeof op === 'function' ? op() : op;
+        if (o) desenharBug(cv, calmo ? 1000 : agora - t0, o);
+      }
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+    return function () { vivo = false; };
+  }
+  
   const telaJogo = document.getElementById('jogo'), conteudoJogo = document.getElementById('jogoC');
-  let jogoAtual = null, relogioJogo = null, piscaJogo = null;
+  let jogoAtual = null, relogioJogo = null, pararBugJogo = null;
   const escJ = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const codJ = (t) => escJ(t).replace(/`([^`]+)`/g, '<code>$1</code>');   // `texto` vira código (nunca HTML de fora)
   function mostrarJogo(j, quando) {
     const chave = JSON.stringify(j);
     if (chave === jogoAtual) return;
     const tinha = !!jogoAtual; jogoAtual = j ? chave : null;
-    clearInterval(relogioJogo); clearInterval(piscaJogo);
+    clearInterval(relogioJogo); if (pararBugJogo) { pararBugJogo(); pararBugJogo = null; }
     if (!j) {                                   // fim do jogo: rebobina e some
       if (tinha && !calmo) { telaJogo.classList.remove('entra'); telaJogo.classList.add('sai'); setTimeout(() => { telaJogo.hidden = true; telaJogo.classList.remove('sai'); }, 800); }
       else telaJogo.hidden = true;
@@ -551,24 +682,28 @@
     }
     let h = '';
     if (j.p === 'intro' || j.p === 'regras' || j.p === 'fim') h += '<canvas width="22" height="18" aria-label="O Bug"></canvas>';
-    if (j.p === 'intro') h += '<span class="jt">O Jogo do Bug</span><p class="js">Vocês acharam que o site estava consertado? Eu ainda estou aqui.</p>';
-    if (j.p === 'regras') h += '<span class="jt">Regras</span><p class="js">Vamos jogar um jogo. Cada grupo é um jogador: levantem a letra antes do tempo acabar.</p>';
+    if (j.p === 'intro') h += '<span class="jt">O Jogo do Bug</span><p class="js">Vocês acharam que tinham consertado tudo? Eu estava escondido no código o tempo todo.</p>';
+    if (j.p === 'regras') h += '<span class="jt">Regras</span><p class="js">Vamos jogar um jogo. Cada grupo levanta a letra antes do tempo acabar. Cada acerto me quebra um pouco.</p>';
     if (j.p === 'q') {
-      h += '<span class="jt">Prova ' + (j.i + 1) + ' de ' + j.n + '</span>';
+      h += '<span class="jt">Erro ' + (j.i + 1) + ' de ' + j.n + (j.e ? ' · ' + escJ(j.e) : '') + '</span>';
+      h += '<div class="jhp"><canvas width="44" height="36" aria-hidden="true"></canvas><span>Integridade</span><b><i style="width:' + Math.round((1 - (+j.d || 0)) * 100) + '%"></i></b></div>';
       if (!j.r) h += '<span class="jr" id="jogoR">15</span>';
       h += '<p class="jq">' + codJ(j.q) + '</p><div class="jo">' +
         (j.o || []).map((o, k) => '<div' + (j.r && k === j.c ? ' class="ok"' : '') + '><b>' + 'ABCD'[k] + '</b><span>' + codJ(o) + '</span></div>').join('') + '</div>';
       if (j.r) h += '<p class="jw">' + escJ(j.w || '') + '</p>';
     }
     if (j.p === 'fim') {
-      h += '<p class="js">Vocês sobreviveram.</p>';
-      h += j.g ? '<p class="jf" style="--c:' + (/^#[0-9a-f]{6}$/i.test(j.c) ? j.c : '#43e0a6') + '"><small>' + (j.e ? 'Grupos finalistas' : 'Grupo finalista') + '</small>' + escJ(j.g) + '</p>' : '<p class="js">Ninguém abriu um cadeado…</p>';
+      h += '<p class="js">O Bug foi destruído. O site é de vocês de novo.</p>';
+      h += j.g ? '<p class="jf" style="--c:' + (/^#[0-9a-f]{6}$/i.test(j.c) ? j.c : '#43e0a6') + '"><small>' + (j.e ? 'Grupos finalistas' : 'Grupo finalista') + '</small>' + escJ(j.g) + '</p>' : '<p class="js">A turma toda venceu.</p>';
     }
     conteudoJogo.innerHTML = h;
     telaJogo.classList.toggle('rev', !!(j.p === 'q' && j.r));
     if (telaJogo.hidden) { telaJogo.hidden = false; if (!calmo) { telaJogo.classList.remove('entra'); void telaJogo.offsetWidth; telaJogo.classList.add('entra'); } }
     const cv = conteudoJogo.querySelector('canvas');
-    if (cv) { let aceso = true; desenharBug(cv, aceso); piscaJogo = setInterval(() => { aceso = !aceso; desenharBug(cv, aceso); }, 600); }
+    if (cv) {
+      const t0 = Date.now(), dano = j.p === 'q' ? (+j.d || 0) : 0;
+      pararBugJogo = animarBug(cv, () => ({ dano: dano, some: j.p === 'fim' ? Math.min(1, (Date.now() - t0) / 2600) : 0 }));
+    }
     const r = document.getElementById('jogoR');
     if (r) {                                     // cronômetro de 15s a partir do envio
       const fim = (quando || Date.now()) + 15000;
@@ -578,14 +713,40 @@
     try { navigator.vibrate && navigator.vibrate(j.p === 'intro' ? [80, 60, 160] : 40); } catch (e) {}
   }
 
+
+  /* =====================================================================
+     O SITE BUGANDO AOS POUCOS: a apresentação manda o nível ("b", 0 a 4).
+     Do nível 1 em diante o Bug atravessa a tela de vez em quando;
+     do 2 em diante, o site começa a quebrar (cada vez mais).
+     ===================================================================== */
+  const bugAnda = document.getElementById('bugAnda');
+  let nivelBug = 0, timerAnda = null, pararAnda = null;
+  function passearBug() {
+    if (calmo || !nivelBug || !bugAnda) return;
+    if (!pararAnda) pararAnda = animarBug(bugAnda, () => (bugAnda.classList.contains('vai') ? { dano: 0 } : null));
+    bugAnda.classList.remove('vai'); void bugAnda.offsetWidth; bugAnda.classList.add('vai');
+    try { navigator.vibrate && navigator.vibrate(30); } catch (e) {}
+  }
+  function aplicarBug(b) {
+    b = Math.max(0, Math.min(4, +b || 0));
+    if (b === nivelBug) return;
+    const subiu = b > nivelBug; nivelBug = b;
+    if (b) raiz.dataset.bug = b; else delete raiz.dataset.bug;
+    clearInterval(timerAnda);
+    if (b) {
+      if (subiu) setTimeout(passearBug, 600);
+      timerAnda = setInterval(passearBug, [0, 26000, 17000, 11000, 7000][b]);
+    }
+  }
+
   /* Escuta o canal. As mensagens dos últimos 45 min chegam primeiro;
      esperamos 300ms e aplicamos só a mais recente. */
   let espera = 3000, pendente = null, timerPendente, aquecido = false;
   let es = null, timerReconexao = null, ultimoSinal = Date.now();
-  function receber(s, j, quando) {
-    pendente = { s, j, quando };
+  function receber(s, j, quando, b) {
+    pendente = { s, j, quando, b };
     clearTimeout(timerPendente);
-    timerPendente = setTimeout(() => { aplicar(pendente.s, aquecido); mostrarJogo(pendente.j, pendente.quando); }, aquecido ? 0 : 300);
+    timerPendente = setTimeout(() => { aplicar(pendente.s, aquecido); aplicarBug(pendente.b); mostrarJogo(pendente.j, pendente.quando); }, aquecido ? 0 : 300);
   }
   function conectar() {
     clearTimeout(timerReconexao);
@@ -605,7 +766,7 @@
         const d = JSON.parse(e.data);
         if (d.event !== 'message') return;
         const m = JSON.parse(d.message);
-        if (typeof m.s === 'number') receber(m.s, (m.j && typeof m.j === 'object') ? m.j : null, typeof m.t === 'number' ? Math.min(m.t, Date.now()) : Date.now());
+        if (typeof m.s === 'number') receber(m.s, (m.j && typeof m.j === 'object') ? m.j : null, typeof m.t === 'number' ? Math.min(m.t, Date.now()) : Date.now(), typeof m.b === 'number' ? m.b : 0);
       } catch (erro) {}
     };
     es.onerror = () => {
@@ -638,7 +799,7 @@
   });
 
   /* Para testar no computador: lanchonete.aplicar(5) no console */
-  window.lanchonete = { aplicar: (s) => aplicar(s, true), jogo: (j) => mostrarJogo(j, Date.now()) };
+  window.lanchonete = { aplicar: (s) => aplicar(s, true), jogo: (j) => mostrarJogo(j, Date.now()), bug: (b) => aplicarBug(b) };
   /* modo ensaio: a página de ensaio do app manda o estágio por mensagem */
   addEventListener('message', (e) => {
     const d = e.data;

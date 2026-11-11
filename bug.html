@@ -462,6 +462,17 @@
     .erro-win footer span { border: 1px solid #8d4a48; padding: 1px 10px; color: #d6b3ad; }
     .bug-enxame { position: fixed; left: 0; top: 0; width: 56px; height: auto; aspect-ratio: 52 / 42; z-index: 56; pointer-events: none; image-rendering: pixelated; }
     @media (prefers-reduced-motion: reduce) { .estatica, .erro-win, .bug-enxame { display: none !important; } }
+
+    /* reinício: quando o Bug é destruído o site "reinicia" limpinho */
+    .reinicio { position: fixed; inset: 0; z-index: 70; display: none; place-content: center; justify-items: center; gap: 12px; background: #000; color: #fff8ec; font-family: system-ui, sans-serif; text-align: center; }
+    .reinicio.on { display: grid; animation: reinicioSai 1.7s steps(1) forwards; }
+    @keyframes reinicioSai { 0%, 88% { opacity: 1 } 100% { opacity: 0 } }
+    .reinicio > * { zoom: var(--k, 1); }
+    .reinicio b { font-size: 26px; font-weight: 800; }
+    .reinicio span { font: 12px "Courier New", monospace; letter-spacing: .16em; text-transform: uppercase; color: #ffc93c; }
+    .reinicio i { display: block; width: 220px; height: 6px; border: 1px solid #5a3a20; border-radius: 999px; overflow: hidden; }
+    .reinicio i::before { content: ""; display: block; height: 100%; width: 0; background: #ffc93c; animation: reinicioBarra 1.25s steps(12) forwards; }
+    @keyframes reinicioBarra { to { width: 100%; } }
   </style>
 </head>
 <body>
@@ -527,6 +538,7 @@
     <button type="button" id="regrasOk">Voltar à caça</button>
   </div></div>
   <div class="susto" id="susto" aria-hidden="true"><canvas width="52" height="42"></canvas><b class="susto-txt"></b></div>
+  <div class="reinicio" id="reinicio" aria-hidden="true"><b>🍔 Lanchonete Pixel</b><i></i><span>restaurando o site…</span></div>
   <div class="apagao" id="apagao" aria-hidden="true"><canvas width="26" height="21"></canvas><b class="apag-txt"></b></div>
   <div class="pedido" id="pedido" hidden role="dialog" aria-label="Fazer pedido"><form id="pedidoForm" autocomplete="off">
     <span class="pd-logo">🍔 Lanchonete Pixel</span><h2 id="pedidoTit">Pra quem é o pedido?</h2>
@@ -1094,7 +1106,10 @@
   function aplicarBug(b) {
     b = Math.max(0, Math.min(4, +b || 0));
     if (b === nivelBug) return;
-    const subiu = b > nivelBug; nivelBug = b;
+    const subiu = b > nivelBug, antes = nivelBug; nivelBug = b;
+    if (!b && antes >= 3 && aquecido && !calmo) {          // o Bug foi destruído: o site reinicia limpinho
+      const r = document.getElementById('reinicio'); r.classList.remove('on'); void r.offsetWidth; r.classList.add('on'); setTimeout(() => r.classList.remove('on'), 1750);
+    }
     if (b) raiz.dataset.bug = b; else delete raiz.dataset.bug;
     if (b < 3) ligarDreno(0); else if (raiz.dataset.dreno) ligarDreno(1);
     agendarCorrompe(); agendarSabe(); caosDoNivel(b);

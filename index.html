@@ -469,6 +469,13 @@
     .reinicio i { display: block; width: 220px; height: 6px; border: 1px solid #5a3a20; border-radius: 999px; overflow: hidden; }
     .reinicio i::before { content: ""; display: block; height: 100%; width: 0; background: #ffc93c; animation: reinicioBarra 1.25s steps(12) forwards; }
     @keyframes reinicioBarra { to { width: 100%; } }
+    /* invasão compacta: tudo cabe na tela sem rolar, até em celular pequeno */
+    .jogo .jc.inv { gap: 10px; }
+    .jogo .jc.inv canvas { width: 96px; }
+    .jogo .jc.inv .js { font-size: 18px; }
+    .jogo .jc.inv .inv-r { font-size: 13.5px; gap: 5px; }
+    .jogo .jc.inv .slots i { width: 32px; height: 40px; font-size: 20px; }
+    @media (min-height: 760px) { .jogo .jc.inv canvas { width: 130px; } .jogo .jc.inv .js { font-size: 20px; } .jogo .jc.inv .inv-r { font-size: 15px; } }
   </style>
 </head>
 <body>
@@ -1069,8 +1076,10 @@
       h += '<div class="slots ok">' + [...meuCodigo()].map((d) => '<i>' + d + '</i>').join('') + '</div><span class="jt">o seu código era</span>';
     }
     conteudoJogo.innerHTML = h;
+    conteudoJogo.classList.toggle('inv', j.p === 'inv');
     telaJogo.classList.toggle('rev', !!(j.p === 'q' && j.r));
     if (telaJogo.hidden) { telaJogo.hidden = false; if (!calmo) { telaJogo.classList.remove('entra'); void telaJogo.offsetWidth; telaJogo.classList.add('entra'); } }
+    if (falaBug && falaBug.classList.contains('on') && !falaBug.dataset.prio) falaBug.classList.remove('on');   // o jogo entrou: a fala sai da frente
     const cv = conteudoJogo.querySelector('canvas');
     if (cv) {
       const t0 = Date.now(), dano = j.p === 'q' ? (+j.d || 0) : 0;
@@ -1176,12 +1185,14 @@
     /* quando o Bug fala de VOCÊ no telão, essa fala não pode ser atropelada */
     if (!prioridade && Date.now() < travaFala) { setTimeout(() => falar(texto, grave, false, tipo), travaFala - Date.now() + 400); return; }
     if (prioridade) travaFala = Date.now() + 7600;
+    if (!prioridade && (!telaJogo.hidden || !pedido.hidden)) return;   // nunca tampar o jogo/quiz nem o pedido
     falaBug.querySelector('.sr').textContent = texto;
     falaBug.classList.toggle('grave', !!grave);
     escreverFalhando(falaBug.querySelector('span'), texto, grave ? Math.max(nivelBug, 3) : nivelBug);
     if (!pararFala) pararFala = animarBug(falaBug.querySelector('canvas'), () => (falaBug.classList.contains('on') ? {} : null));
     falaBug.classList.add('on'); clearTimeout(timerFala);
     timerFala = setTimeout(() => { falaBug.classList.remove('on'); clearInterval(timerTexto); }, grave ? 7500 : 6500);
+    falaBug.dataset.prio = prioridade ? '1' : '';
     vibrar(tipo || (prioridade ? 'telao' : 'geral'));
   }
   /* SUSTOS: com 2 números liberados o Bug começa a pular na tela de vez em

@@ -740,6 +740,8 @@ body:is([data-clima="4"],[data-clima="5"]) .clima-fx{opacity:1;animation:tfFlick
 .reinicio i{display:block;width:min(420px,70vw);height:6px;border:1px solid #223a66;border-radius:999px;overflow:hidden}
 .reinicio i::before{content:"";display:block;height:100%;width:0;background:linear-gradient(90deg,#3a72ff,#52d5ff);animation:reinicioBarra 1.25s steps(12) forwards}
 @keyframes reinicioBarra{to{width:100%}}
+/* projetor com tela baixa (1280x720, 1024x768): menos espaço em cima e embaixo de cada slide */
+@media (max-height:780px){.slide{padding-block:clamp(8px,1.6vh,18px)}}
 /* ---------- ÚLTIMO CAPÍTULO: PLOT TWIST (Bootstrap) ---------- */
 :root{--bs:#7952b3;--bs2:#b9a2f0}
 /* A. rebobinar: os 8 consertos do dia */
@@ -1180,7 +1182,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
      O Bug toma o site e explica as regras da caça ao código.
      Código: 4 números escondidos no site do celular; cada número só aparece
      quando a parte certa do site é consertada. -->
-<section class="slide inv-slide" data-act="Abertura · A invasão" data-stage="0" data-codigo="1">
+<section class="slide inv-slide" data-act="Ato 1 · A invasão" data-stage="0" data-codigo="1">
   <div class="inner jg inv">
     <canvas class="jg-bug inv-bug" width="52" height="42" aria-label="O Bug: uma aranha de pixels com olhos vermelhos que vaza para fora da tela"></canvas>
     <p class="jg-say inv-say" id="invSay" data-text="Eu sou o Bug. Este site agora é meu. Tranquei ele com um código."></p>

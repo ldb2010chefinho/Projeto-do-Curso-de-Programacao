@@ -187,6 +187,39 @@
     .m-tela iframe { position: absolute; top: 0; left: 0; border: 0; transform-origin: 0 0; background: #fff6ea;
       transition: transform .6s cubic-bezier(.16, 1, .3, 1); }
 
+
+    /* ---------- O JOGO DO BUG (só durante o jogo da apresentação) ----------
+       Uma tela escura cobre o site. Ela mostra o Bug, a prova da vez e,
+       no fim, o grupo finalista. Quem responde é o grupo, levantando a letra. */
+    .jogo { position: fixed; inset: 0; z-index: 58; display: grid; place-items: center; overflow: auto;
+      padding: max(18px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(18px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+      background: radial-gradient(ellipse at center, #15101a, #07070a 70%); color: #e9e2d0;
+      font-family: "Courier New", ui-monospace, monospace; text-align: center; }
+    .jogo[hidden] { display: none; }
+    .jogo::after { content: ""; position: fixed; inset: 0; pointer-events: none;
+      background: repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 1px, transparent 1px 3px); animation: jgFlick 7s infinite; }
+    @keyframes jgFlick { 0%, 91%, 100% { opacity: 1 } 92% { opacity: .3 } 94% { opacity: 1 } }
+    .jogo .jc { display: grid; gap: 16px; justify-items: center; width: min(560px, 100%); }
+    .jogo canvas { width: 150px; height: auto; aspect-ratio: 22 / 18; image-rendering: pixelated; filter: drop-shadow(0 0 22px rgba(194, 43, 30, .5)); }
+    .jogo .jt { font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: #c22b1e; }
+    .jogo .js { margin: 0; font-size: 22px; line-height: 1.3; }
+    .jogo .jq { margin: 0; font-size: 21px; line-height: 1.25; font-weight: 700; }
+    .jogo code { color: #52d5ff; }
+    .jogo .jo { display: grid; gap: 8px; width: 100%; }
+    .jogo .jo div { display: flex; gap: 12px; align-items: center; text-align: left; padding: 11px 14px; border: 1px solid #2a2630; border-radius: 10px; background: #111015; font-size: 16px; }
+    .jogo .jo b { flex: none; width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid #8d8676; border-radius: 6px; }
+    .jogo.rev .jo div { opacity: .3; }
+    .jogo.rev .jo div.ok { opacity: 1; border-color: #43e0a6; background: rgba(67, 224, 166, .12); }
+    .jogo .jw { margin: 0; font-size: 14px; color: #a8a090; }
+    .jogo .jr { font-size: 46px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .jogo .jr.low { color: #ff3b2f; }
+    .jogo .jf { margin: 0; font-size: 44px; line-height: 1; font-weight: 700; color: var(--c, #43e0a6); text-shadow: 0 0 30px currentColor; font-family: system-ui, sans-serif; }
+    .jogo .jf small { display: block; margin-bottom: 10px; font-size: 13px; letter-spacing: .2em; color: #8d8676; text-transform: uppercase; text-shadow: none; font-family: "Courier New", monospace; }
+    .jogo.entra { animation: jgEntra .9s steps(6); }
+    @keyframes jgEntra { 0% { opacity: 0 } 20% { opacity: 1; filter: invert(1) } 35% { filter: none; transform: translate(-6px, 3px) } 55% { transform: translate(5px, -4px) } 100% { transform: none } }
+    .jogo.sai { animation: jgSai .8s steps(8) forwards; }
+    @keyframes jgSai { 0% { opacity: 1 } 50% { opacity: 1; transform: translateY(-20px) } 100% { opacity: 0; transform: translateY(20px) } }
+
     /* =====================================================================
        AVISOS (só aparecem no momento em que o site muda)
        --k aumenta tudo quando a página está "encolhida" (sem viewport),
@@ -260,6 +293,9 @@
 
   <!-- PLOT TWIST: a versão Bootstrap carrega aqui (só a partir da Caça ao bug) -->
   <iframe class="twist" id="twist" title="Lanchonete Pixel, versão feita com Bootstrap"></iframe>
+
+  <!-- O JOGO DO BUG: aparece sozinho quando a apresentação chega no jogo -->
+  <div class="jogo" id="jogo" hidden aria-live="polite"><div class="jc" id="jogoC"></div></div>
 
   <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
 
@@ -481,14 +517,79 @@
     }
   }
 
+
+  /* =====================================================================
+     O JOGO DO BUG: a apresentação manda, junto com a etapa, o que mostrar
+     ("j"). Sem "j", a tela do jogo some e o site volta.
+     ===================================================================== */
+  function desenharBug(cv, aceso){
+  /* "O Bug": inseto de pixels que vaza para fora da viewport (linha tracejada) */
+  const MAPA = ['....4.......4.......','.....4.....4........','......55555.........','.....5355535........','4...555555555....4..','.4.11122222111.4....','..1122222222211.....','441122212222211144..','..1122212222211.....','.4111222122221114...','4..11112221111...4..','....111111111.......','.....4.....4........','....4.......4.......'];
+  const g = cv.getContext('2d'), BORDA = 14; g.clearRect(0, 0, cv.width, cv.height);
+  const cor = { '1':'#7a1a12', '2':'#c22b1e', '3': aceso ? '#ff3b2f' : '#3a1210', '4':'#e9e2d0', '5':'#1a1418' };
+  MAPA.forEach((linha, y) => [...linha].forEach((v, x) => {
+    if(v === '.') return;
+    const fora = x > BORDA;                       // pedaço que vazou da tela
+    g.fillStyle = cor[v];
+    g.fillRect(x + 1, y + 2 + (fora ? 1 : 0), 1, 1);
+    if(fora){ g.fillStyle = 'rgba(82,213,255,.55)'; g.fillRect(x + 2, y + 2, 1, 1); }
+  }));
+  g.fillStyle = '#52d5ff';                        // borda da viewport, tracejada
+  for(let y = 0; y < 18; y += 2) g.fillRect(BORDA + 1.5, y, .5, 1);
+  g.fillStyle = '#2a2630'; g.fillRect(1, 17, 21, 1);   // barra de rolagem lateral
+  g.fillStyle = '#8d8676'; g.fillRect(1, 17, 13, 1);
+}
+  const telaJogo = document.getElementById('jogo'), conteudoJogo = document.getElementById('jogoC');
+  let jogoAtual = null, relogioJogo = null, piscaJogo = null;
+  const escJ = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const codJ = (t) => escJ(t).replace(/`([^`]+)`/g, '<code>$1</code>');   // `texto` vira código (nunca HTML de fora)
+  function mostrarJogo(j, quando) {
+    const chave = JSON.stringify(j);
+    if (chave === jogoAtual) return;
+    const tinha = !!jogoAtual; jogoAtual = j ? chave : null;
+    clearInterval(relogioJogo); clearInterval(piscaJogo);
+    if (!j) {                                   // fim do jogo: rebobina e some
+      if (tinha && !calmo) { telaJogo.classList.remove('entra'); telaJogo.classList.add('sai'); setTimeout(() => { telaJogo.hidden = true; telaJogo.classList.remove('sai'); }, 800); }
+      else telaJogo.hidden = true;
+      return;
+    }
+    let h = '';
+    if (j.p === 'intro' || j.p === 'regras' || j.p === 'fim') h += '<canvas width="22" height="18" aria-label="O Bug"></canvas>';
+    if (j.p === 'intro') h += '<span class="jt">O Jogo do Bug</span><p class="js">Vocês acharam que o site estava consertado? Eu ainda estou aqui.</p>';
+    if (j.p === 'regras') h += '<span class="jt">Regras</span><p class="js">Vamos jogar um jogo. Cada grupo é um jogador: levantem a letra antes do tempo acabar.</p>';
+    if (j.p === 'q') {
+      h += '<span class="jt">Prova ' + (j.i + 1) + ' de ' + j.n + '</span>';
+      if (!j.r) h += '<span class="jr" id="jogoR">15</span>';
+      h += '<p class="jq">' + codJ(j.q) + '</p><div class="jo">' +
+        (j.o || []).map((o, k) => '<div' + (j.r && k === j.c ? ' class="ok"' : '') + '><b>' + 'ABCD'[k] + '</b><span>' + codJ(o) + '</span></div>').join('') + '</div>';
+      if (j.r) h += '<p class="jw">' + escJ(j.w || '') + '</p>';
+    }
+    if (j.p === 'fim') {
+      h += '<p class="js">Vocês sobreviveram.</p>';
+      h += j.g ? '<p class="jf" style="--c:' + (/^#[0-9a-f]{6}$/i.test(j.c) ? j.c : '#43e0a6') + '"><small>' + (j.e ? 'Grupos finalistas' : 'Grupo finalista') + '</small>' + escJ(j.g) + '</p>' : '<p class="js">Ninguém abriu um cadeado…</p>';
+    }
+    conteudoJogo.innerHTML = h;
+    telaJogo.classList.toggle('rev', !!(j.p === 'q' && j.r));
+    if (telaJogo.hidden) { telaJogo.hidden = false; if (!calmo) { telaJogo.classList.remove('entra'); void telaJogo.offsetWidth; telaJogo.classList.add('entra'); } }
+    const cv = conteudoJogo.querySelector('canvas');
+    if (cv) { let aceso = true; desenharBug(cv, aceso); piscaJogo = setInterval(() => { aceso = !aceso; desenharBug(cv, aceso); }, 600); }
+    const r = document.getElementById('jogoR');
+    if (r) {                                     // cronômetro de 15s a partir do envio
+      const fim = (quando || Date.now()) + 15000;
+      const pinta = () => { const seg = Math.max(0, Math.ceil((fim - Date.now()) / 1000)); r.textContent = seg; r.classList.toggle('low', seg <= 5); if (!seg) clearInterval(relogioJogo); };
+      pinta(); relogioJogo = setInterval(pinta, 250);
+    }
+    try { navigator.vibrate && navigator.vibrate(j.p === 'intro' ? [80, 60, 160] : 40); } catch (e) {}
+  }
+
   /* Escuta o canal. As mensagens dos últimos 45 min chegam primeiro;
      esperamos 300ms e aplicamos só a mais recente. */
   let espera = 3000, pendente = null, timerPendente, aquecido = false;
   let es = null, timerReconexao = null, ultimoSinal = Date.now();
-  function receber(s) {
-    pendente = s;
+  function receber(s, j, quando) {
+    pendente = { s, j, quando };
     clearTimeout(timerPendente);
-    timerPendente = setTimeout(() => { aplicar(pendente, aquecido); }, aquecido ? 0 : 300);
+    timerPendente = setTimeout(() => { aplicar(pendente.s, aquecido); mostrarJogo(pendente.j, pendente.quando); }, aquecido ? 0 : 300);
   }
   function conectar() {
     clearTimeout(timerReconexao);
@@ -508,7 +609,7 @@
         const d = JSON.parse(e.data);
         if (d.event !== 'message') return;
         const m = JSON.parse(d.message);
-        if (typeof m.s === 'number') receber(m.s);
+        if (typeof m.s === 'number') receber(m.s, (m.j && typeof m.j === 'object') ? m.j : null, typeof m.t === 'number' ? Math.min(m.t, Date.now()) : Date.now());
       } catch (erro) {}
     };
     es.onerror = () => {
@@ -541,7 +642,7 @@
   });
 
   /* Para testar no computador: lanchonete.aplicar(5) no console */
-  window.lanchonete = { aplicar: (s) => aplicar(s, true) };
+  window.lanchonete = { aplicar: (s) => aplicar(s, true), jogo: (j) => mostrarJogo(j, Date.now()) };
   /* modo ensaio: a página de ensaio do app manda o estágio por mensagem */
   addEventListener('message', (e) => {
     const d = e.data;

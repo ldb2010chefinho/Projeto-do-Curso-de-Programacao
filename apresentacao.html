@@ -6,7 +6,7 @@
 <title>Design Responsivo ao Vivo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Schibsted+Grotesk:wght@400..700&family=JetBrains+Mono:wght@400..600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Schibsted+Grotesk:wght@400..700&family=JetBrains+Mono:wght@400..600&display=swap">
 <style>
 /* =========================================================
    LAYOUT: palco escuro em tela cheia; barra superior (ato + status
@@ -492,6 +492,65 @@ kbd{font-family:var(--f-mono);font-size:var(--fs-sm);padding:6px 10px;border-rad
 .voz.troca .prox{animation:vozPulse 1.2s ease-in-out infinite}
 @keyframes vozPulse{50%{transform:scale(1.45)}}
 .progress{background:var(--voz-bg)!important;transition:width .5s var(--ease),background .6s var(--ease)}
+
+/* ---------- O JOGO DO BUG (terror leve) ----------
+   Quando o slide do jogo está na tela, a apresentação inteira "escurece". */
+body.terror{background:#07070a}
+body.terror .bg-net, body.terror::before{opacity:0;transition:opacity .6s}
+body.terror .topbar, body.terror .botbar{background:#07070a}
+.terror-fx{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity .8s;
+  background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.85) 100%),
+  repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px)}
+body.terror .terror-fx{opacity:1;animation:tfFlick 7s infinite}
+@keyframes tfFlick{0%,91%,100%{opacity:1}92%{opacity:.4}93%{opacity:1}95%{opacity:.6}96%{opacity:1}}
+.jg{display:grid;gap:clamp(10px,2vh,22px);justify-items:center;text-align:center;align-content:center;min-height:100%;font-family:"Special Elite","Courier New",monospace;color:#e9e2d0}
+.jg-top{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;flex-wrap:wrap}
+.jg-tag{font-family:var(--f-mono);font-size:var(--fs-xs);letter-spacing:.18em;text-transform:uppercase;color:#c22b1e}
+.jg-locks{display:flex;gap:6px}
+.jg-locks i{width:20px;height:24px;display:block;background:no-repeat center/contain url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 38'><path d='M9 16V10a7 7 0 0 1 14 0v6' fill='none' stroke='%238d8676' stroke-width='3'/><rect x='4' y='16' width='24' height='20' rx='3' fill='%237a1a12'/></svg>")}
+.jg-locks i.open{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 38'><path d='M9 12V8a7 7 0 0 1 14 0' fill='none' stroke='%238d8676' stroke-width='3'/><rect x='4' y='16' width='24' height='20' rx='3' fill='%2343e0a6'/></svg>")}
+.jg-bug{width:clamp(130px,20vh,230px);height:auto;aspect-ratio:22/18;image-rendering:pixelated;filter:drop-shadow(0 0 26px rgba(194,43,30,.5))}
+.jg-say{margin:0;max-width:30ch;font-size:clamp(1.2rem,.8rem + 1.8vw,2.4rem);line-height:1.3;min-height:2.6em;text-wrap:balance}
+.jg-say .cur{display:inline-block;width:.5em;height:.95em;background:#c22b1e;vertical-align:-.1em;animation:jgBlink 1s steps(2) infinite}
+@keyframes jgBlink{50%{opacity:0}}
+.jg-rules{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:clamp(1rem,.8rem + .8vw,1.5rem);text-align:left}
+.jg-rules li::before{content:"✕ ";color:#c22b1e}
+.jg-q{display:grid;gap:clamp(10px,1.8vh,20px);justify-items:center;width:100%}
+.jg-qhead{display:flex;align-items:center;gap:18px}
+.jg-num{font-family:var(--f-mono);font-size:var(--fs-xs);letter-spacing:.2em;color:#c22b1e;text-transform:uppercase}
+.jg-timer{position:relative;width:78px;height:78px}
+.jg-timer svg{width:100%;height:100%;transform:rotate(-90deg)}
+.jg-timer b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-mono);font-size:26px;font-variant-numeric:tabular-nums}
+.jg-timer.low b{color:#ff3b2f;animation:jgPulse .5s ease-in-out infinite alternate}
+@keyframes jgPulse{to{transform:scale(1.15)}}
+.jg-text{margin:0;font-size:clamp(1.3rem,.8rem + 2.2vw,2.8rem);line-height:1.18;max-width:28ch;text-wrap:balance}
+.jg-text code,.jg-opt code{font-family:var(--f-mono);font-size:.85em;color:#52d5ff}
+.jg-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;max-width:920px}
+.jg-opt{display:flex;align-items:center;gap:14px;text-align:left;padding:13px 18px;border:1px solid #2a2630;border-radius:10px;background:#111015;font-size:clamp(.95rem,.75rem + .7vw,1.35rem);transition:opacity .3s,border-color .3s,background .3s;min-width:0}
+.jg-opt .k{flex:none;width:34px;height:34px;display:grid;place-items:center;border:1px solid #8d8676;border-radius:6px;font-family:var(--f-mono);font-weight:600}
+.jg-q.rev .jg-opt{opacity:.3}
+.jg-q.rev .jg-opt.ok{opacity:1;border-color:#43e0a6;background:rgba(67,224,166,.1)}
+.jg-q.rev .jg-opt.ok .k{border-color:#43e0a6;color:#43e0a6}
+.jg-why{margin:0;max-width:62ch;font-family:var(--f-mono);font-size:var(--fs-sm);color:#8d8676;min-height:1.5em;opacity:0;transition:opacity .4s}
+.jg-q.rev .jg-why{opacity:1}
+.jg-board{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.jg-g{display:flex;align-items:center;gap:9px;padding:8px 14px;border:1px solid #2a2630;border-radius:999px;background:#111015;font-family:var(--f-mono);font-size:14px;color:#e9e2d0;cursor:pointer}
+.jg-g i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.jg-g b{font-variant-numeric:tabular-nums}
+.jg-g.hit{border-color:#43e0a6;box-shadow:0 0 0 1px #43e0a6}
+.jg-hint{margin:0;font-family:var(--f-mono);font-size:12px;color:#8d8676}
+.jg-hint kbd{border:1px solid #2a2630;border-radius:4px;padding:0 5px;color:#e9e2d0}
+.jg-win{margin:0;font-family:var(--f-display);font-weight:800;font-size:clamp(2.2rem,1.2rem + 4.5vw,5rem);line-height:1;color:var(--c,#43e0a6);text-shadow:0 0 40px currentColor}
+.jg-win small{display:block;font-family:var(--f-mono);font-weight:400;font-size:var(--fs-sm);letter-spacing:.2em;color:#8d8676;text-transform:uppercase;margin-bottom:12px;text-shadow:none}
+.jg-pane{display:none;gap:clamp(10px,2vh,22px);justify-items:center;width:100%}
+.jg-pane.on{display:grid;animation:jgIn .6s cubic-bezier(.16,1,.3,1)}
+@keyframes jgIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.jg-shake{animation:jgShake .5s steps(6)}
+@keyframes jgShake{20%{transform:translate(-10px,4px)}40%{transform:translate(8px,-6px)}60%{transform:translate(-6px,-2px)}80%{transform:translate(5px,6px)}}
+.jg-flash{position:fixed;inset:0;z-index:60;pointer-events:none;background:#c22b1e;opacity:0}
+.jg-flash.go{animation:jgFlash .9s ease-out}
+@keyframes jgFlash{0%{opacity:0}10%{opacity:.7}30%{opacity:.12}45%{opacity:.55}100%{opacity:0}}
+@media (max-width:760px){.jg-opts{grid-template-columns:1fr}}
 /* ---------- ÚLTIMO CAPÍTULO: PLOT TWIST (Bootstrap) ---------- */
 :root{--bs:#7952b3;--bs2:#b9a2f0}
 /* A. rebobinar: os 8 consertos do dia */
@@ -1688,6 +1747,60 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
      o Bootstrap por dentro é o próximo grupo. O último slide passa a vez.
      ===================================================================== -->
 
+
+<!-- ================= O JOGO DO BUG =================
+     Depois do falso final, "O Bug" (um bug de responsividade que vazou da
+     tela) aparece e desafia a turma. Cada grupo responde levantando A, B, C ou D.
+     Tudo o que aparece aqui também aparece no celular da turma.
+     Teclas: → avança · 1 a 5 marcam os grupos que acertaram (depois de revelar). -->
+<section class="slide jogo-slide" data-act="Último capítulo · O Jogo do Bug" data-stage="4" data-jogo="1">
+  <div class="inner jg" id="jg">
+    <div class="jg-top"><span class="jg-tag">O Jogo do Bug</span><span class="jg-locks" id="jgLocks"></span></div>
+    <div class="jg-pane" data-p="intro">
+      <canvas class="jg-bug" width="22" height="18" aria-label="O Bug: um inseto de pixels que vaza para fora da tela"></canvas>
+      <p class="jg-say" id="jgSay1" data-text="Vocês acharam que o site estava consertado? Eu ainda estou aqui."></p>
+    </div>
+    <div class="jg-pane" data-p="regras">
+      <p class="jg-say" id="jgSay2" data-text="Vamos jogar um jogo."></p>
+      <ul class="jg-rules">
+        <li>Cada grupo é um jogador.</li>
+        <li>15 segundos por prova. Levantem a letra antes do tempo acabar.</li>
+        <li>Cada prova vencida abre um cadeado.</li>
+        <li>Abram todos os cadeados para sair daqui.</li>
+      </ul>
+    </div>
+    <div class="jg-pane jg-q" data-p="q" id="jgQ">
+      <div class="jg-qhead"><span class="jg-num" id="jgNum"></span>
+        <div class="jg-timer" id="jgTimer"><svg viewBox="0 0 86 86" aria-hidden="true"><circle cx="43" cy="43" r="38" fill="none" stroke="#2a2630" stroke-width="6"/><circle id="jgTfg" cx="43" cy="43" r="38" fill="none" stroke="#c22b1e" stroke-width="6" stroke-dasharray="238.8" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear"/></svg><b id="jgTnum">15</b></div>
+      </div>
+      <h2 class="jg-text" id="jgText"></h2>
+      <div class="jg-opts" id="jgOpts"></div>
+      <p class="jg-why" id="jgWhy"></p>
+    </div>
+    <div class="jg-pane" data-p="fim">
+      <canvas class="jg-bug" width="22" height="18" aria-hidden="true"></canvas>
+      <p class="jg-say" id="jgSay3" data-text="Vocês sobreviveram. O site é de vocês de novo."></p>
+      <p class="jg-win" id="jgWin"></p>
+    </div>
+    <div class="jg-board" id="jgBoard"></div>
+    <p class="jg-hint"><kbd>→</kbd> avança · depois de revelar, <kbd>1</kbd>–<kbd>5</kbd> (ou clique) marca os grupos que acertaram</p>
+    <i data-frag="1" hidden></i>
+    <i data-frag="2" hidden></i>
+    <i data-frag="3" hidden></i>
+    <i data-frag="4" hidden></i>
+    <i data-frag="5" hidden></i>
+    <i data-frag="6" hidden></i>
+    <i data-frag="7" hidden></i>
+    <i data-frag="8" hidden></i>
+    <i data-frag="9" hidden></i>
+    <i data-frag="10" hidden></i>
+    <i data-frag="11" hidden></i>
+    <i data-frag="12" hidden></i>
+    <i data-frag="13" hidden></i>
+    <i data-frag="14" hidden></i>
+  </div>
+</section>
+
 <!-- ================= A. REBOBINAR ================= -->
 <section class="slide" data-act="Último capítulo · Plot twist" data-stage="4" data-enter="rewind">
   <div class="inner">
@@ -1783,6 +1896,8 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 
 <!-- ============ BARRA INFERIOR ============ -->
 <i class="voz-line" aria-hidden="true"></i>
+<i class="terror-fx" aria-hidden="true"></i>
+<i class="jg-flash" id="jgFlash" aria-hidden="true"></i>
 <footer class="botbar">
   <div class="track" id="track"></div>
   <div class="progress" id="progress"></div>
@@ -2438,7 +2553,7 @@ function autoHooks(s){
    Tons tirados da própria paleta dos slides (--ok, azul elétrico clareado, --warn).
    Um fragmento com data-voz troca a cor no meio do slide.
    ========================================================= */
-const VOZ_POR_SLIDE = 'LTMTLTMLMTMLTM' + 'LTMMTMLTLLT' + 'MLTMTLMTLMTL' + 'MA' + 'MTT' + '-';
+const VOZ_POR_SLIDE = 'LTMTLTMLMTMLTM' + 'LTMMTMLTLLT' + 'MLTMTLMTLMTL' + 'MA' + 'A' + 'MTT' + '-';
 const VOZ_COR = { L:'#43e0a6', T:'#5b8cff', M:'#ffd25c' };
 const VOZ_TODOS = 'linear-gradient(90deg,#43e0a6,#5b8cff,#ffd25c)';
 function vozEm(n, fi){
@@ -2456,6 +2571,7 @@ function pintarVoz(){
   r.setProperty('--voz-bg', agora === 'A' ? VOZ_TODOS : (VOZ_COR[agora] || 'var(--line)'));
   r.setProperty('--voz-next', prox === 'A' ? '#e8efff' : (VOZ_COR[prox] || 'var(--line)'));
   $('#voz').classList.toggle('troca', prox !== agora && prox !== '-');
+  if(window.JOGO) window.JOGO.sync();
 }
 
 function next(){ const s=slides[cur]; if(s._fi < s._frags.length){ showFrag(s, s._fi); s._fi++; } else if(cur < slides.length-1) go(cur+1, 1); pintarVoz(); }
@@ -2469,7 +2585,7 @@ function prev(){ const s=slides[cur]; if(s._fi > 0){ s._fi--; s._frags[s._fi].cl
 const LIVE = (() => {
   const CANAL = 'lanchonete-pixel-ldb-oterimxu';   // o mesmo nome está no site (index.html)
   const NOMES = ['Site quebrado','Conserto 1 · meta viewport','Conserto 2 · Flexbox','Conserto 2 · Grid','Conserto 2 · media query','Conserto 3 · max-width: 100%','Conserto 3 · clamp()','Conserto 3 · container query','Caça ao bug','Site consertado','Plot twist · Bootstrap'];
-  let atual = null, envio = 0, rede = 'idle';
+  let atual = null, envio = 0, rede = 'idle', jogo = null;   // jogo = o que o celular mostra no Jogo do Bug
   const pill = $('#livePill'), txt = $('#liveTxt'), panel = $('#livePanel'), grid = $('#lpGrid'), msg = $('#lpMsg');
   $('#lpCanal').textContent = 'ntfy.sh/' + CANAL;
   grid.innerHTML = NOMES.map((n,i) => `<button data-s="${i}" aria-pressed="false"><small>etapa ${i}</small>${esc(n)}</button>`).join('');
@@ -2490,7 +2606,7 @@ const LIVE = (() => {
     }
     const id = ++envio; confirmado = false;
     rede = 'sending'; pintar();
-    const tentar = (n) => fetch('https://ntfy.sh/' + CANAL, { method:'POST', body: JSON.stringify({ s, t: Date.now() }) })
+    const tentar = (n) => fetch('https://ntfy.sh/' + CANAL, { method:'POST', body: JSON.stringify(jogo ? { s, t: Date.now(), j: jogo } : { s, t: Date.now() }) })
       .then(r => { if(!r.ok) throw new Error(r.status); if(id === envio){ rede = 'ok'; pintar(); } })
       .catch(() => { if(id !== envio) return; rede = 'off'; pintar(); if(n < 4) setTimeout(() => { if(id === envio) tentar(n + 1); }, 2000 * 2 ** n); });
     tentar(0);
@@ -2537,9 +2653,135 @@ const LIVE = (() => {
   grid.onclick = e => { const b = e.target.closest('[data-s]'); if(b) set(+b.dataset.s, true); };
   document.addEventListener('keydown', e => { if(e.key === 'Escape') abrir(false); });
   pintar();
-  return { set, get: () => atual, abrir };
+  /* Jogo do Bug: manda o estado do jogo para os celulares (mesma etapa do site) */
+  function setJogo(j){
+    if(JSON.stringify(j) === JSON.stringify(jogo)) return;
+    jogo = j; if(atual !== null) enviar(atual);
+  }
+  return { set, get: () => atual, abrir, setJogo };
 })();
 
+
+
+/* =========================================================
+   O JOGO DO BUG
+   Um slide com vários passos (marcadores data-frag escondidos):
+   0 o Bug aparece · 1 regras · depois, para cada prova, "pergunta" e "resposta"
+   · último: grupo finalista. Cada passo também vai para os celulares.
+   ========================================================= */
+window.JOGO = (() => {
+  const PROVAS = [{"q": "Sem a meta viewport, o navegador do celular finge ter uma tela de uns…", "o": ["320px", "980px", "1920px", "100%"], "c": 1, "why": "Por isso o site aparecia minúsculo: a página era desenhada em ~980px e encolhida."}, {"q": "O que `width=device-width` faz?", "o": ["Trava o zoom", "Usa a largura real da tela do aparelho", "Deixa as imagens maiores", "Esconde o menu"], "c": 1, "why": "É o Conserto 1: a página passa a ter a largura de verdade do celular."}, {"q": "Para organizar em DUAS dimensões (linhas e colunas), o melhor é…", "o": ["Flexbox", "Grid", "`float`", "`position`"], "c": 1, "why": "Flexbox trabalha numa dimensão (o menu); Grid em duas (o cardápio, a página)."}, {"q": "Mobile-first: você começa pela tela menor e vai adicionando com…", "o": ["`max-width`", "`min-width`", "`!important`", "`display: none`"], "c": 1, "why": "Media queries com min-width acrescentam regras conforme a tela cresce."}, {"q": "Em `clamp(1.5rem, 5vw, 3rem)`, o primeiro valor é o…", "o": ["Máximo", "Ideal", "Mínimo", "Breakpoint"], "c": 2, "why": "Mínimo, ideal e máximo: o título nunca fica menor que 1.5rem nem maior que 3rem."}, {"q": "Qual atributo oferece a MESMA foto em vários tamanhos?", "o": ["`alt`", "`srcset`", "`loading`", "`class`"], "c": 1, "why": "Com srcset, o navegador escolhe o arquivo do tamanho certo e economiza internet."}];
+  const GRUPOS = [{"n": "Grupo 1", "c": "#ff5a4f"}, {"n": "Grupo 2", "c": "#ffbf52"}, {"n": "Grupo 3", "c": "#43e0a6"}, {"n": "Grupo 4", "c": "#52d5ff"}, {"n": "Grupo 5", "c": "#b9a2f0"}];
+  const TEMPO = 15;
+  function desenharBug(cv, aceso){
+  /* "O Bug": inseto de pixels que vaza para fora da viewport (linha tracejada) */
+  const MAPA = ['....4.......4.......','.....4.....4........','......55555.........','.....5355535........','4...555555555....4..','.4.11122222111.4....','..1122222222211.....','441122212222211144..','..1122212222211.....','.4111222122221114...','4..11112221111...4..','....111111111.......','.....4.....4........','....4.......4.......'];
+  const g = cv.getContext('2d'), BORDA = 14; g.clearRect(0, 0, cv.width, cv.height);
+  const cor = { '1':'#7a1a12', '2':'#c22b1e', '3': aceso ? '#ff3b2f' : '#3a1210', '4':'#e9e2d0', '5':'#1a1418' };
+  MAPA.forEach((linha, y) => [...linha].forEach((v, x) => {
+    if(v === '.') return;
+    const fora = x > BORDA;                       // pedaço que vazou da tela
+    g.fillStyle = cor[v];
+    g.fillRect(x + 1, y + 2 + (fora ? 1 : 0), 1, 1);
+    if(fora){ g.fillStyle = 'rgba(82,213,255,.55)'; g.fillRect(x + 2, y + 2, 1, 1); }
+  }));
+  g.fillStyle = '#52d5ff';                        // borda da viewport, tracejada
+  for(let y = 0; y < 18; y += 2) g.fillRect(BORDA + 1.5, y, .5, 1);
+  g.fillStyle = '#2a2630'; g.fillRect(1, 17, 21, 1);   // barra de rolagem lateral
+  g.fillStyle = '#8d8676'; g.fillRect(1, 17, 13, 1);
+}
+  const slide = $('.jogo-slide'); if(!slide) return { sync(){} };
+  const pontos = GRUPOS.map(() => 0), marcados = PROVAS.map(() => new Set());
+  let passoAtual = -1, relogio = null, aceso = true, ac = null;
+  const bugs = $$('.jg-bug', slide);
+  setInterval(() => { aceso = !aceso; if(slide.classList.contains('is-active')) bugs.forEach(b => desenharBug(b, aceso)); }, 600);
+  bugs.forEach(b => desenharBug(b, true));
+
+  const esc2 = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const comCodigo = t => esc2(t).replace(/`([^`]+)`/g, '<code>$1</code>');   // `texto` vira código
+
+  function som(tipo){
+    try {
+      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+      const o = ac.createOscillator(), g = ac.createGain(); o.connect(g); g.connect(ac.destination); const t = ac.currentTime;
+      if(tipo === 'tic'){ o.type='square'; o.frequency.value=900; g.gain.setValueAtTime(.04,t); g.gain.exponentialRampToValueAtTime(.0001,t+.05); o.start(t); o.stop(t+.06); }
+      if(tipo === 'grave'){ o.type='sawtooth'; o.frequency.setValueAtTime(90,t); o.frequency.exponentialRampToValueAtTime(38,t+1.4); g.gain.setValueAtTime(.16,t); g.gain.exponentialRampToValueAtTime(.0001,t+1.5); o.start(t); o.stop(t+1.5); }
+      if(tipo === 'abre'){ o.type='triangle'; o.frequency.setValueAtTime(520,t); o.frequency.exponentialRampToValueAtTime(1040,t+.18); g.gain.setValueAtTime(.1,t); g.gain.exponentialRampToValueAtTime(.0001,t+.3); o.start(t); o.stop(t+.3); }
+    } catch(e){}
+  }
+  function digitar(el){
+    const txt = el.dataset.text; let i = 0; clearInterval(el._t);
+    if(REDUCED){ el.textContent = txt; return; }
+    el.innerHTML = '<span class="cur"></span>';
+    el._t = setInterval(() => { i++; el.innerHTML = esc2(txt.slice(0, i)) + '<span class="cur"></span>'; if(i >= txt.length) clearInterval(el._t); }, 36);
+  }
+  function placar(qi){
+    $('#jgBoard').innerHTML = GRUPOS.map((g, k) => `<button type="button" class="jg-g${qi >= 0 && marcados[qi].has(k) ? ' hit' : ''}" data-g="${k}" style="--c:${g.c}"><i></i>${g.n} <b>${pontos[k]}</b></button>`).join('');
+  }
+  function cadeados(abertos){ $('#jgLocks').innerHTML = PROVAS.map((_, i) => `<i class="${i < abertos ? 'open' : ''}"></i>`).join(''); }
+  function finalista(){
+    const max = Math.max(...pontos);
+    if(max <= 0) return null;
+    const venc = GRUPOS.filter((_, k) => pontos[k] === max);
+    return { nome: venc.map(g => g.n).join(' e '), cor: venc[0].c, pts: max, empate: venc.length > 1 };
+  }
+  function painel(nome){ $$('.jg-pane', slide).forEach(p => p.classList.toggle('on', p.dataset.p === nome)); }
+  function pararRelogio(){ clearInterval(relogio); relogio = null; }
+
+  // passo: 0 intro · 1 regras · 2.. (pergunta, resposta) por prova · último = fim
+  function render(passo, avancando){
+    const ultimo = 2 + PROVAS.length * 2;
+    pararRelogio();
+    if(passo === 0){
+      painel('intro'); digitar($('#jgSay1')); cadeados(0); placar(-1);
+      if(avancando){ som('grave'); const f = $('#jgFlash'); f.classList.remove('go'); void f.offsetWidth; f.classList.add('go');
+        const m = document.querySelector('main'); m.classList.remove('jg-shake'); void m.offsetWidth; m.classList.add('jg-shake'); }
+      LIVE.setJogo({ p:'intro' }); return;
+    }
+    if(passo === 1){ painel('regras'); digitar($('#jgSay2')); cadeados(0); placar(-1); LIVE.setJogo({ p:'regras' }); return; }
+    if(passo >= ultimo){
+      painel('fim'); digitar($('#jgSay3')); cadeados(PROVAS.length); placar(-1);
+      const f = finalista();
+      $('#jgWin').style.setProperty('--c', f ? f.cor : '#e9e2d0');
+      $('#jgWin').innerHTML = f ? `<small>${f.empate ? 'Grupos finalistas' : 'Grupo finalista'}</small>${esc2(f.nome)}` : '<small>Ninguém abriu um cadeado…</small>';
+      LIVE.setJogo({ p:'fim', g: f ? f.nome : '', c: f ? f.cor : '', e: f ? f.empate : false });
+      return;
+    }
+    const qi = Math.floor((passo - 2) / 2), revelado = (passo - 2) % 2 === 1, pv = PROVAS[qi];
+    painel('q'); const q = $('#jgQ'); q.classList.toggle('rev', revelado);
+    $('#jgNum').textContent = `Prova ${qi + 1} de ${PROVAS.length}`;
+    $('#jgText').innerHTML = comCodigo(pv.q);
+    $('#jgOpts').innerHTML = pv.o.map((o, k) => `<div class="jg-opt${k === pv.c ? ' ok' : ''}"><span class="k">${'ABCD'[k]}</span><span>${comCodigo(o)}</span></div>`).join('');
+    $('#jgWhy').textContent = pv.why;
+    cadeados(qi + (revelado ? 1 : 0)); placar(revelado ? qi : -1);
+    const tn = $('#jgTnum'), tf = $('#jgTfg'), tm = $('#jgTimer');
+    if(revelado){ tn.textContent = '0'; tf.style.strokeDashoffset = 238.8; tm.classList.remove('low'); if(avancando) som('abre'); }
+    else {
+      let r = TEMPO; const pinta = () => { tn.textContent = r; tf.style.strokeDashoffset = 238.8 * (1 - r / TEMPO); tm.classList.toggle('low', r <= 5); };
+      pinta();
+      relogio = setInterval(() => { r--; pinta(); som('tic'); if(r <= 0){ pararRelogio(); if(slides[cur] === slide && slide._fi === passo) next(); } }, 1000);
+    }
+    LIVE.setJogo(Object.assign({ p:'q', i: qi, n: PROVAS.length, r: revelado ? 1 : 0, q: pv.q, o: pv.o }, revelado ? { c: pv.c, w: pv.why } : {}));
+  }
+  function marcar(k){
+    if(slides[cur] !== slide) return;
+    const passo = slide._fi; if(passo < 2 || (passo - 2) % 2 !== 1 || passo >= 2 + PROVAS.length * 2) return;
+    const qi = Math.floor((passo - 2) / 2);
+    if(marcados[qi].has(k)){ marcados[qi].delete(k); pontos[k]--; } else { marcados[qi].add(k); pontos[k]++; }
+    placar(qi);
+  }
+  $('#jgBoard').addEventListener('click', e => { const b = e.target.closest('[data-g]'); if(b) marcar(+b.dataset.g); });
+  document.addEventListener('keydown', e => { if(/^[1-5]$/.test(e.key) && !e.target.closest('textarea,input')) marcar(+e.key - 1); });
+
+  function sync(){
+    const ativo = slides[cur] === slide;
+    document.body.classList.toggle('terror', ativo);
+    if(!ativo){ if(passoAtual !== -1){ pararRelogio(); passoAtual = -1; } LIVE.setJogo(null); return; }
+    const p = slide._fi; if(p === passoAtual) return;
+    const avancando = p > passoAtual; passoAtual = p; render(p, avancando);
+  }
+  return { sync };
+})();
 
 /* =========================================================
    ÚLTIMO CAPÍTULO: PLOT TWIST

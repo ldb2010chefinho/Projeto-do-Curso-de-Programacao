@@ -635,6 +635,76 @@ body[data-bug="4"] .bordas{--bw:34px;--bo:.85;opacity:.85;animation:bordaPisca .
 .copia-aviso{position:fixed;left:50%;top:calc(var(--top-h) + 10px);transform:translateX(-50%);z-index:80;width:min(760px,calc(100vw - 32px));
   padding:10px 16px;border:1px solid #ff6679;border-radius:12px;background:#2a0b12;color:#ffd6dc;font-family:var(--f-mono);font-size:13px;line-height:1.4;text-align:center}
 .copia-aviso[hidden]{display:none}
+
+/* ---------- O CLIMA DEPOIS DA INVASÃO ----------
+   body[data-clima] vai de 1 (logo depois da invasão) a 5 (hora do duelo).
+   Antes da invasão e depois do "rebobinar" ele não existe: tudo normal. */
+body[data-clima]{transition:background-color 1.2s}
+body[data-clima="1"]{--bg:#08080f;--navy:#0e0d1a;--surface:#141224;--surface-2:#1c182f;--line:#2e2744;--line-soft:rgba(200,110,140,.10);--muted:#a49cb8}
+body[data-clima="2"]{--bg:#0a070c;--navy:#130c14;--surface:#1a1119;--surface-2:#241520;--line:#3d2331;--line-soft:rgba(255,80,80,.12);--muted:#b39ba3;--sky:#ffcfc6;--faint:#7d6068}
+body[data-clima="3"]{--bg:#0a0507;--navy:#150a0e;--surface:#1c0e13;--surface-2:#28121a;--line:#4a1e28;--line-soft:rgba(255,60,50,.14);--muted:#c09a9f;--sky:#ffb3a6;--cyan:#ff7a66;--blue:#d8443a;--faint:#86595f}
+body:is([data-clima="4"],[data-clima="5"]){--bg:#070304;--navy:#130608;--surface:#1b080b;--surface-2:#280c10;--line:#5a1a1f;--line-soft:rgba(255,42,31,.18);--text:#f3e2dc;--muted:#c99490;--sky:#ff9d8f;--cyan:#ff4f3f;--blue:#c22b1e;--faint:#8e4f50}
+body[data-clima] .bg-net, body[data-clima]::before{transition:opacity 1.2s}
+body:is([data-clima="2"],[data-clima="3"]) .bg-net{opacity:.35}
+body:is([data-clima="4"],[data-clima="5"]) .bg-net, body:is([data-clima="4"],[data-clima="5"])::before{opacity:0}
+body[data-clima="3"] .slide :is(h1,h2){text-shadow:0 0 22px rgba(255,60,45,.35)}
+body:is([data-clima="4"],[data-clima="5"]) .slide :is(h1,h2){color:#ffd9d2;text-shadow:0 0 26px rgba(255,42,31,.6)}
+.clima-fx{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity 1.5s;
+  background:radial-gradient(ellipse at center,transparent 45%,rgba(60,0,4,.55) 85%,rgba(0,0,0,.9) 100%),
+  repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 3px)}
+body[data-clima="1"] .clima-fx{opacity:.35}
+body[data-clima="2"] .clima-fx{opacity:.55}
+body[data-clima="3"] .clima-fx{opacity:.8;animation:tfFlick 9s infinite}
+body:is([data-clima="4"],[data-clima="5"]) .clima-fx{opacity:1;animation:tfFlick 4s infinite}
+@media (prefers-reduced-motion:reduce){.clima-fx{animation:none!important}}
+
+/* o Bug passeando pela apresentação */
+.bug-passeio{position:fixed;left:0;top:0;width:clamp(70px,7vw,112px);height:auto;aspect-ratio:52/42;z-index:25;pointer-events:none;
+  image-rendering:pixelated;opacity:0;filter:drop-shadow(0 0 12px rgba(194,43,30,.6))}
+
+/* apagão: a luz pisca, a tela apaga e aparece só a cara do Bug */
+.apagao{position:fixed;inset:0;z-index:72;display:none;place-items:center;background:#000;pointer-events:none;overflow:hidden}
+.apagao.on{display:grid;animation:apagaLuz 3.8s steps(1) forwards}
+@keyframes apagaLuz{0%{background:#000}4%{background:rgba(0,0,0,.15)}7%{background:#000}10%{background:rgba(0,0,0,.45)}12%,100%{background:#000}}
+.apagao canvas{width:min(84vw,118vh);height:auto;aspect-ratio:26/21;image-rendering:pixelated;opacity:0}
+.apagao.on canvas{animation:caraVem 3.8s forwards}
+@keyframes caraVem{0%,36%{opacity:0;transform:scale(.5);filter:brightness(.2)}
+  50%{opacity:.9;transform:scale(.56);filter:brightness(.32)}
+  68%{opacity:.9;transform:scale(.6);filter:brightness(.4)}
+  69%{opacity:1;transform:scale(1.2);filter:brightness(1.25) drop-shadow(0 0 50px #ff2a1f)}
+  72%{transform:scale(1.13) translate(-1.5%,1%)}75%{transform:scale(1.17) translate(1.5%,-1%)}78%{transform:scale(1.14)}
+  90%{opacity:1}91%,100%{opacity:0}}
+.apagao::after{content:"";position:absolute;inset:0;background:#c22b1e;opacity:0}
+.apagao.on::after{animation:caraFlash 3.8s forwards}
+@keyframes caraFlash{0%,68%{opacity:0}69%{opacity:.55}74%{opacity:0}100%{opacity:0}}
+
+/* a fuga: lista ao vivo de quem digitou o código no celular */
+.jg-fuga{list-style:none;margin:0;padding:0;display:grid;gap:8px;width:min(560px,100%);counter-reset:fg}
+.jg-fuga li{counter-increment:fg;display:flex;align-items:center;gap:12px;padding:6px 14px;border:1px dashed #3a2a30;border-radius:10px;font-size:clamp(1rem,.8rem + .8vw,1.5rem);color:#6d6370}
+.jg-fuga li::before{content:counter(fg);flex:none;width:30px;height:30px;display:grid;place-items:center;border:1px solid currentColor;border-radius:6px;font-family:var(--f-mono);font-size:.8em}
+.jg-fuga li.cheio{border:1px solid var(--c,#43e0a6);color:#efe6d2;background:#111015;cursor:pointer;animation:jgIn .5s cubic-bezier(.16,1,.3,1)}
+.jg-fuga li.cheio::before{border-color:var(--c,#43e0a6);color:var(--c,#43e0a6)}
+.jg-fuga li.cheio:hover{text-decoration:line-through}
+.jg[data-p="intro"] .jg-board, .jg[data-p="intro"] .jg-hint{display:none}
+.jg[data-p="intro"] .jg-pane[data-p="intro"] .jg-bug{width:clamp(80px,12vh,140px)}
+.jg[data-p="intro"] .jg-say{min-height:0}
+.jg-fuga-info{margin:0;font-family:var(--f-mono);font-size:var(--fs-xs);color:#8d8676}
+.jg-fuga-info b{color:#ff6a5c;font-weight:400}
+.jg-corte{font-family:var(--f-mono);font-size:var(--fs-xs);letter-spacing:.2em;text-transform:uppercase;color:#43e0a6}
+.jg-g .rs{width:8px;height:8px;border-radius:50%;background:#efe6d2;box-shadow:0 0 8px #efe6d2}
+
+/* ---------- FIM: obrigado + o Bug derrotado (ele vai voltar…) ---------- */
+.fim{display:grid;align-content:center;justify-items:center;text-align:center;gap:clamp(10px,2vh,22px);min-height:100%;position:relative}
+.fim-tag{margin:0;font-family:var(--f-mono);font-size:var(--fs-xs);letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)}
+.fim-tit{margin:0;font-size:clamp(3.4rem,2rem + 8vw,10rem);line-height:.95;letter-spacing:-.03em}
+.fim-sub{margin:0;font-size:var(--fs-md);color:var(--muted);max-width:40ch}
+.fim-slide .fim{position:static}
+.fim-bug{position:absolute;right:var(--gutter);bottom:clamp(12px,3vh,32px);display:flex;align-items:flex-end;gap:12px;opacity:0}
+.fim-bug canvas{width:clamp(70px,7vw,110px);height:auto;aspect-ratio:52/42;image-rendering:pixelated;filter:grayscale(.5) drop-shadow(0 0 10px rgba(194,43,30,.4))}
+.fim-fala{margin:0 0 30px;max-width:min(320px,50vw);padding:10px 14px;border:1px solid #c22b1e;border-radius:12px 12px 2px 12px;background:#0d0709;color:#efe6d2;
+  font-family:"Special Elite","Courier New",monospace;font-size:var(--fs-sm);line-height:1.3;text-align:left;min-height:2.6em}
+.fim-slide.is-active .fim-bug{animation:fimBug 11s steps(1,end) forwards}
+@keyframes fimBug{0%,25%{opacity:0}26%,89%{opacity:1}90%,100%{opacity:0}}
 /* ---------- ÚLTIMO CAPÍTULO: PLOT TWIST (Bootstrap) ---------- */
 :root{--bs:#7952b3;--bs2:#b9a2f0}
 /* A. rebobinar: os 8 consertos do dia */
@@ -1083,8 +1153,8 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
       <ol class="inv-rules">
         <li>O código tem <b>4 números</b>. Eles estão <b>escondidos no site</b> que está no celular de vocês.</li>
         <li>Cada número só aparece quando <b>a parte certa do site for consertada</b>. Fiquem de olho.</li>
-        <li>Quem descobrir os 4 números corre até <b>o cadeado aqui na frente</b> e tenta abrir.</li>
-        <li>Os primeiros a abrir vão para o <b>duelo final</b>.</li>
+        <li>Achou os 4? Toque em <b>🔒 código</b> no celular e digite. O sistema anota quem chegou primeiro.</li>
+        <li>Só os <b>5 primeiros</b> escapam e vão para o <b>duelo final</b>. O resto… fica comigo.</li>
       </ol>
       <div class="inv-lock" aria-label="Código de 4 números, ainda trancado">
         <div class="inv-slots"><i>?</i><i>?</i><i>?</i><i>?</i></div>
@@ -1770,7 +1840,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= COMO TESTAR ================= -->
-<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="3" data-bug="3" data-cameo="Estou me espalhando pelas bordas…">
+<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="3" data-bug="3" data-apagao="1200" data-cameo="Estou me espalhando pelas bordas…">
   <div class="inner">
     <div class="eyebrow">Como sabemos que realmente funciona?</div>
     <div class="tests">
@@ -1865,13 +1935,15 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
     <div class="jg-top"><span class="jg-tag">O Jogo do Bug</span><span class="jg-locks" id="jgLocks"></span></div>
     <div class="jg-pane" data-p="intro">
       <canvas class="jg-bug" width="22" height="18" aria-label="O Bug: um inseto de pixels que vaza para fora da tela"></canvas>
-      <p class="jg-say" id="jgSay1" data-text="O código está completo. Quem tem os 4 números: corra até o cadeado. AGORA."></p>
+      <p class="jg-say" id="jgSay1" data-text="O código está completo. Digitem no celular. Só os 5 primeiros escapam. AGORA."></p>
+      <ol class="jg-fuga" id="jgFuga"></ol>
+      <p class="jg-fuga-info" id="jgFugaInfo"></p>
     </div>
     <div class="jg-pane" data-p="regras">
-      <p class="jg-say" id="jgSay2" data-text="Duelo final. Só quem abriu o cadeado joga. Cada acerto me quebra um pouco."></p>
+      <p class="jg-say" id="jgSay2" data-text="Duelo final. Só quem escapou joga. Cada acerto me quebra um pouco."></p>
       <ul class="jg-rules">
-        <li>Quem abriu o cadeado vira finalista (na ordem em que chegou).</li>
-        <li>3 perguntas, 15 segundos cada. Cada finalista mostra a resposta com a mão: 1, 2, 3 ou 4 dedos (A, B, C, D).</li>
+        <li>Os finalistas são os 5 primeiros que digitaram o código.</li>
+        <li>3 perguntas, 15 segundos cada. Os finalistas respondem <b>no celular</b> (sem internet: 1 a 4 dedos).</li>
         <li>Cada acerto vale 1 ponto e enfraquece o Bug.</li>
         <li>Quem fizer mais pontos destrói o Bug e salva o site.</li>
       </ul>
@@ -1891,7 +1963,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
       <p class="jg-win" id="jgWin"></p>
     </div>
     <div class="jg-board" id="jgBoard"></div>
-    <p class="jg-hint"><kbd>→</kbd> avança · depois de revelar, <kbd>1</kbd>–<kbd>5</kbd> (ou clique) marca os finalistas que acertaram</p>
+    <p class="jg-hint"><kbd>→</kbd> avança · <kbd>C</kbd> faz o corte agora · clique num nome da fuga para tirá-lo · depois de revelar, <kbd>1</kbd>–<kbd>5</kbd> corrige pontos à mão</p>
     <i data-frag="1" hidden></i>
     <i data-frag="2" hidden></i>
     <i data-frag="3" hidden></i>
@@ -1953,27 +2025,15 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= FONTES ================= -->
-<section class="slide" data-act="Apêndice · Fontes" data-stage="4">
-  <div class="inner">
-    <div class="eyebrow">Fontes</div>
-    <ol class="sources">
-      <li><div>Desktop vs Mobile vs Tablet Market Share Worldwide <span>— StatCounter Global Stats</span></div></li>
-      <li><div>Desktop vs Mobile vs Tablet Market Share Brazil <span>— StatCounter Global Stats</span></div></li>
-      <li><div>Práticas recomendadas para sites móveis e indexação que prioriza dispositivos móveis <span>— Google Search Central</span></div></li>
-      <li><div>Design Responsivo <span>— MDN Web Docs</span></div></li>
-      <li><div>Web Design Responsivo (glossário) <span>— MDN Web Docs</span></div></li>
-      <li><div>Fundamentos do Web design responsivo <span>— web.dev</span></div></li>
-      <li><div>Aprenda sobre design responsivo (curso) <span>— web.dev</span></div></li>
-      <li><div>Design responsivo acessível <span>— web.dev</span></div></li>
-      <li><div>Container queries <span>— MDN Web Docs</span></div></li>
-      <li><div>Responsive Web Design <span>— Ethan Marcotte, A List Apart, 2010</span><span class="check">conferir</span></div></li>
-      <li><div>A Complete Guide to Flexbox <span>— CSS-Tricks</span><span class="check">conferir</span></div></li>
-      <li><div>A Complete Guide to CSS Grid <span>— CSS-Tricks</span><span class="check">conferir</span></div></li>
-      <li><div>clamp() <span>— MDN Web Docs</span><span class="check">conferir</span></div></li>
-      <li><div>Grid system <span>— Bootstrap</span><span class="check">conferir</span></div></li>
-      <li><div>Breakpoints <span>— Bootstrap</span></div></li>
-      <li><div>Responsive design <span>— Tailwind CSS</span><span class="check">conferir</span></div></li>
-    </ol>
+<section class="slide fim-slide" data-act="Fim" data-stage="4">
+  <div class="inner fim">
+    <p class="fim-tag">Design Responsivo · um site, todas as telas</p>
+    <h1 class="fim-tit">Obrigado!</h1>
+    <p class="fim-sub">Agora é com vocês: abram qualquer site no celular e procurem o Bug.</p>
+    <div class="fim-bug" aria-hidden="true">
+      <p class="fim-fala" id="fimFala"></p>
+      <canvas width="52" height="42"></canvas>
+    </div>
   </div>
 </section>
 
@@ -1987,7 +2047,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
   <div class="lp-head"><h3>Celulares ao vivo</h3><button class="btn" id="lpClose">Fechar</button></div>
   <p id="lpMsg">O site nos celulares segue os slides sozinho. Use os botões abaixo só se precisar forçar uma etapa.</p>
   <div class="lp-grid" id="lpGrid"></div>
-  <div class="row" style="justify-content:space-between"><button class="btn" id="lpResend">Reenviar etapa atual</button><span class="lp-canal" id="lpCanal"></span></div>
+  <div class="row" style="justify-content:space-between"><button class="btn" id="lpResend">Reenviar etapa atual</button><button class="btn" id="lpRodada" title="Apaga a lista de quem escapou (use depois do ensaio)">Nova rodada da caça</button><span class="lp-canal" id="lpCanal"></span></div>
 </div>
 <div class="overview" id="overview" hidden>
   <div>
@@ -1999,7 +2059,10 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 <!-- ============ BARRA INFERIOR ============ -->
 <i class="voz-line" aria-hidden="true"></i>
 <div class="copia-aviso" id="copiaAviso" hidden>Esta cópia <b>não comanda os celulares</b>. Para apresentar, abra <b>ldb2010.github.io/lanchonete-pixel/apresentacao.html</b> no Chrome.</div>
+<i class="clima-fx" aria-hidden="true"></i>
 <i class="terror-fx" aria-hidden="true"></i>
+<canvas class="bug-passeio" id="bugPasseio" width="52" height="42" aria-hidden="true"></canvas>
+<div class="apagao" id="apagao" aria-hidden="true"><canvas width="26" height="21"></canvas></div>
 <i class="bug-tint" aria-hidden="true"></i>
 <canvas class="bug-cameo" id="bugCameo" width="52" height="42" aria-hidden="true"></canvas>
 <p class="bug-fala" id="bugFala" aria-live="polite"></p>
@@ -2682,6 +2745,8 @@ function pintarVoz(){
   if(window.JOGO) window.JOGO.sync();
   if(window.INVASAO) window.INVASAO.sync();
   if(window.BUGNIVEL) window.BUGNIVEL.sync();
+  if(window.CLIMA) window.CLIMA.sync();
+  if(window.VOLTA) window.VOLTA.sync();
 }
 
 function next(){ const s=slides[cur]; if(s._fi < s._frags.length){ showFrag(s, s._fi); s._fi++; } else if(cur < slides.length-1) go(cur+1, 1); pintarVoz(); }
@@ -2692,10 +2757,16 @@ function prev(){ const s=slides[cur]; if(s._fi > 0){ s._fi--; s._frags[s._fi].cl
    A apresentação publica a etapa atual (0 a 9) no canal gratuito do
    ntfy.sh; o site dos celulares escuta esse canal e se conserta sozinho.
    ========================================================= */
+/* rodada da caça: cada apresentação tem um código próprio, assim o ensaio não
+   se mistura com o dia (guardado na aba; o botão "Nova rodada" troca) */
+const RODADA = (() => {
+  const novo = () => Math.random().toString(36).slice(2, 8);
+  try { let r = sessionStorage.getItem('lp-rodada'); if(!r){ r = novo(); sessionStorage.setItem('lp-rodada', r); } return r; } catch(e){ return novo(); }
+})();
 const LIVE = (() => {
   const CANAL = 'lanchonete-pixel-ldb-oterimxu';   // o mesmo nome está no site (index.html)
   const NOMES = ['Site quebrado','Conserto 1 · meta viewport','Conserto 2 · Flexbox','Conserto 2 · Grid','Conserto 2 · media query','Conserto 3 · max-width: 100%','Conserto 3 · clamp()','Conserto 3 · container query','Caça ao bug','Site consertado','Plot twist · Bootstrap'];
-  let atual = null, envio = 0, rede = 'idle', jogo = null, bug = 0, cod = 0, tEnvio = null;   // jogo = tela do Jogo do Bug · bug = nível de falha (0 a 4)
+  let atual = null, envio = 0, rede = 'idle', jogo = null, bug = 0, cod = 0, tEnvio = null, apag = 0;   // jogo = tela do Jogo do Bug · bug = nível de falha (0 a 4)
   const pill = $('#livePill'), txt = $('#liveTxt'), panel = $('#livePanel'), grid = $('#lpGrid'), msg = $('#lpMsg');
   $('#lpCanal').textContent = 'ntfy.sh/' + CANAL;
   grid.innerHTML = NOMES.map((n,i) => `<button data-s="${i}" aria-pressed="false"><small>etapa ${i}</small>${esc(n)}</button>`).join('');
@@ -2719,7 +2790,8 @@ const LIVE = (() => {
     }
     const id = ++envio; confirmado = false;
     rede = 'sending'; pintar();
-    const tentar = (n) => fetch('https://ntfy.sh/' + CANAL, { method:'POST', body: JSON.stringify(Object.assign({ s, t: Date.now() }, jogo ? { j: jogo } : {}, bug ? { b: bug } : {}, cod ? { k: cod } : {})) })
+    const extra = Object.assign({}, cod ? { k: cod, r: RODADA } : {}, apag && Date.now() - apag < 4000 ? { a: apag } : {}); apag = 0;
+    const tentar = (n) => fetch('https://ntfy.sh/' + CANAL, { method:'POST', body: JSON.stringify(Object.assign({ s, t: Date.now() }, jogo ? { j: jogo } : {}, bug ? { b: bug } : {}, extra)) })
       .then(r => { if(!r.ok) throw new Error(r.status); if(id === envio){ rede = 'ok'; pintar(); } })
       .catch(() => { if(id !== envio) return; rede = 'off'; pintar(); if(n < 4) setTimeout(() => { if(id === envio) tentar(n + 1); }, 2000 * 2 ** n); });
     tentar(0);
@@ -2763,6 +2835,7 @@ const LIVE = (() => {
   pill.onclick = () => abrir();
   $('#lpClose').onclick = () => abrir(false);
   $('#lpResend').onclick = () => { const s = atual ?? 0; atual = null; set(s, true); };
+  $('#lpRodada').onclick = () => { try { sessionStorage.removeItem('lp-rodada'); } catch(e){} location.reload(); };
   grid.onclick = e => { const b = e.target.closest('[data-s]'); if(b) set(+b.dataset.s, true); };
   document.addEventListener('keydown', e => { if(e.key === 'Escape') abrir(false); });
   pintar();
@@ -2773,7 +2846,9 @@ const LIVE = (() => {
   }
   function setBug(n){ if(n === bug) return; bug = n; if(atual !== null) enviar(); }
   function setCodigo(n){ if(n === cod) return; cod = n; if(atual !== null) enviar(); }
-  return { set, get: () => atual, abrir, setJogo, setBug, setCodigo };
+  /* apagão: todos os celulares apagam junto com a apresentação */
+  function apagao(){ apag = Date.now(); if(atual !== null) enviarJa(); }
+  return { set, get: () => atual, abrir, setJogo, setBug, setCodigo, apagao };
 })();
 
 
@@ -2899,6 +2974,56 @@ function animarBug(cv, op) {
   return function () { vivo = false; };
 }
 
+/* =========================================================
+   A FUGA: os celulares mandam o nome de quem digitou o código certo
+   (e, no duelo, a resposta de cada finalista) num segundo canal.
+   A apresentação anota a ordem de chegada e faz o corte nos 5 primeiros.
+   ========================================================= */
+window.FUGA = (() => {
+  const CANAL_R = 'lanchonete-pixel-ldb-oterimxu-r';   // o mesmo nome está no site (index.html)
+  const TOP = 5;
+  const CORES = ['#ff5a4f', '#ffbf52', '#43e0a6', '#52d5ff', '#b9a2f0'];
+  let fila = [], tirados = new Set(), corte = false;
+  const respostas = {};             // respostas[pergunta][id] = alternativa
+  let aoMudar = () => {};
+  const limpaNome = t => String(t || '').replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, 16) || 'Sem nome';
+  function finalistas(){ return fila.filter(p => !tirados.has(p.id)).slice(0, TOP).map((p, i) => ({ id: p.id, n: p.n, c: CORES[i] })); }
+  function cortar(){ if(corte) return; corte = true; aoMudar('corte'); }
+  function receber(m){
+    if(!m || m.r !== RODADA || typeof m.id !== 'string' || !/^[a-z0-9]{3,10}$/.test(m.id)) return;
+    if(m.tp === 'c'){
+      if(fila.some(p => p.id === m.id)) return;
+      if(corte){ fila.push({ id: m.id, n: limpaNome(m.n), tarde: true }); aoMudar('tarde'); return; }
+      fila.push({ id: m.id, n: limpaNome(m.n) });
+      aoMudar('chegou');
+      if(finalistas().length >= TOP) setTimeout(cortar, 1200);
+    }
+    if(m.tp === 'a' && Number.isInteger(m.q) && Number.isInteger(m.o) && m.o >= 0 && m.o < 4){
+      (respostas[m.q] = respostas[m.q] || {});
+      if(respostas[m.q][m.id] === undefined) { respostas[m.q][m.id] = m.o; aoMudar('resposta'); }
+    }
+  }
+  function escutar(){
+    if(window.parent !== window) return;      // modo ensaio (sem internet)
+    let es;
+    try { es = new EventSource('https://ntfy.sh/' + CANAL_R + '/sse?since=90m'); } catch(e){ return; }
+    es.onmessage = e => { try { const d = JSON.parse(e.data); if(d.event === 'message') receber(JSON.parse(d.message)); } catch(err){} };
+    es.onerror = () => { es.close(); setTimeout(escutar, 6000); };
+  }
+  escutar();
+  // tecla C: corta agora (com quem já chegou)
+  document.addEventListener('keydown', e => { if((e.key === 'c' || e.key === 'C') && !e.target.closest('textarea,input') && $('.jogo-slide.is-active')) cortar(); });
+  return {
+    finalistas, cortar, receber,
+    get corte(){ return corte; },
+    tirar(id){ tirados.add(id); if(corte && finalistas().length < TOP){ /* quem estava na fila sobe */ } aoMudar('tirou'); },
+    tarde(){ return fila.filter(p => p.tarde || (!tirados.has(p.id) && !finalistas().some(f => f.id === p.id))).length; },
+    total(){ return fila.filter(p => !tirados.has(p.id)).length; },
+    respostas: q => respostas[q] || {},
+    aoMudar(fn){ aoMudar = fn; }
+  };
+})();
+
 window.JOGO = (() => {
   const PROVAS = [{"e": "viewport", "q": "Sem a meta viewport, o navegador do celular finge ter uma tela de uns…", "o": ["320px", "980px", "1920px", "100%"], "c": 1, "why": "Por isso o site aparecia minúsculo: a página era desenhada em ~980px e encolhida."}, {"e": "breakpoint", "q": "Mobile-first: você começa pela tela menor e vai adicionando com…", "o": ["`max-width`", "`min-width`", "`!important`", "`display: none`"], "c": 1, "why": "Media queries com min-width acrescentam regras conforme a tela cresce."}, {"e": "imagem", "q": "Qual atributo oferece a MESMA foto em vários tamanhos?", "o": ["`alt`", "`srcset`", "`loading`", "`class`"], "c": 1, "why": "Com srcset, o navegador escolhe o arquivo do tamanho certo e economiza internet."}];
   const GRUPOS = [{"n": "Finalista 1", "c": "#ff5a4f"}, {"n": "Finalista 2", "c": "#ffbf52"}, {"n": "Finalista 3", "c": "#43e0a6"}, {"n": "Finalista 4", "c": "#52d5ff"}, {"n": "Finalista 5", "c": "#b9a2f0"}];
@@ -2934,17 +3059,57 @@ window.JOGO = (() => {
     el.innerHTML = '<span class="cur"></span>';
     el._t = setInterval(() => { i++; el.innerHTML = esc2(txt.slice(0, i)) + '<span class="cur"></span>'; if(i >= txt.length) clearInterval(el._t); }, 36);
   }
-  function placar(qi){
-    $('#jgBoard').innerHTML = GRUPOS.map((g, k) => `<button type="button" class="jg-g${qi >= 0 && marcados[qi].has(k) ? ' hit' : ''}" data-g="${k}" style="--c:${g.c}"><i></i>${g.n} <b>${pontos[k]}</b></button>`).join('');
+  /* finalistas de verdade (quem digitou o código) ou, sem internet, "Finalista 1..5" */
+  function lista(){ const f = window.FUGA ? FUGA.finalistas() : []; return f.length ? f : GRUPOS; }
+  function placar(qi, respondendo){
+    const resp = respondendo !== undefined && window.FUGA ? FUGA.respostas(respondendo) : {};
+    $('#jgBoard').innerHTML = lista().map((g, k) => `<button type="button" class="jg-g${qi >= 0 && marcados[qi].has(k) ? ' hit' : ''}" data-g="${k}" style="--c:${g.c}"><i></i>${esc2(g.n)} <b>${pontos[k]}</b>${g.id && resp[g.id] !== undefined ? '<span class="rs" title="respondeu"></span>' : ''}</button>`).join('');
   }
   function cadeados(abertos){ $('#jgLocks').innerHTML = PROVAS.map((_, i) => `<i class="${i < abertos ? 'open' : ''}"></i>`).join(''); }
   function finalista(){
     const max = Math.max(...pontos);
     if(max <= 0) return null;
-    const venc = GRUPOS.filter((_, k) => pontos[k] === max);
+    const venc = lista().filter((_, k) => pontos[k] === max);
     return { nome: venc.map(g => g.n).join(' e '), cor: venc[0].c, pts: max, empate: venc.length > 1 };
   }
-  function painel(nome){ $$('.jg-pane', slide).forEach(p => p.classList.toggle('on', p.dataset.p === nome)); }
+
+  /* --- a fuga e o duelo pelo celular --- */
+  const pontuados = new Set();
+  function pontuarCelulares(qi){          // na hora de revelar, quem acertou no celular ganha o ponto sozinho
+    if(pontuados.has(qi) || !window.FUGA) return; pontuados.add(qi);
+    const resp = FUGA.respostas(qi);
+    lista().forEach((g, k) => { if(g.id && resp[g.id] === PROVAS[qi].c && !marcados[qi].has(k)){ marcados[qi].add(k); pontos[k]++; } });
+  }
+  function comFuga(j){
+    if(!window.FUGA) return j;
+    const f = FUGA.finalistas();
+    return Object.assign(j, { f: f.map(x => x.id).join('.'), fc: FUGA.corte ? 1 : 0 });
+  }
+  function pintarFuga(){
+    const ol = $('#jgFuga'); if(!ol || !window.FUGA) return;
+    const f = FUGA.finalistas();
+    ol.innerHTML = Array.from({ length: 5 }, (_, i) => f[i]
+      ? `<li class="cheio" data-id="${f[i].id}" style="--c:${f[i].c}" title="clique para tirar">${esc2(f[i].n)}</li>`
+      : '<li>…</li>').join('');
+    const tarde = FUGA.tarde();
+    $('#jgFugaInfo').innerHTML = FUGA.corte
+      ? `<span class="jg-corte">corte feito</span>${tarde ? ` · <b>${tarde} chegaram tarde demais</b>` : ''}`
+      : (f.length ? `${f.length} de 5 escaparam` : 'esperando o primeiro código…');
+  }
+  $('#jgFuga').addEventListener('click', e => { const li = e.target.closest('li[data-id]'); if(li && window.FUGA) FUGA.tirar(li.dataset.id); });
+  if(window.FUGA) FUGA.aoMudar(tipo => {
+    if(slides[cur] !== slide) return;
+    const p = slide._fi;
+    if(p === 0){
+      pintarFuga();
+      if(tipo === 'chegou' && !REDUCED) som('abre');
+      if(tipo === 'corte'){ som('grave'); const fl = $('#jgFlash'); fl.classList.remove('go'); void fl.offsetWidth; fl.classList.add('go'); }
+      LIVE.setJogo(comFuga({ p:'intro' }));
+    } else if(p >= 2 && (p - 2) % 2 === 0 && p < 2 + PROVAS.length * 2){
+      placar(-1, Math.floor((p - 2) / 2));          // mostra quem já respondeu (sem dizer se acertou)
+    } else if(tipo === 'tirou'){ placar(-1); }
+  });
+  function painel(nome){ slide.querySelector('.jg').dataset.p = nome; $$('.jg-pane', slide).forEach(p => p.classList.toggle('on', p.dataset.p === nome)); }
   function pararRelogio(){ clearInterval(relogio); relogio = null; }
 
   // passo: 0 intro · 1 regras · 2.. (pergunta, resposta) por prova · último = fim
@@ -2952,18 +3117,18 @@ window.JOGO = (() => {
     const ultimo = 2 + PROVAS.length * 2;
     pararRelogio();
     if(passo === 0){
-      painel('intro'); digitar($('#jgSay1')); cadeados(0); placar(-1); vida(0); estadoBug.some = 0;
+      painel('intro'); digitar($('#jgSay1')); cadeados(0); placar(-1); vida(0); estadoBug.some = 0; pintarFuga();
       if(avancando){ som('grave'); const f = $('#jgFlash'); f.classList.remove('go'); void f.offsetWidth; f.classList.add('go');
         const m = document.querySelector('main'); m.classList.remove('jg-shake'); void m.offsetWidth; m.classList.add('jg-shake'); }
-      LIVE.setJogo({ p:'intro' }); return;
+      LIVE.setJogo(comFuga({ p:'intro' })); return;
     }
-    if(passo === 1){ painel('regras'); digitar($('#jgSay2')); cadeados(0); placar(-1); vida(0); estadoBug.some = 0; LIVE.setJogo({ p:'regras' }); return; }
+    if(passo === 1){ if(window.FUGA) FUGA.cortar(); painel('regras'); digitar($('#jgSay2')); cadeados(0); placar(-1); vida(0); estadoBug.some = 0; LIVE.setJogo(comFuga({ p:'regras' })); return; }
     if(passo >= ultimo){
       painel('fim'); digitar($('#jgSay3')); cadeados(PROVAS.length); placar(-1); vida(1); desintegrar();
       const f = finalista();
       $('#jgWin').style.setProperty('--c', f ? f.cor : '#e9e2d0');
       $('#jgWin').innerHTML = (f ? `<small>${f.empate ? 'Empate' : 'Destruiu o Bug'}</small>${esc2(f.nome)}` : '<small>O Bug foi destruído pela turma toda</small>') + `<small style="margin-top:14px">o código era ${CODIGO}</small>`;
-      LIVE.setJogo({ p:'fim', g: f ? f.nome : '', c: f ? f.cor : '', e: f ? f.empate : false, cod: CODIGO });
+      LIVE.setJogo(comFuga({ p:'fim', g: f ? f.nome : '', c: f ? f.cor : '', e: f ? f.empate : false, cod: CODIGO }));
       return;
     }
     const qi = Math.floor((passo - 2) / 2), revelado = (passo - 2) % 2 === 1, pv = PROVAS[qi];
@@ -2973,7 +3138,8 @@ window.JOGO = (() => {
     $('#jgText').innerHTML = comCodigo(pv.q);
     $('#jgOpts').innerHTML = pv.o.map((o, k) => `<div class="jg-opt${k === pv.c ? ' ok' : ''}"><span class="k">${'ABCD'[k]}</span><span>${comCodigo(o)}</span></div>`).join('');
     $('#jgWhy').textContent = pv.why;
-    cadeados(qi + (revelado ? 1 : 0)); placar(revelado ? qi : -1);
+    if(revelado) pontuarCelulares(qi);
+    cadeados(qi + (revelado ? 1 : 0)); placar(revelado ? qi : -1, revelado ? undefined : qi);
     const tn = $('#jgTnum'), tf = $('#jgTfg'), tm = $('#jgTimer');
     if(revelado){ tn.textContent = '0'; tf.style.strokeDashoffset = 238.8; tm.classList.remove('low'); if(avancando) som('abre'); }
     else {
@@ -2981,12 +3147,13 @@ window.JOGO = (() => {
       pinta();
       relogio = setInterval(() => { r--; pinta(); som('tic'); if(r <= 0){ pararRelogio(); if(slides[cur] === slide && slide._fi === passo) next(); } }, 1000);
     }
-    LIVE.setJogo(Object.assign({ p:'q', i: qi, n: PROVAS.length, e: pv.e, d: estadoBug.dano, r: revelado ? 1 : 0, q: pv.q, o: pv.o }, revelado ? { c: pv.c, w: pv.why } : {}));
+    LIVE.setJogo(comFuga(Object.assign({ p:'q', i: qi, n: PROVAS.length, e: pv.e, d: estadoBug.dano, r: revelado ? 1 : 0, q: pv.q, o: pv.o }, revelado ? { c: pv.c, w: pv.why } : {})));
   }
   function marcar(k){
     if(slides[cur] !== slide) return;
     const passo = slide._fi; if(passo < 2 || (passo - 2) % 2 !== 1 || passo >= 2 + PROVAS.length * 2) return;
     const qi = Math.floor((passo - 2) / 2);
+    if(k >= lista().length) return;
     if(marcados[qi].has(k)){ marcados[qi].delete(k); pontos[k]--; } else { marcados[qi].add(k); pontos[k]++; }
     placar(qi);
   }
@@ -3082,9 +3249,141 @@ window.BUGNIVEL = (() => {
     if(indo && s.dataset.bugDelay){ aplicar(niveis[Math.max(0, cur - 1)]); atraso = setTimeout(() => { if(slides[cur] === s) aplicar(nv); }, +s.dataset.bugDelay); }
     else aplicar(nv);
     LIVE.setCodigo(codigo[cur]);
-    if(indo && s.dataset.cameo !== undefined) setTimeout(() => { if(slides[cur] === s) aparecer(s.dataset.cameo); }, s.dataset.bugDelay ? +s.dataset.bugDelay + 300 : 1100);
+    const espera = s.dataset.apagao ? +s.dataset.apagao + 4100 : s.dataset.bugDelay ? +s.dataset.bugDelay + 300 : 1100;
+    if(indo && s.dataset.cameo !== undefined) setTimeout(() => { if(slides[cur] === s) aparecer(s.dataset.cameo); }, espera);
   }
   return { sync, aparecer };
+})();
+
+
+/* =========================================================
+   O CLIMA: até a invasão a apresentação é normal. Depois dela tudo
+   escurece e fica mais vermelho a cada ato, o Bug passeia pela tela
+   cada vez mais vezes e, num momento, a luz apaga. No "rebobinar"
+   tudo volta ao normal, como se nada tivesse acontecido.
+   Teclas: B = o Bug passeia agora · X = apagão agora.
+   ========================================================= */
+window.CLIMA = (() => {
+  const climas = []; let n = 0, k = 0;
+  slides.forEach((s, i) => {
+    if(s.dataset.bug !== undefined) n = +s.dataset.bug;
+    if(s.dataset.codigo !== undefined) k = +s.dataset.codigo;
+    const ato = s.dataset.act || '', base = /^Ato 3/.test(ato) ? 3 : /^Ato 2/.test(ato) ? 2 : 1;
+    climas[i] = k ? Math.min(5, Math.max(base, [1, 3, 4, 4, 5][n])) : 0;   // 0 = normal · 1 a 5 = cada vez pior
+  });
+  const cv = $('#bugPasseio'), ap = $('#apagao'), cara = $('canvas', ap);
+  let clima = 0, anterior = -1, timerPasseio = null, timerApagao = null, ocupado = false, ac = null;
+  if(cv) animarBug(cv, () => cv._vivo ? { falha: clima >= 4 } : null);
+
+  /* desenha só a cabeça do Bug (antenas, olhos e pinças), ampliada */
+  const tmp = document.createElement('canvas');
+  let t0 = 0;
+  function loopCara(agora){
+    if(!ap.classList.contains('on')) return;
+    desenharBug(tmp, agora - t0, { falha: false });
+    const g = cara.getContext('2d'); g.clearRect(0, 0, 26, 21); g.drawImage(tmp, 9, 0, 26, 21, 0, 0, 26, 21);
+    requestAnimationFrame(loopCara);
+  }
+  function rugido(){
+    try {
+      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+      const t = ac.currentTime, len = ac.sampleRate * .9, buf = ac.createBuffer(1, len, ac.sampleRate), d = buf.getChannelData(0);
+      for(let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2);
+      const ruido = ac.createBufferSource(), gr = ac.createGain(); ruido.buffer = buf; ruido.connect(gr); gr.connect(ac.destination); gr.gain.value = .22; ruido.start(t);
+      const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sawtooth'; o.connect(g); g.connect(ac.destination);
+      o.frequency.setValueAtTime(70, t); o.frequency.exponentialRampToValueAtTime(30, t + 1.2);
+      g.gain.setValueAtTime(.25, t); g.gain.exponentialRampToValueAtTime(.0001, t + 1.3); o.start(t); o.stop(t + 1.3);
+    } catch(e){}
+  }
+  function apagao(){
+    if(REDUCED || !ap || ocupado) return;
+    ocupado = true; LIVE.apagao();
+    ap.classList.remove('on'); void ap.offsetWidth; ap.classList.add('on');
+    t0 = performance.now(); requestAnimationFrame(loopCara);
+    setTimeout(rugido, 2600);                  // o som vem junto com o pulo da cara
+    setTimeout(() => { ap.classList.remove('on'); ocupado = false; }, 3900);
+  }
+
+  /* o Bug atravessa a tela por um caminho sorteado; nos piores níveis ele esbarra no slide */
+  function passear(){
+    if(REDUCED || !cv || ocupado || !clima || document.hidden) return;
+    const s = slides[cur]; if(s.classList.contains('inv-slide') || s.classList.contains('jogo-slide')) return;
+    const W = innerWidth, H = innerHeight, w = cv.offsetWidth || 90, h = w * 42 / 52;
+    const top = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--top-h')) || 56;
+    const bot = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bot-h')) || 56;
+    const rotas = [
+      { de:[-w, H - bot - h - 6], para:[W + w, H - bot - h - 6], r: 90 },          // rente à barra de baixo
+      { de:[W + w, top + 4], para:[-w, top + 4], r: -90 },                      // pelo topo, ao contrário
+      { de:[W - w * .8, H + h], para:[W - w * .8, -h], r: 0 }                   // subindo pela borda direita
+    ];
+    if(clima >= 4) rotas.push({ de:[-w, H * .3], para:[W + w, H * .62], r: 108, esbarra: true });   // atravessa o meio
+    const rota = rotas[Math.floor(Math.random() * rotas.length)];
+    const dur = clima >= 4 ? 4200 : 7000;
+    cv._vivo = true; cv.style.opacity = 1;
+    const a = cv.animate([
+      { transform: `translate(${rota.de[0]}px,${rota.de[1]}px) rotate(${rota.r}deg)` },
+      { transform: `translate(${(rota.de[0] + rota.para[0]) / 2}px,${(rota.de[1] + rota.para[1]) / 2 + (clima >= 3 ? 14 : 0)}px) rotate(${rota.r + (clima >= 3 ? 12 : 0)}deg)`, offset: .5 },
+      { transform: `translate(${rota.para[0]}px,${rota.para[1]}px) rotate(${rota.r}deg)` }
+    ], { duration: dur, easing: 'linear' });
+    a.onfinish = () => { cv._vivo = false; cv.style.opacity = 0; };
+    if(rota.esbarra) setTimeout(() => {
+      const inner = $('.slide.is-active > .inner');
+      if(inner) inner.animate([{ transform:'none' }, { transform:'translate(10px,6px) rotate(1.2deg)' }, { transform:'translate(-4px,-2px) rotate(-.5deg)' }, { transform:'none' }], { duration: 520, easing:'ease-out' });
+    }, dur * .48);
+  }
+  function agendar(){
+    clearTimeout(timerPasseio);
+    if(!clima) return;
+    const faixa = [null, [70, 100], [45, 70], [28, 40], [16, 26], [9, 15]][clima];
+    timerPasseio = setTimeout(() => { passear(); agendar(); }, (faixa[0] + Math.random() * (faixa[1] - faixa[0])) * 1000);
+  }
+  function sync(){
+    if(cur === anterior) return;
+    const indo = cur > anterior; anterior = cur;
+    const novo = climas[cur] || 0, s = slides[cur];
+    if(novo !== clima){
+      const subiu = novo > clima; clima = novo;
+      if(clima) document.body.dataset.clima = clima; else delete document.body.dataset.clima;
+      agendar();
+      if(subiu && clima >= 2) setTimeout(passear, 2500);   // mudou de nível: o Bug dá uma volta para avisar
+    }
+    clearTimeout(timerApagao);
+    if(indo && s.dataset.apagao) timerApagao = setTimeout(() => { if(slides[cur] === s) apagao(); }, +s.dataset.apagao);
+  }
+  document.addEventListener('keydown', e => {
+    if(e.target.closest('textarea,input,select,[contenteditable]') || e.ctrlKey || e.metaKey || e.altKey) return;
+    if(e.key === 'b' || e.key === 'B') passear();
+    if(e.key === 'x' || e.key === 'X') apagao();
+  });
+  sync();
+  return { sync, apagao, passear };
+})();
+
+
+/* =========================================================
+   FIM: o Bug derrotado aparece no canto, rachado, e promete voltar.
+   Os celulares recebem a mesma fala (com o nome de cada um).
+   ========================================================= */
+window.VOLTA = (() => {
+  const slide = $('.fim-slide'); if(!slide) return { sync(){} };
+  const cv = $('.fim-bug canvas', slide), fala = $('#fimFala');
+  animarBug(cv, () => slide.classList.contains('is-active') ? { dano: 1, falha: true } : null);
+  let estava = false, timers = [];
+  function sync(){
+    const ativo = slides[cur] === slide;
+    if(ativo && !estava){
+      timers.forEach(clearTimeout); fala.textContent = '';
+      const txt = '…isso não acabou. Eu vou voltar.';
+      timers.push(setTimeout(() => {
+        let i = 0; const t = setInterval(() => { i++; fala.textContent = txt.slice(0, i); if(i >= txt.length) clearInterval(t); }, REDUCED ? 0 : 55);
+        timers.push(t);
+      }, 3200));
+      timers.push(setTimeout(() => { if(slides[cur] === slide) LIVE.setJogo({ p:'volta' }); }, 3000));
+    }
+    if(!ativo && estava){ timers.forEach(t => { clearTimeout(t); clearInterval(t); }); timers = []; }
+    estava = ativo;
+  }
+  return { sync };
 })();
 
 /* =========================================================

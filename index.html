@@ -254,6 +254,66 @@
     html[data-bug="4"] .bug-tinta { animation: pgTinta 1.2s ease-in-out infinite; }
     @media (prefers-reduced-motion: reduce) { html[data-bug] * { animation: none !important; } }
 
+
+    /* ---------- O PEDIDO (o nome entra aqui, sem ninguém desconfiar) ---------- */
+    .pedido { position: fixed; inset: 0; z-index: 64; display: grid; place-items: center; padding: 20px; background: rgba(20, 12, 6, .72); }
+    .pedido[hidden] { display: none; }
+    .pedido form { zoom: var(--k, 1); width: min(360px, calc(100vw / var(--k, 1) - 32px)); display: grid; gap: 12px; padding: 22px 20px; border-radius: 18px;
+      background: #fff8ec; color: #3a1d0b; font-family: system-ui, sans-serif; box-shadow: 0 20px 60px rgba(0, 0, 0, .4); text-align: center; }
+    .pedido .pd-logo { font-weight: 800; color: #c0392b; letter-spacing: .02em; }
+    .pedido h2 { margin: 0; font-size: 22px; }
+    .pedido p { margin: 0; font-size: 14px; color: #7a5a40; }
+    .pedido form > * { box-sizing: border-box; width: 100%; min-width: 0; }
+    .pedido input { font: 600 18px system-ui, sans-serif; padding: 12px 14px; border: 2px solid #e2c9a6; border-radius: 12px; text-align: center; background: #fff; color: #3a1d0b; }
+    .pedido input:focus { outline: 3px solid #ffc93c; border-color: #c0392b; }
+    .pedido button { font: 700 17px system-ui, sans-serif; padding: 12px; border: 0; border-radius: 999px; background: #c0392b; color: #fff; }
+
+    /* ---------- digitar o código ---------- */
+    .cod-form { display: grid; gap: 8px; justify-items: center; }
+    .cod-form label { font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: #c22b1e; }
+    .cod-form div { display: flex; gap: 8px; }
+    .cod-form input { width: 150px; padding: 10px; border: 2px solid #c22b1e; border-radius: 10px; background: #140809; color: #ffd9d2;
+      font: 700 28px "Courier New", monospace; letter-spacing: .3em; text-align: center; }
+    .cod-form input::placeholder { color: #5a2a2a; }
+    .cod-form button { padding: 10px 16px; border: 1px solid #efe6d2; border-radius: 10px; background: transparent; color: #efe6d2; font: 700 16px "Courier New", monospace; }
+    .cod-form p { margin: 0; min-height: 1.3em; font-size: 14px; color: #ff6a5c; }
+    .cod-form.erro input { animation: pgShake .12s steps(2) 4; border-color: #ff2a1f; }
+    .hud.livre { border-color: #43e0a6; }
+    .hud.livre i { border-color: #43e0a6; background: #43e0a6; box-shadow: none; }
+
+    /* ---------- o corte: passou / o Bug te pegou ---------- */
+    .jogo .papel { padding: 5px 12px; border-radius: 999px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; border: 1px solid currentColor; }
+    .jogo .papel.fin { color: #43e0a6; }
+    .jogo .papel.pego { color: #ff4a3d; }
+    .jogo .veredito { display: grid; gap: 8px; justify-items: center; padding: 22px 18px; border-radius: 16px; width: 100%; }
+    .jogo .veredito small { font-size: 13px; letter-spacing: .24em; text-transform: uppercase; }
+    .jogo .veredito b { font: 800 44px/1 system-ui, sans-serif; overflow-wrap: anywhere; }
+    .jogo .veredito.ok { background: #0d3a2a; color: #b9ffe2; border: 2px solid #43e0a6; box-shadow: 0 0 60px rgba(67, 224, 166, .45); }
+    .jogo .veredito.ok b { color: #43e0a6; }
+    .jogo .veredito.pego { background: #2a0507; color: #ffb3a6; border: 2px solid #c22b1e; box-shadow: 0 0 60px rgba(194, 43, 30, .5); }
+    .jogo .veredito.pego b { color: #ff2a1f; animation: pgRGB 1.4s steps(1) infinite; }
+    .jogo .jo button { display: flex; gap: 12px; align-items: center; width: 100%; text-align: left; padding: 13px 14px; border: 1px solid #4a3a40; border-radius: 10px;
+      background: #17131a; color: inherit; font: 16px "Courier New", monospace; }
+    .jogo .jo button:active { transform: scale(.98); }
+    .jogo .jo button.meu { border-color: #ffc93c; background: rgba(255, 201, 60, .12); }
+    .jogo .jo button:disabled:not(.meu) { opacity: .45; }
+    .jogo.rev .jo button { opacity: .3; }
+    .jogo.rev .jo button.ok { opacity: 1; border-color: #43e0a6; background: rgba(67, 224, 166, .12); }
+    .jogo .jnota { margin: 0; font-size: 15px; color: #c9bfae; }
+    .jogo .jnota.boa { color: #43e0a6; font-weight: 700; }
+    .jogo .jnota.ruim { color: #ff6a5c; font-weight: 700; }
+    html.pego .bug-tinta { opacity: .3; }
+
+    /* ---------- apagão: junto com a apresentação ---------- */
+    .apagao { position: fixed; inset: 0; z-index: 66; display: none; place-items: center; background: #000; pointer-events: none; overflow: hidden; }
+    .apagao.on { display: grid; animation: apagaLuz 3.8s steps(1) forwards; }
+    @keyframes apagaLuz { 0% { background: #000 } 4% { background: rgba(0, 0, 0, .15) } 7% { background: #000 } 10% { background: rgba(0, 0, 0, .45) } 12%, 100% { background: #000 } }
+    .apagao canvas { width: 100vw; height: auto; aspect-ratio: 26 / 21; image-rendering: pixelated; opacity: 0; }
+    .apagao.on canvas { animation: caraVem 3.8s forwards; }
+    @keyframes caraVem { 0%, 36% { opacity: 0; transform: scale(.5); filter: brightness(.2) } 50% { opacity: .9; transform: scale(.56); filter: brightness(.32) }
+      68% { opacity: .9; transform: scale(.6); filter: brightness(.4) } 69% { opacity: 1; transform: scale(1.25); filter: brightness(1.25) }
+      72% { transform: scale(1.18) translate(-2%, 1%) } 75% { transform: scale(1.22) translate(2%, -1%) } 90% { opacity: 1 } 91%, 100% { opacity: 0 } }
+
     /* ---------- A CAÇA AO CÓDIGO DO BUG ----------
        4 números: 1º perto do hambúrguer (depois do Conserto 1, meta viewport),
        2º dentro do menu ☰ (depois da media query), 3º na Promoção do dia
@@ -405,12 +465,21 @@
     <ol>
       <li>O código tem <b>4 números</b>, escondidos neste site.</li>
       <li>Cada número só aparece quando a parte certa do site é consertada. Os quadradinhos vermelhos aqui embaixo mostram quantos já foram liberados.</li>
-      <li>Achou os 4? Corra até o <b>cadeado</b> na frente da sala.</li>
-      <li>Os primeiros a abrir vão para o duelo final.</li>
+      <li>Achou os 4? Digite aqui embaixo. O sistema anota quem chegou primeiro.</li>
+      <li>Só os <b>5 primeiros</b> escapam e vão para o duelo final.</li>
     </ol>
+    <form class="cod-form" id="codForm" autocomplete="off"><label for="codIn">Digite o código</label>
+      <div><input id="codIn" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="????" aria-label="Código de 4 números"><button type="submit">Abrir</button></div>
+      <p aria-live="polite"></p></form>
     <button type="button" id="regrasOk">Voltar à caça</button>
   </div></div>
   <div class="susto" id="susto" aria-hidden="true"><canvas width="52" height="42"></canvas></div>
+  <div class="apagao" id="apagao" aria-hidden="true"><canvas width="26" height="21"></canvas></div>
+  <div class="pedido" id="pedido" hidden role="dialog" aria-label="Fazer pedido"><form id="pedidoForm" autocomplete="off">
+    <span class="pd-logo">🍔 Lanchonete Pixel</span><h2 id="pedidoTit">Pra quem é o pedido?</h2>
+    <p id="pedidoTxt">A gente chama o seu nome quando ficar pronto.</p>
+    <input id="pedidoNome" maxlength="16" placeholder="Seu nome" aria-label="Seu nome" required>
+    <button type="submit">Fazer pedido</button></form></div>
   <div class="bug-fala" id="bugFala" aria-live="polite"><canvas width="52" height="42" aria-hidden="true"></canvas><span></span></div>
   <div class="bug-tinta" aria-hidden="true"></div>
   <!-- O JOGO DO BUG: aparece sozinho quando a apresentação chega no jogo -->
@@ -756,15 +825,136 @@
     return function () { vivo = false; };
   }
   
+
+  /* =====================================================================
+     QUEM É VOCÊ: o nome entra pelo "pedido" no começo. O id é sorteado
+     uma vez e fica guardado no celular.
+     ===================================================================== */
+  const CANAL_R = 'lanchonete-pixel-ldb-oterimxu-r';   // respostas: a apresentação escuta este canal
+  const guarda = {
+    ler(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    pôr(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+  let meuId = guarda.ler('lp-id');
+  if (!/^[a-z0-9]{3,10}$/.test(meuId || '')) { meuId = Math.random().toString(36).slice(2, 8); guarda.pôr('lp-id', meuId); }
+  let meuNome = guarda.ler('lp-nome') || '';
+  let rodada = null, escapei = false, finAtual = [], corteFeito = false, minhasResp = {};
+  let ultimoJogo = null, ultimoQuando = 0, depoisDoNome = null;
+  const pedido = document.getElementById('pedido');
+  function pedirNome(titulo, texto, depois) {
+    document.getElementById('pedidoTit').textContent = titulo || 'Pra quem é o pedido?';
+    document.getElementById('pedidoTxt').textContent = texto || 'A gente chama o seu nome quando ficar pronto.';
+    depoisDoNome = depois || null; pedido.hidden = false;
+  }
+  document.getElementById('pedidoForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const v = document.getElementById('pedidoNome').value.replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, 16);
+    if (!v) return;
+    meuNome = v; guarda.pôr('lp-nome', v); pedido.hidden = true;
+    document.getElementById('pedidoNome').blur();
+    if (depoisDoNome) { const f = depoisDoNome; depoisDoNome = null; f(); }
+  });
+  if (!meuNome) setTimeout(() => pedirNome(), 900);
+
+  function postar(msg, tentativa) {
+    tentativa = tentativa || 0;
+    fetch('https://ntfy.sh/' + CANAL_R, { method: 'POST', body: JSON.stringify(Object.assign({ r: rodada, id: meuId }, msg)) })
+      .then((r) => { if (!r.ok) throw new Error(r.status); })
+      .catch(() => { if (tentativa < 3) setTimeout(() => postar(msg, tentativa + 1), 1500 * (tentativa + 1)); });
+  }
+
+  /* papel nesta rodada: 'fin' (passou), 'pego' (o Bug pegou) ou 'caça' (ainda valendo) */
+  function papel(j) {
+    if (finAtual.includes(meuId)) return 'fin';
+    return corteFeito ? 'pego' : 'caça';
+  }
+  function etiquetaPapel(j) {
+    const p = papel(j), pos = finAtual.indexOf(meuId);
+    if (p === 'fin') return '<span class="papel fin">Finalista ' + (pos + 1) + ' · ' + escJ(meuNome || 'você') + '</span>';
+    if (p === 'pego') return '<span class="papel pego">O Bug te pegou · só assistindo</span>';
+    return '';
+  }
+  function formCodigo() {
+    return '<form class="cod-form" data-cod autocomplete="off"><label>Digite o código</label><div><input inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="????" aria-label="Código de 4 números"><button type="submit">Abrir</button></div><p aria-live="polite"></p></form>';
+  }
+  /* A FUGA: a tela muda conforme a pessoa escapou, passou no corte ou foi pega */
+  function telaFuga(j) {
+    const p = papel(j), pos = finAtual.indexOf(meuId), nome = escJ(meuNome || 'você');
+    if (p === 'fin' && corteFeito) return '<div class="veredito ok"><small>Você passou</small><b>' + nome + '</b><span>Finalista ' + (pos + 1) + '</span></div><p class="js">Mostre esta tela e venha até a frente. AGORA.</p>';
+    if (p === 'pego') return '<div class="veredito pego"><small>' + (escapei ? 'Tarde demais' : 'O Bug te pegou') + '</small><b>' + nome + '</b></div><p class="js">Você agora é meu. Assista os finalistas tentarem me destruir.</p>';
+    if (escapei) return '<span class="jt">A fuga</span><p class="js">' + (pos >= 0 ? 'Você escapou em ' + (pos + 1) + 'º lugar!' : 'Código enviado!') + '</p><p class="jnota">Esperando o corte…</p>';
+    return '<span class="jt">A fuga</span><p class="js">O código está completo. Digite agora. Só os 5 primeiros escapam.</p>' + formCodigo();
+  }
+  /* confere o código (fica embaralhado aqui para ninguém achar lendo o código-fonte) */
+  let bloqueadoAte = 0;
+  function tentarCodigo(form) {
+    const inp = form.querySelector('input'), msg = form.querySelector('p');
+    const v = (inp.value || '').replace(/\D/g, '');
+    const dizer = (t) => { msg.textContent = t; };
+    form.classList.remove('erro');
+    if (Date.now() < bloqueadoAte) return dizer('Espere um pouco antes de tentar de novo.');
+    if (v.length !== 4) return dizer('O código tem 4 números.');
+    if (corteFeito && !finAtual.includes(meuId)) return dizer('Tarde demais. O corte já foi feito.');
+    if (btoa(v.split('').reverse().join('')) !== 'NjE4Mw==') {
+      bloqueadoAte = Date.now() + 3000; void form.offsetWidth; form.classList.add('erro');
+      try { navigator.vibrate && navigator.vibrate([90, 50, 90]); } catch (e) {}
+      return dizer('Errado. O Bug riu de você. Espere 3 segundos.');
+    }
+    if (!meuNome) return pedirNome('Antes de escapar…', 'Qual é o seu nome? Ele aparece no telão.', () => tentarCodigo(form));
+    escapei = true; if (rodada) guarda.pôr('lp-escapou', rodada);
+    if (rodada) postar({ tp: 'c', n: meuNome });
+    regras.hidden = true; hud.classList.add('livre');
+    try { navigator.vibrate && navigator.vibrate([60, 40, 60, 40, 200]); } catch (e) {}
+    if (ultimoJogo) mostrarJogo(ultimoJogo, ultimoQuando);
+    else falar(rodada ? 'Você escapou… por enquanto. Espere o corte.' : 'Código certo! Sem internet: mostre esta tela para o grupo.');
+  }
+  document.addEventListener('submit', (e) => {
+    const f = e.target.closest('#codForm, form[data-cod]'); if (!f) return;
+    e.preventDefault(); tentarCodigo(f);
+  });
+  /* duelo: o finalista toca na alternativa */
+  document.getElementById('jogoC').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-o]'); const j = ultimoJogo;
+    if (!b || !j || j.p !== 'q' || j.r || papel(j) !== 'fin' || minhasResp[j.i] !== undefined) return;
+    minhasResp[j.i] = +b.dataset.o;
+    postar({ tp: 'a', q: j.i, o: +b.dataset.o });
+    try { navigator.vibrate && navigator.vibrate(40); } catch (e2) {}
+    mostrarJogo(j, ultimoQuando);
+  });
+
+  /* APAGÃO: a apresentação manda "a" e todo mundo apaga junto */
+  const apag = document.getElementById('apagao'), apagCara = apag.querySelector('canvas'), apagTmp = document.createElement('canvas');
+  let ultimoApagao = 0;
+  function apagao() {
+    if (calmo || apag.classList.contains('on')) return;
+    apag.classList.remove('on'); void apag.offsetWidth; apag.classList.add('on');
+    const t0 = performance.now();
+    (function loop(agora) {
+      if (!apag.classList.contains('on')) return;
+      desenharBug(apagTmp, agora - t0, { falha: false });
+      const g = apagCara.getContext('2d'); g.clearRect(0, 0, 26, 21); g.drawImage(apagTmp, 9, 0, 26, 21, 0, 0, 26, 21);
+      requestAnimationFrame(loop);
+    })(t0);
+    setTimeout(() => { try { navigator.vibrate && navigator.vibrate([400, 80, 400]); } catch (e) {} }, 2600);
+    setTimeout(() => apag.classList.remove('on'), 3900);
+  }
+
   const telaJogo = document.getElementById('jogo'), conteudoJogo = document.getElementById('jogoC');
   let jogoAtual = null, relogioJogo = null, pararBugJogo = null;
   const escJ = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const codJ = (t) => escJ(t).replace(/`([^`]+)`/g, '<code>$1</code>');   // `texto` vira código (nunca HTML de fora)
   function mostrarJogo(j, quando) {
-    const chave = JSON.stringify(j);
+    ultimoJogo = j; ultimoQuando = quando;
+    if (j && j.f !== undefined) { finAtual = String(j.f || '').split('.').filter(Boolean); corteFeito = j.fc === 1; raiz.classList.toggle('pego', corteFeito && !finAtual.includes(meuId)); }
+    const chave = j ? JSON.stringify(j) + '|' + papel(j) + escapei + JSON.stringify(minhasResp) : null;
     if (chave === jogoAtual) return;
     const tinha = !!jogoAtual; jogoAtual = j ? chave : null;
     clearInterval(relogioJogo); if (pararBugJogo) { pararBugJogo(); pararBugJogo = null; }
+    if (j && j.p === 'volta') {                // o último slide: o Bug derrotado promete voltar
+      telaJogo.hidden = true;
+      falar((meuNome ? meuNome + '… ' : '') + 'isso não acabou. Eu vou voltar.');
+      return;
+    }
     if (!j) {                                   // fim do jogo: rebobina e some
       if (tinha && !calmo) { telaJogo.classList.remove('entra'); telaJogo.classList.add('sai'); setTimeout(() => { telaJogo.hidden = true; telaJogo.classList.remove('sai'); }, 800); }
       else telaJogo.hidden = true;
@@ -774,15 +964,23 @@
     if (j.p === 'intro' || j.p === 'regras' || j.p === 'fim' || j.p === 'inv') h += '<canvas width="52" height="42" aria-label="O Bug"></canvas>';
     if (j.p === 'inv') h += '<span class="jt">Invasão</span><p class="js">Eu sou o Bug. Este site agora é meu. Tranquei ele com um código.</p><div class="slots"><i>?</i><i>?</i><i>?</i><i>?</i></div>' +
       '<ol class="inv-r"><li>O código tem <b>4 números</b>, escondidos neste site.</li><li>Cada número só aparece quando <b>a parte certa do site for consertada</b>.</li>' +
-      '<li>Achou os 4? Corra até o <b>cadeado</b> na frente da sala.</li><li>Os primeiros a abrir vão para o <b>duelo final</b>.</li></ol>';
-    if (j.p === 'intro') h += '<span class="jt">A fuga</span><p class="js">O código está completo. Quem tem os 4 números: corra até o cadeado. AGORA.</p>';
-    if (j.p === 'regras') h += '<span class="jt">Duelo final</span><p class="js">Só quem abriu o cadeado joga. O resto da sala torce. Cada acerto me quebra um pouco.</p>';
+      '<li>Achou os 4? Toque em <b>🔒 código</b> (canto de baixo) e digite.</li><li>Só os <b>5 primeiros</b> escapam e vão para o <b>duelo final</b>.</li></ol>';
+    if (j.p === 'inv' && meuNome) h = h.replace('<div class="slots">', '<p class="js">Eu sei o seu nome, <b>' + escJ(meuNome) + '</b>.</p><div class="slots">');
+    if (j.p === 'intro') h += telaFuga(j);
+    if (j.p === 'regras') h += '<span class="jt">Duelo final</span><p class="js">Só quem escapou joga. O resto da sala torce. Cada acerto me quebra um pouco.</p>';
+    if (j.p === 'regras' || j.p === 'q' || j.p === 'fim') h = etiquetaPapel(j) + h;
     if (j.p === 'q') {
       h += '<span class="jt">Erro ' + (j.i + 1) + ' de ' + j.n + (j.e ? ' · ' + escJ(j.e) : '') + '</span>';
       h += '<div class="jhp"><canvas width="44" height="36" aria-hidden="true"></canvas><span>Integridade</span><b><i style="width:' + Math.round((1 - (+j.d || 0)) * 100) + '%"></i></b></div>';
       if (!j.r) h += '<span class="jr" id="jogoR">15</span>';
+      const souFin = papel(j) === 'fin', minha = minhasResp[j.i];
       h += '<p class="jq">' + codJ(j.q) + '</p><div class="jo">' +
-        (j.o || []).map((o, k) => '<div' + (j.r && k === j.c ? ' class="ok"' : '') + '><b>' + 'ABCD'[k] + '</b><span>' + codJ(o) + '</span></div>').join('') + '</div>';
+        (j.o || []).map((o, k) => souFin
+          ? '<button type="button" data-o="' + k + '"' + (minha !== undefined || j.r ? ' disabled' : '') + ' class="' + (minha === k ? 'meu ' : '') + (j.r && k === j.c ? 'ok' : '') + '"><b>' + 'ABCD'[k] + '</b><span>' + codJ(o) + '</span></button>'
+          : '<div' + (j.r && k === j.c ? ' class="ok"' : '') + '><b>' + 'ABCD'[k] + '</b><span>' + codJ(o) + '</span></div>').join('') + '</div>';
+      if (souFin && !j.r) h += '<p class="jnota">' + (minha === undefined ? 'Toque na resposta. Só vale a primeira.' : 'Resposta enviada. Agora é esperar…') + '</p>';
+      if (souFin && j.r) h += minha === j.c ? '<p class="jnota boa">Você acertou! O Bug sentiu.</p>' : '<p class="jnota ruim">' + (minha === undefined ? 'Você não respondeu.' : 'Errou…') + '</p>';
+      if (!souFin && !j.r) h += '<p class="jnota">Só os finalistas respondem. Torça por eles.</p>';
       if (j.r) h += '<p class="jw">' + escJ(j.w || '') + '</p>';
     }
     if (j.p === 'fim') {
@@ -829,6 +1027,7 @@
     clearInterval(timerAnda);
     if (b) {
       if (subiu) setTimeout(passearBug, 600);
+      if (subiu && b >= 2) setTimeout(() => { if (typeof falaQueSabe === 'function') falaQueSabe(); }, 12000);
       timerAnda = setInterval(passearBug, [0, 26000, 17000, 11000, 7000][b]);
     }
   }
@@ -848,6 +1047,7 @@
     'Três números à vista. Eu não vou deixar barato.',
     'Vocês me quebraram demais… NÃO PISQUEM.'
   ];
+  const comNome = (t, i) => meuNome && i >= 2 ? meuNome + '… ' + t.charAt(0).toLowerCase() + t.slice(1) : t;
   let caca = 0, liberados = 0, pararFala = null, timerFala = null;
   function contarLiberados() {
     return caca ? [atual >= 1, atual >= 4, atual >= 7, nivelBug >= 4].filter(Boolean).length : 0;
@@ -871,12 +1071,44 @@
     setTimeout(() => susto.classList.remove('on'), 800);
     try { navigator.vibrate && navigator.vibrate([220, 70, 220]); } catch (e) {}
   }
+
+  /* =====================================================================
+     O BUG "SABE COISAS": só o que o próprio navegador já informa
+     (bateria, hora, tipo de celular, quantos toques...). É lido aqui no
+     aparelho e NUNCA é enviado para lugar nenhum. Serve só para assustar.
+     ===================================================================== */
+  const sabe = { toques: 0, rolagens: 0, inicio: Date.now(), bateria: null, carregando: false, usadas: new Set() };
+  addEventListener('pointerdown', () => { sabe.toques++; }, { passive: true });
+  let ultimaRolagem = 0;
+  addEventListener('scroll', () => { const t = Date.now(); if (t - ultimaRolagem > 700) sabe.rolagens++; ultimaRolagem = t; }, { passive: true });
+  try { navigator.getBattery && navigator.getBattery().then((b) => { const ler = () => { sabe.bateria = Math.round(b.level * 100); sabe.carregando = b.charging; }; ler(); b.addEventListener('levelchange', ler); b.addEventListener('chargingchange', ler); }).catch(() => {}); } catch (e) {}
+  function falaQueSabe() {
+    const nome = meuNome || 'você', ua = navigator.userAgent;
+    const aparelho = /iPhone|iPad/.test(ua) ? 'iPhone' : /Android/.test(ua) ? 'Android' : '';
+    const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    const minutos = Math.max(1, Math.round((Date.now() - sabe.inicio) / 60000));
+    const rede = navigator.connection && navigator.connection.type;
+    const op = [];
+    if (sabe.bateria !== null && !sabe.carregando) op.push(['bat', nome + '… ' + sabe.bateria + '% de bateria. Eu não gastaria com calma.']);
+    if (sabe.carregando) op.push(['carga', 'Carregando o celular, ' + nome + '? Eu também me alimento de energia.']);
+    if (aparelho) op.push(['ap', 'Bonito esse ' + aparelho + ', ' + nome + '. Agora ele é meu.']);
+    if (sabe.toques > 8) op.push(['toq', 'Você já tocou na tela ' + sabe.toques + ' vezes. Eu contei cada uma.']);
+    if (sabe.rolagens > 4) op.push(['rol', 'Eu vi você rolar a página ' + sabe.rolagens + ' vezes, ' + nome + '. Procurando o quê?']);
+    op.push(['hora', 'São ' + hora + '. Você está comigo há ' + minutos + ' minuto' + (minutos > 1 ? 's' : '') + ', ' + nome + '.']);
+    if (rede === 'wifi') op.push(['rede', 'Wi-Fi da escola, ' + nome + '? Eu estou em todos os celulares desta sala.']);
+    if (rede === 'cellular') op.push(['rede', 'Usando os seus dados móveis, ' + nome + '? Eu estou em todos os celulares desta sala.']);
+    if (matchMedia('(prefers-color-scheme: dark)').matches) op.push(['esc', 'Modo escuro, ' + nome + '? Você gosta do escuro… eu também.']);
+    const novas = op.filter((o) => !sabe.usadas.has(o[0]));
+    const esc = (novas.length ? novas : op)[Math.floor(Math.random() * (novas.length ? novas : op).length)];
+    sabe.usadas.add(esc[0]);
+    if (!falaBug.classList.contains('on') && telaJogo.hidden && regras.hidden) falar(esc[1]);
+  }
   function agendarSusto() {
     clearTimeout(timerSusto);
     const n = contarLiberados();
     if (!caca || n < 2) return;
     const faixa = { 2: [45000, 80000], 3: [25000, 45000], 4: [12000, 22000] }[n];
-    timerSusto = setTimeout(() => { assustar(); agendarSusto(); }, faixa[0] + Math.random() * (faixa[1] - faixa[0]));
+    timerSusto = setTimeout(() => { assustar(); setTimeout(falaQueSabe, 1600); agendarSusto(); }, faixa[0] + Math.random() * (faixa[1] - faixa[0]));
   }
 
   function atualizarCaca(k) {
@@ -887,7 +1119,7 @@
     if (n > liberados && caca) {
       hud.classList.remove('pulsa'); void hud.offsetWidth; hud.classList.add('pulsa');
       if (n >= 3) setTimeout(assustar, 1600);            // a turma avançou: o Bug revida
-      setTimeout(() => falar(DICAS[n - 1]), n >= 3 ? 3200 : 2400);
+      setTimeout(() => falar(comNome(DICAS[n - 1], n - 1)), n >= 3 ? 3200 : 2400);
     }
     if (n !== liberados || !timerSusto) agendarSusto();
     if (!caca) clearTimeout(timerSusto), timerSusto = null;
@@ -927,6 +1159,10 @@
         const d = JSON.parse(e.data);
         if (d.event !== 'message') return;
         const m = JSON.parse(d.message);
+        if (typeof m.r === 'string' && /^[a-z0-9]{3,10}$/.test(m.r) && m.r !== rodada) {
+          rodada = m.r; escapei = guarda.ler('lp-escapou') === rodada; hud.classList.toggle('livre', escapei); minhasResp = {};
+        }
+        if (typeof m.a === 'number' && aquecido && m.a !== ultimoApagao) { ultimoApagao = m.a; apagao(); }
         if (typeof m.s === 'number') receber(m.s, (m.j && typeof m.j === 'object') ? m.j : null, typeof m.t === 'number' ? Math.min(m.t, Date.now()) : Date.now(), typeof m.b === 'number' ? m.b : 0, m.k === 1 ? 1 : 0);
       } catch (erro) {}
     };
@@ -960,7 +1196,7 @@
   });
 
   /* Para testar no computador: lanchonete.aplicar(5) no console */
-  window.lanchonete = { aplicar: (s) => aplicar(s, true), jogo: (j) => mostrarJogo(j, Date.now()), bug: (b) => aplicarBug(b), caca: (k) => atualizarCaca(k) };
+  window.lanchonete = { aplicar: (s) => aplicar(s, true), jogo: (j) => mostrarJogo(j, Date.now()), bug: (b) => aplicarBug(b), caca: (k) => atualizarCaca(k), apagao, id: () => meuId, sabe: () => falaQueSabe() };
   /* modo ensaio: a página de ensaio do app manda o estágio por mensagem */
   addEventListener('message', (e) => {
     const d = e.data;

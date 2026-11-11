@@ -196,7 +196,11 @@
       background: repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 1px, transparent 1px 3px); animation: jgFlick 7s infinite; }
     @keyframes jgFlick { 0%, 91%, 100% { opacity: 1 } 92% { opacity: .3 } 94% { opacity: 1 } }
     .jogo .jc { display: grid; gap: 16px; justify-items: center; width: min(560px, 100%); }
-    .jogo canvas { width: 150px; height: auto; aspect-ratio: 22 / 18; image-rendering: pixelated; filter: drop-shadow(0 0 22px rgba(194, 43, 30, .5)); }
+    /* com o site ainda quebrado (980px), estas telas encolheriam junto: zoom compensa */
+    .jogo .jc, .hud, .regras > div, .bug-fala { zoom: var(--k, 1); }
+    .jogo .jc { width: min(560px, calc(100vw / var(--k, 1) - 32px)); }
+    .bug-fala { width: min(calc(92vw / var(--k, 1)), 420px); }
+    .jogo canvas { width: 150px; height: auto; aspect-ratio: 52 / 42; image-rendering: pixelated; filter: drop-shadow(0 0 22px rgba(194, 43, 30, .5)); }
     .jogo .jt { font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: #c22b1e; }
     .jogo .js { margin: 0; font-size: 22px; line-height: 1.3; }
     .jogo .jq { margin: 0; font-size: 21px; line-height: 1.25; font-weight: 700; }
@@ -212,14 +216,14 @@
     .jogo .jf { margin: 0; font-size: 44px; line-height: 1; font-weight: 700; color: var(--c, #43e0a6); text-shadow: 0 0 30px currentColor; font-family: system-ui, sans-serif; }
     .jogo .jf small { display: block; margin-bottom: 10px; font-size: 13px; letter-spacing: .2em; color: #8d8676; text-transform: uppercase; text-shadow: none; font-family: "Courier New", monospace; }
 
-    .jogo canvas { width: 190px; }
+    .jogo canvas { width: 200px; }
     .jogo .jhp { display: flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #8d8676; }
     .jogo .jhp canvas { width: 40px; filter: none; }
     .jogo .jhp b { display: block; width: 120px; height: 8px; border: 1px solid #4c0d08; border-radius: 3px; overflow: hidden; background: #140c0e; }
     .jogo .jhp i { display: block; height: 100%; background: #c22b1e; transition: width .8s; }
 
     /* ---------- O SITE "BUGANDO" AOS POUCOS (nível 1 a 4, vem da apresentação) ---------- */
-    .bug-anda { position: fixed; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); left: 0; width: 64px; height: auto; aspect-ratio: 44 / 36;
+    .bug-anda { position: fixed; bottom: calc(52px + env(safe-area-inset-bottom, 0px)); left: 0; width: 64px; height: auto; aspect-ratio: 52 / 42;
       z-index: 57; pointer-events: none; image-rendering: pixelated; transform: translateX(-120%); filter: drop-shadow(0 0 10px rgba(194, 43, 30, .6)); }
     .bug-anda.vai { animation: bugAnda 6s linear forwards; }
     @keyframes bugAnda { 0% { transform: translateX(-120%) } 45% { transform: translateX(45vw) } 52% { transform: translateX(45vw) skewX(16deg); filter: hue-rotate(160deg) }
@@ -249,6 +253,62 @@
     html[data-bug="3"] .bug-tinta { animation: pgTinta 4s ease-in-out infinite; }
     html[data-bug="4"] .bug-tinta { animation: pgTinta 1.2s ease-in-out infinite; }
     @media (prefers-reduced-motion: reduce) { html[data-bug] * { animation: none !important; } }
+
+    /* ---------- A CAÇA AO CÓDIGO DO BUG ----------
+       4 números: 1º perto do hambúrguer (depois do Conserto 1, meta viewport),
+       2º dentro do menu ☰ (depois da media query), 3º na Promoção do dia
+       (depois da container query), 4º pisca na tela quando tudo quebra. */
+    .pista { display: none; font: 700 13px "Courier New", monospace; color: #8a1c13; letter-spacing: .05em; opacity: .55; }
+    .hero { position: relative; }
+    .f1 .pista-1 { display: block; position: absolute; right: 8px; bottom: 6px; rotate: -6deg; }
+    .f4.menu-aberto .pista-2 { display: block; padding: 4px 0; opacity: .6; }
+    @media (min-width: 768px) { .f4 .pista-2 { display: none !important; } }
+    @container (min-width: 300px) { .f7 .card-promo .pista-3 { display: block; margin-top: 6px; color: #ffc93c; opacity: .5; } }
+    .pista-4 { position: fixed; inset: 0; z-index: 59; display: none; place-items: center; pointer-events: none;
+      font: 700 min(60vw, 260px) / 1 "Courier New", monospace; color: #ff2a1f; text-shadow: 6px 0 #52d5ff, -6px 0 #ff2a1f; opacity: 0; }
+    html[data-k="1"][data-bug="4"] .pista-4 { display: grid; animation: pista4 3.6s steps(1) infinite; }
+    @keyframes pista4 { 0%, 93%, 100% { opacity: 0 } 94%, 97% { opacity: .95 } }
+
+    /* marcador do código (canto de baixo) e painel com as regras */
+    .hud { position: fixed; left: max(10px, env(safe-area-inset-left, 0px)); bottom: calc(10px + env(safe-area-inset-bottom, 0px)); z-index: 57; display: none;
+      align-items: center; gap: 8px; padding: 7px 12px; border: 1px solid #c22b1e; border-radius: 999px; background: rgba(13, 7, 9, .92); color: #efe6d2;
+      font: 700 12px "Courier New", monospace; letter-spacing: .06em; cursor: pointer; box-shadow: 0 6px 24px rgba(0, 0, 0, .4); }
+    html[data-k="1"] .hud { display: flex; }
+    .hud i { width: 10px; height: 10px; border-radius: 3px; border: 1px solid #c22b1e; }
+    .hud i.on { background: #ff2a1f; box-shadow: 0 0 8px #ff2a1f; }
+    .hud.pulsa { animation: hudPulsa .5s 3; }
+    @keyframes hudPulsa { 50% { transform: scale(1.12); box-shadow: 0 0 22px #ff2a1f; } }
+    .regras { position: fixed; inset: 0; z-index: 61; display: grid; place-items: center; padding: 20px; background: rgba(7, 7, 10, .92); color: #efe6d2; font-family: "Courier New", monospace; }
+    .regras[hidden] { display: none; }
+    .regras div { width: min(440px, 100%); display: grid; gap: 12px; }
+    .regras h2 { margin: 0; font-size: 18px; color: #ff4a3d; letter-spacing: .1em; text-transform: uppercase; }
+    .regras ol { margin: 0; padding-left: 20px; display: grid; gap: 8px; font-size: 15px; line-height: 1.35; }
+    .regras button { justify-self: start; padding: 9px 18px; border: 1px solid #efe6d2; border-radius: 999px; background: transparent; color: inherit; font: inherit; }
+
+    /* fala do Bug (quando um número é liberado) */
+    .bug-fala { position: fixed; left: 50%; top: calc(14px + env(safe-area-inset-top, 0px)); z-index: 60; width: min(92vw, 420px); translate: -50% -140%;
+      display: flex; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid #c22b1e; border-radius: 12px; background: #0d0709; color: #efe6d2;
+      font: 14px/1.35 "Courier New", monospace; box-shadow: 0 10px 34px rgba(0, 0, 0, .5); transition: translate .5s cubic-bezier(.2, .9, .3, 1.2); }
+    .bug-fala.on { translate: -50% 0; }
+    .bug-fala canvas { flex: none; width: 52px; height: auto; aspect-ratio: 52 / 42; image-rendering: pixelated; }
+
+    /* bordas da tela falhando (nível 2 a 4) */
+    .bordas { position: fixed; inset: 0; z-index: 55; pointer-events: none; opacity: 0; }
+    .bordas::before, .bordas::after { content: ""; position: absolute; top: 0; bottom: 0; width: var(--bw, 8px);
+      background: repeating-linear-gradient(180deg, rgba(255, 42, 31, .8) 0 3px, transparent 3px 9px, rgba(82, 213, 255, .65) 9px 11px, transparent 11px 23px, rgba(239, 230, 210, .45) 23px 24px, transparent 24px 37px);
+      background-size: 100% 220px; animation: bordaCorre .9s steps(6) infinite; }
+    .bordas::before { left: 0; } .bordas::after { right: 0; animation-direction: reverse; }
+    @keyframes bordaCorre { to { background-position: 0 220px; } }
+    @keyframes bordaPisca { 0%, 100% { opacity: var(--bo, .5) } 40% { opacity: .1 } 45% { opacity: var(--bo, .5) } 70% { opacity: .25 } }
+    html[data-bug="2"] .bordas { --bw: 5px; --bo: .4; opacity: .4; animation: bordaPisca 3s steps(1) infinite; }
+    html[data-bug="3"] .bordas { --bw: 12px; --bo: .65; opacity: .65; animation: bordaPisca 1.6s steps(1) infinite; }
+    html[data-bug="4"] .bordas { --bw: 26px; --bo: .9; opacity: .9; animation: bordaPisca .6s steps(1) infinite; }
+    .bug-anda { width: 78px; aspect-ratio: 52 / 42; }
+    .jogo .inv-r { margin: 0; padding-left: 20px; display: grid; gap: 8px; text-align: left; font-size: 15px; line-height: 1.35; }
+    .jogo .inv-r b { color: #ff6a5c; }
+    .jogo .slots { display: flex; gap: 8px; }
+    .jogo .slots i { width: 38px; height: 48px; display: grid; place-items: center; border: 2px solid #c22b1e; border-radius: 7px; font: 700 24px "Courier New", monospace; font-style: normal; color: #c22b1e; }
+    .jogo .slots.ok i { border-color: #43e0a6; color: #43e0a6; }
     .jogo.entra { animation: jgEntra .9s steps(6); }
     @keyframes jgEntra { 0% { opacity: 0 } 20% { opacity: 1; filter: invert(1) } 35% { filter: none; transform: translate(-6px, 3px) } 55% { transform: translate(5px, -4px) } 100% { transform: none } }
     .jogo.sai { animation: jgSai .8s steps(8) forwards; }
@@ -289,7 +349,7 @@
   <header class="topo">
     <a class="logo" href="#"><span></span>Lanchonete Pixel</a>
     <button class="btn-menu" type="button" aria-expanded="false">☰ Menu</button>
-    <nav class="menu"><a href="#">Início</a><a href="#cardapio">Cardápio</a><a href="#promo">Promoções</a><a href="#contato">Contato</a></nav>
+    <nav class="menu"><a href="#">Início</a><a href="#cardapio">Cardápio</a><a href="#promo">Promoções</a><a href="#contato">Contato</a><span class="pista pista-2" aria-hidden="true">🔒 8</span></nav>
   </header>
 
   <section class="hero">
@@ -299,6 +359,7 @@
       <a class="btn-pedido" href="#cardapio">Fazer pedido</a>
     </div>
     <img src="burger.svg" width="900" height="560" alt="Hambúrguer artesanal da Lanchonete Pixel">
+    <span class="pista pista-1" aria-hidden="true">🔒 3</span>
   </section>
 
   <main class="layout">
@@ -317,7 +378,7 @@
       <div class="area-do-card">
         <article class="card-promo">
           <img src="burger.svg" width="900" height="560" alt="">
-          <div><h3>Promoção do dia</h3><p>Combo Pixel: burger + batata + refri</p><p class="preco">R$ 39,90</p></div>
+          <div><h3>Promoção do dia</h3><p>Combo Pixel: burger + batata + refri</p><p class="preco">R$ 39,90</p><p class="pista pista-3" aria-hidden="true">🔒 1</p></div>
         </article>
       </div>
     </aside>
@@ -329,7 +390,21 @@
   <iframe class="twist" id="twist" title="Lanchonete Pixel, versão feita com Bootstrap"></iframe>
 
   <!-- O BUG andando pela tela e a "tinta" de falha (aparecem conforme a apresentação avança) -->
-  <canvas class="bug-anda" id="bugAnda" width="44" height="36" aria-hidden="true"></canvas>
+  <canvas class="bug-anda" id="bugAnda" width="52" height="42" aria-hidden="true"></canvas>
+  <div class="bordas" aria-hidden="true"></div>
+  <div class="pista-4" aria-hidden="true">6</div>
+  <button class="hud" id="hud" type="button" aria-label="Código do Bug: ver regras">🔒 código <i></i><i></i><i></i><i></i></button>
+  <div class="regras" id="regras" hidden role="dialog" aria-label="Regras do código do Bug"><div>
+    <h2>O código do Bug</h2>
+    <ol>
+      <li>O código tem <b>4 números</b>, escondidos neste site.</li>
+      <li>Cada número só aparece quando a parte certa do site é consertada. Os quadradinhos vermelhos aqui embaixo mostram quantos já foram liberados.</li>
+      <li>Achou os 4? Corra até o <b>cadeado</b> na frente da sala.</li>
+      <li>Os primeiros a abrir vão para o duelo final.</li>
+    </ol>
+    <button type="button" id="regrasOk">Voltar à caça</button>
+  </div></div>
+  <div class="bug-fala" id="bugFala" aria-live="polite"><canvas width="52" height="42" aria-hidden="true"></canvas><span></span></div>
   <div class="bug-tinta" aria-hidden="true"></div>
   <!-- O JOGO DO BUG: aparece sozinho quando a apresentação chega no jogo -->
   <div class="jogo" id="jogo" hidden aria-live="polite"><div class="jc" id="jogoC"></div></div>
@@ -560,69 +635,75 @@
      ("j"). Sem "j", a tela do jogo some e o site volta.
      ===================================================================== */
   /* =====================================================================
-     "O BUG" (mascote do jogo, personagem original)
-     Um besouro de pixels cujo casco é uma janela de navegador. A parte direita
-     VAZA da viewport (linha tracejada azul) e aparece deslocada e "fantasma",
-     como um layout quebrado. Uma barra de rolagem lateral fica embaixo dele.
-     op = { dano: 0..1 (rachaduras), some: 0..1 (desintegra em pixels) }
+     "O BUG" (mascote, personagem original): uma aranha-besouro de pixels,
+     casco preto com rachaduras vermelhas que brilham e um "</>" em brasa,
+     olhos vermelhos acesos, pinças e pernas longas com garras.
+     A parte direita VAZA da viewport (linha tracejada azul) e sai deslocada,
+     com um "fantasma" azul, como um layout quebrado.
+     op = { dano: 0..1 (rachaduras brancas), some: 0..1 (desintegra), falha: bool }
      ===================================================================== */
   function desenharBug(cv, t, op) {
     op = op || {};
-    var W = 44, H = 36, CX = 19, VX = 30;
+    var W = 52, H = 42, CX = 22, VX = 36;
     if (cv.width !== W) { cv.width = W; cv.height = H; }
     var g = cv.getContext('2d');
     var off = desenharBug._a || (desenharBug._a = document.createElement('canvas'));
     var fan = desenharBug._b || (desenharBug._b = document.createElement('canvas'));
     off.width = fan.width = W; off.height = fan.height = H;
     var o = off.getContext('2d');
-    function px(x, y, c) { o.fillStyle = c; o.fillRect(Math.round(x), Math.round(y), 1, 1); }
-    var passo = Math.floor(t / 170) % 2;
-    var aceso = (t % 2300) > 160;                 // pisca de vez em quando
-    var OSSO = '#efe6d2', CASCO = '#9a2016', CLARO = '#d8402f', BORDA = '#4c0d08', ESCURO = '#17121a';
+    function px(x, y, c) { if (x < 0 || y < 0 || x >= W || y >= H) return; o.fillStyle = c; o.fillRect(Math.round(x), Math.round(y), 1, 1); }
+    function linha(x0, y0, x1, y1, c) { var n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)) || 1; for (var i = 0; i <= n; i++) px(x0 + (x1 - x0) * i / n, y0 + (y1 - y0) * i / n, c); }
+    var passo = Math.floor(t / 150) % 2;
+    var aceso = (t % 2600) > 140;
+    var pulso = 0.5 + 0.5 * Math.sin(t / 380);
+    var OSSO = '#d9cfb8', GARRA = '#ffffff', BRASA = pulso > .5 ? '#ff2a1f' : '#d81e14', BRASA2 = '#6e0f0b';
   
-    // antenas (pontas vermelhas, como cursores)
-    var bal = Math.round(Math.sin(t / 260));
-    [[-1, 1], [1, 1]].forEach(function (lado) {
-      var s = lado[0];
-      for (var i = 0; i < 6; i++) px(CX + s * (2 + i), 5 - Math.floor(i / 1.6) + (i > 3 ? bal * s * 0 : 0) - (i === 5 ? bal : 0), i === 5 ? '#ff3b2f' : OSSO);
-    });
-    // pernas: 3 de cada lado, alternando o passo
-    [15, 21, 27].forEach(function (y, k) {
-      var sobe = ((k + passo) % 2) ? -1 : 1;
+    // antenas quebradas
+    linha(CX - 3, 7, CX - 7, 3, '#8a7f6c'); linha(CX - 7, 3, CX - 11, 1 + passo, '#8a7f6c'); px(CX - 12, 1 + passo, BRASA);
+    linha(CX + 3, 7, CX + 7, 3, '#8a7f6c'); linha(CX + 7, 3, CX + 11, 2 - passo, '#8a7f6c'); px(CX + 12, 2 - passo, BRASA);
+    // pernas longas com garras (4 de cada lado), tremendo
+    [20, 25, 30, 35].forEach(function (y, k) {
+      var tr = ((k + passo) % 2) ? -1 : 1;
       for (var s = -1; s <= 1; s += 2) {
-        var x0 = CX + s * 10;
-        px(x0 + s * 1, y, OSSO); px(x0 + s * 2, y, OSSO); px(x0 + s * 3, y + sobe * 0, OSSO);
-        px(x0 + s * 4, y + sobe, OSSO); px(x0 + s * 5, y + sobe * 2, OSSO);
+        var x0 = CX + s * 11, jx = x0 + s * 5, jy = y - 4 + tr, fx = x0 + s * 9, fy = y + 3 + (k > 1 ? 2 : 0);
+        linha(x0, y, jx, jy, OSSO); linha(jx, jy, fx, fy, OSSO); px(fx + s, fy + 1, GARRA);
       }
     });
-    // casco (elipse) com contorno, brilho e a divisão do meio
-    for (var y = 11; y <= 31; y++) for (var x = CX - 11; x <= CX + 11; x++) {
-      var dx = (x - CX) / 11, dy = (y - 21) / 10, d = dx * dx + dy * dy;
+    // casco (elipse)
+    for (var y = 16; y <= 39; y++) for (var x = CX - 12; x <= CX + 12; x++) {
+      var dx = (x - CX) / 12, dy = (y - 27.5) / 11.5, d = dx * dx + dy * dy;
       if (d > 1) continue;
-      var c = CASCO;
-      if (d > 0.78) c = BORDA; else if (dx + dy < -0.85) c = CLARO;
-      if (x === CX && y > 16) c = '#2a0706';
+      var c = '#2a0d10';
+      if (d > 0.8) c = '#12060a'; else if (dx + dy < -0.9) c = '#4a1418';
+      if (x === CX && y > 18) c = '#05020a';
       px(x, y, c);
     }
-    // barra de título de janela no casco, com os 3 botões
-    for (var x2 = CX - 8; x2 <= CX + 8; x2++) { px(x2, 14, '#2b2230'); px(x2, 15, '#2b2230'); }
-    px(CX - 7, 14, '#ff5a4f'); px(CX - 5, 14, '#ffbf52'); px(CX - 3, 14, '#43e0a6');
-    // "</>" gravado no casco
+    // rachaduras que brilham no casco
+    [[CX-9,22],[CX-8,23],[CX-7,23],[CX-6,24],[CX-6,25],[CX-5,26],[CX+6,20],[CX+7,21],[CX+7,22],[CX+8,23],[CX+9,24],[CX-4,33],[CX-5,34],[CX-6,35],[CX+4,32],[CX+5,33],[CX+5,34],[CX+6,35]]
+      .forEach(function (p, i) { px(p[0], p[1], (i % 3) ? BRASA : BRASA2); });
+    // "</>" em brasa
     var G = { '<': [[2,0],[1,1],[0,2],[1,3],[2,4]], '/': [[2,0],[2,1],[1,2],[0,3],[0,4]], '>': [[0,0],[1,1],[2,2],[1,3],[0,4]] };
-    ['<', '/', '>'].forEach(function (ch, i) { G[ch].forEach(function (p) { px(CX - 6 + i * 4 + p[0], 20 + p[1], '#f6c9b8'); }); });
-    // cabeça e olhos
-    for (var y3 = 6; y3 <= 12; y3++) for (var x3 = CX - 6; x3 <= CX + 6; x3++) {
-      var a = (x3 - CX) / 6.2, b = (y3 - 9.5) / 3.6; if (a * a + b * b <= 1) px(x3, y3, ESCURO);
+    ['<', '/', '>'].forEach(function (ch, i) { G[ch].forEach(function (p) { px(CX - 6 + i * 4 + p[0], 26 + p[1], BRASA); }); });
+    // cabeça
+    for (var y3 = 5; y3 <= 17; y3++) for (var x3 = CX - 8; x3 <= CX + 8; x3++) {
+      var a = (x3 - CX) / 7.5, b = (y3 - 11) / 5.6; if (a * a + b * b <= 1) px(x3, y3, '#0d0709');
     }
-    var olho = aceso ? '#ff3b2f' : '#3a1210';
-    [[CX - 4, 8], [CX + 2, 8]].forEach(function (e) { px(e[0], e[1], olho); px(e[0] + 1, e[1], olho); px(e[0], e[1] + 1, olho); px(e[0] + 1, e[1] + 1, olho); if (aceso) px(e[0], e[1], '#ffd2c8'); });
-    px(CX - 2, 12, OSSO); px(CX + 2, 12, OSSO);       // pinças
-    // rachaduras (dano)
-    var R = [[CX+4,13],[CX+5,14],[CX+5,15],[CX+6,16],[CX+5,17],[CX+6,18],[CX+7,19],[CX+6,20],[CX+7,21],[CX+8,22],[CX-6,24],[CX-5,25],[CX-6,26],[CX-4,27],[CX-5,28],[CX-3,29],[CX+3,26],[CX+4,27],[CX+2,28],[CX+3,29]];
+    // pinças
+    [[-1],[1]].forEach(function (s) { s = s[0];
+      px(CX + s * 3, 16, OSSO); px(CX + s * 4, 17, OSSO); px(CX + s * 4, 18, OSSO); px(CX + s * 3, 19, OSSO); px(CX + s * 2, 20, GARRA); });
+    // olhos (com brilho em volta)
+    var olho = aceso ? '#ff2a1f' : '#3a0a08';
+    [[CX - 5, 9], [CX + 2, 9]].forEach(function (e) {
+      if (aceso) for (var yy = -1; yy <= 3; yy++) for (var xx = -1; xx <= 3; xx++) if (xx < 0 || yy < 0 || xx > 2 || yy > 2) px(e[0] + xx, e[1] + yy, '#3d0806');
+      for (var yy2 = 0; yy2 < 3; yy2++) for (var xx2 = 0; xx2 < 3; xx2++) px(e[0] + xx2, e[1] + yy2, olho);
+      if (aceso) px(e[0] + 1, e[1] + 1, '#ffe2d8');
+    });
+    // dano: rachaduras brancas
+    var R = [[CX+3,18],[CX+4,19],[CX+4,20],[CX+5,21],[CX+4,22],[CX+5,23],[CX+6,24],[CX+5,25],[CX-3,29],[CX-2,30],[CX-3,31],[CX-1,32],[CX-2,33],[CX,34],[CX+2,29],[CX+3,30],[CX+1,31],[CX+2,32],[CX-6,18],[CX-7,19]];
     var nR = Math.floor((op.dano || 0) * R.length);
-    for (var r = 0; r < nR; r++) px(R[r][0], R[r][1], '#0b0809');
+    for (var r = 0; r < nR; r++) px(R[r][0], R[r][1], '#f4efe6');
   
-    // monta: parte dentro da viewport normal; parte de fora deslocada + fantasma azul
+    // monta: dentro da viewport normal; fora, deslocado + fantasma azul
     g.clearRect(0, 0, W, H);
     g.drawImage(off, 0, 0, VX, H, 0, 0, VX, H);
     var f = fan.getContext('2d'); f.clearRect(0, 0, W, H);
@@ -630,32 +711,34 @@
     f.globalCompositeOperation = 'source-atop'; f.fillStyle = 'rgba(82,213,255,.85)'; f.fillRect(0, 0, W, H); f.globalCompositeOperation = 'source-over';
     g.globalAlpha = .55; g.drawImage(fan, 2, 1); g.globalAlpha = 1;
     g.drawImage(off, VX, 0, W - VX, H, VX + 1, 2, W - VX, H);
-    // falha: uma faixa horizontal escorrega de vez em quando
-    if ((t % 1700) < 140 || op.falha) {
-      var fy = 8 + Math.floor((t / 140) % 18);
-      var tira = g.getImageData(0, fy, W, 3); g.clearRect(0, fy, W, 3); g.putImageData(tira, (t % 2) ? 2 : -2, fy);
+    // falha: faixas escorregam
+    if ((t % 1500) < 160 || op.falha) {
+      var fy = 6 + Math.floor((t / 130) % 28);
+      var tira = g.getImageData(0, fy, W, 3); g.clearRect(0, fy, W, 3); g.putImageData(tira, (Math.floor(t / 60) % 2) ? 3 : -3, fy);
     }
-    // borda da viewport (tracejada) e barra de rolagem lateral
-    g.fillStyle = '#52d5ff'; for (var yy = 0; yy < H - 3; yy += 3) g.fillRect(VX, yy, 1, 2);
+    // estática em volta
+    for (var k2 = 0; k2 < 7; k2++) {
+      var hx = Math.floor(((t / 90 + k2 * 37) * 7919) % W), hy = Math.floor(((t / 90 + k2 * 53) * 104729) % (H - 4));
+      g.fillStyle = k2 % 2 ? 'rgba(255,42,31,.7)' : 'rgba(82,213,255,.6)'; g.fillRect(hx, hy, 1, 1);
+    }
+    // borda da viewport e barra de rolagem lateral
+    g.fillStyle = '#52d5ff'; for (var yy3 = 0; yy3 < H - 3; yy3 += 3) g.fillRect(VX, yy3, 1, 2);
     g.fillStyle = '#2a2630'; g.fillRect(2, H - 2, W - 4, 1);
     g.fillStyle = '#8d8676'; g.fillRect(2, H - 2, VX - 4, 1);
-    // desintegra em pixels (fim do jogo)
+    // desintegra
     if (op.some > 0) {
       var img = g.getImageData(0, 0, W, H), dd = img.data;
-      for (var i2 = 0; i2 < W * H; i2++) {
-        var h = ((i2 * 2654435761) >>> 0) % 1000 / 1000;
-        if (h < op.some) dd[i2 * 4 + 3] = 0;
-      }
+      for (var i2 = 0; i2 < W * H; i2++) { if ((((i2 * 2654435761) >>> 0) % 1000) / 1000 < op.some) dd[i2 * 4 + 3] = 0; }
       g.putImageData(img, 0, 0);
     }
   }
-  /* anima um canvas do Bug (~9 quadros por segundo); op pode ser uma função */
+  /* anima um canvas do Bug (~10 quadros por segundo); op pode ser uma função */
   function animarBug(cv, op) {
     var vivo = true, ultimo = 0, t0 = performance.now();
     var calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
     function loop(agora) {
       if (!vivo) return;
-      if (agora - ultimo > 110) {
+      if (agora - ultimo > 100) {
         ultimo = agora;
         var o = typeof op === 'function' ? op() : op;
         if (o) desenharBug(cv, calmo ? 1000 : agora - t0, o);
@@ -681,9 +764,12 @@
       return;
     }
     let h = '';
-    if (j.p === 'intro' || j.p === 'regras' || j.p === 'fim') h += '<canvas width="22" height="18" aria-label="O Bug"></canvas>';
-    if (j.p === 'intro') h += '<span class="jt">O Jogo do Bug</span><p class="js">Vocês acharam que tinham consertado tudo? Eu estava escondido no código o tempo todo.</p>';
-    if (j.p === 'regras') h += '<span class="jt">Regras</span><p class="js">Vamos jogar um jogo. Cada grupo levanta a letra antes do tempo acabar. Cada acerto me quebra um pouco.</p>';
+    if (j.p === 'intro' || j.p === 'regras' || j.p === 'fim' || j.p === 'inv') h += '<canvas width="52" height="42" aria-label="O Bug"></canvas>';
+    if (j.p === 'inv') h += '<span class="jt">Invasão</span><p class="js">Eu sou o Bug. Este site agora é meu. Tranquei ele com um código.</p><div class="slots"><i>?</i><i>?</i><i>?</i><i>?</i></div>' +
+      '<ol class="inv-r"><li>O código tem <b>4 números</b>, escondidos neste site.</li><li>Cada número só aparece quando <b>a parte certa do site for consertada</b>.</li>' +
+      '<li>Achou os 4? Corra até o <b>cadeado</b> na frente da sala.</li><li>Os primeiros a abrir vão para o <b>duelo final</b>.</li></ol>';
+    if (j.p === 'intro') h += '<span class="jt">A fuga</span><p class="js">O código está completo. Quem tem os 4 números: corra até o cadeado. AGORA.</p>';
+    if (j.p === 'regras') h += '<span class="jt">Duelo final</span><p class="js">Só quem abriu o cadeado joga. O resto da sala torce. Cada acerto me quebra um pouco.</p>';
     if (j.p === 'q') {
       h += '<span class="jt">Erro ' + (j.i + 1) + ' de ' + j.n + (j.e ? ' · ' + escJ(j.e) : '') + '</span>';
       h += '<div class="jhp"><canvas width="44" height="36" aria-hidden="true"></canvas><span>Integridade</span><b><i style="width:' + Math.round((1 - (+j.d || 0)) * 100) + '%"></i></b></div>';
@@ -694,7 +780,8 @@
     }
     if (j.p === 'fim') {
       h += '<p class="js">O Bug foi destruído. O site é de vocês de novo.</p>';
-      h += j.g ? '<p class="jf" style="--c:' + (/^#[0-9a-f]{6}$/i.test(j.c) ? j.c : '#43e0a6') + '"><small>' + (j.e ? 'Grupos finalistas' : 'Grupo finalista') + '</small>' + escJ(j.g) + '</p>' : '<p class="js">A turma toda venceu.</p>';
+      h += j.g ? '<p class="jf" style="--c:' + (/^#[0-9a-f]{6}$/i.test(j.c) ? j.c : '#43e0a6') + '"><small>' + (j.e ? 'Empate' : 'Destruiu o Bug') + '</small>' + escJ(j.g) + '</p>' : '<p class="js">A turma toda venceu.</p>';
+      if (/^[0-9]{4}$/.test(j.cod || '')) h += '<div class="slots ok">' + [...j.cod].map((d) => '<i>' + d + '</i>').join('') + '</div><span class="jt">o código era</span>';
     }
     conteudoJogo.innerHTML = h;
     telaJogo.classList.toggle('rev', !!(j.p === 'q' && j.r));
@@ -739,14 +826,58 @@
     }
   }
 
+
+  /* =====================================================================
+     A CAÇA AO CÓDIGO: a apresentação liga a caça ("k") na invasão.
+     Números liberados: 1º depois do Conserto 1, 2º depois da media query,
+     3º depois da container query, 4º quando tudo quebra (nível 4).
+     ===================================================================== */
+  const hud = document.getElementById('hud'), regras = document.getElementById('regras');
+  const falaBug = document.getElementById('bugFala');
+  const DICAS = [
+    'Agora dá pra ler o 1º número. Procurem perto do hambúrguer.',
+    'O 2º número está dentro do menu ☰. Abram.',
+    'O 3º apareceu na Promoção do dia.',
+    'O último número pisca na tela quando tudo quebra. Não pisquem.'
+  ];
+  let caca = 0, liberados = 0, pararFala = null, timerFala = null;
+  function contarLiberados() {
+    return caca ? [atual >= 1, atual >= 4, atual >= 7, nivelBug >= 4].filter(Boolean).length : 0;
+  }
+  function falar(texto) {
+    if (!falaBug) return;
+    falaBug.querySelector('span').textContent = texto;
+    if (!pararFala) pararFala = animarBug(falaBug.querySelector('canvas'), () => (falaBug.classList.contains('on') ? {} : null));
+    falaBug.classList.add('on'); clearTimeout(timerFala);
+    timerFala = setTimeout(() => falaBug.classList.remove('on'), 6500);
+    try { navigator.vibrate && navigator.vibrate([60, 40, 60]); } catch (e) {}
+  }
+  function atualizarCaca(k) {
+    caca = k ? 1 : 0;
+    if (caca) raiz.dataset.k = '1'; else { delete raiz.dataset.k; regras.hidden = true; }
+    const n = contarLiberados();
+    hud.querySelectorAll('i').forEach((el, i) => el.classList.toggle('on', i < n));
+    if (n > liberados && caca) {
+      hud.classList.remove('pulsa'); void hud.offsetWidth; hud.classList.add('pulsa');
+      setTimeout(() => falar(DICAS[n - 1]), 2400);      // depois do aviso do conserto
+    }
+    liberados = n;
+  }
+  hud.addEventListener('click', () => { regras.hidden = false; });
+  document.getElementById('regrasOk').addEventListener('click', () => { regras.hidden = true; });
+
   /* Escuta o canal. As mensagens dos últimos 45 min chegam primeiro;
      esperamos 300ms e aplicamos só a mais recente. */
   let espera = 3000, pendente = null, timerPendente, aquecido = false;
   let es = null, timerReconexao = null, ultimoSinal = Date.now();
-  function receber(s, j, quando, b) {
-    pendente = { s, j, quando, b };
+  function receber(s, j, quando, b, k) {
+    pendente = { s, j, quando, b, k };
     clearTimeout(timerPendente);
-    timerPendente = setTimeout(() => { aplicar(pendente.s, aquecido); aplicarBug(pendente.b); mostrarJogo(pendente.j, pendente.quando); }, aquecido ? 0 : 300);
+    timerPendente = setTimeout(() => {
+      if (!aquecido) liberados = 99;            // quem chega atrasado não recebe todas as falas de uma vez
+      aplicar(pendente.s, aquecido); aplicarBug(pendente.b); atualizarCaca(pendente.k); mostrarJogo(pendente.j, pendente.quando);
+      if (liberados === 99) liberados = contarLiberados();
+    }, aquecido ? 0 : 300);
   }
   function conectar() {
     clearTimeout(timerReconexao);
@@ -766,7 +897,7 @@
         const d = JSON.parse(e.data);
         if (d.event !== 'message') return;
         const m = JSON.parse(d.message);
-        if (typeof m.s === 'number') receber(m.s, (m.j && typeof m.j === 'object') ? m.j : null, typeof m.t === 'number' ? Math.min(m.t, Date.now()) : Date.now(), typeof m.b === 'number' ? m.b : 0);
+        if (typeof m.s === 'number') receber(m.s, (m.j && typeof m.j === 'object') ? m.j : null, typeof m.t === 'number' ? Math.min(m.t, Date.now()) : Date.now(), typeof m.b === 'number' ? m.b : 0, m.k === 1 ? 1 : 0);
       } catch (erro) {}
     };
     es.onerror = () => {
@@ -799,7 +930,7 @@
   });
 
   /* Para testar no computador: lanchonete.aplicar(5) no console */
-  window.lanchonete = { aplicar: (s) => aplicar(s, true), jogo: (j) => mostrarJogo(j, Date.now()), bug: (b) => aplicarBug(b) };
+  window.lanchonete = { aplicar: (s) => aplicar(s, true), jogo: (j) => mostrarJogo(j, Date.now()), bug: (b) => aplicarBug(b), caca: (k) => atualizarCaca(k) };
   /* modo ensaio: a página de ensaio do app manda o estágio por mensagem */
   addEventListener('message', (e) => {
     const d = e.data;

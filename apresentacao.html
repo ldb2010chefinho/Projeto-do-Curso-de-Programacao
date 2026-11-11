@@ -509,7 +509,7 @@ body.terror .terror-fx{opacity:1;animation:tfFlick 7s infinite}
 .jg-locks{display:flex;gap:6px}
 .jg-locks i{width:20px;height:24px;display:block;background:no-repeat center/contain url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 38'><path d='M9 16V10a7 7 0 0 1 14 0v6' fill='none' stroke='%238d8676' stroke-width='3'/><rect x='4' y='16' width='24' height='20' rx='3' fill='%237a1a12'/></svg>")}
 .jg-locks i.open{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 38'><path d='M9 12V8a7 7 0 0 1 14 0' fill='none' stroke='%238d8676' stroke-width='3'/><rect x='4' y='16' width='24' height='20' rx='3' fill='%2343e0a6'/></svg>")}
-.jg-bug{width:clamp(130px,20vh,230px);height:auto;aspect-ratio:22/18;image-rendering:pixelated;filter:drop-shadow(0 0 26px rgba(194,43,30,.5))}
+.jg-bug{width:clamp(130px,20vh,230px);height:auto;aspect-ratio:52/42;image-rendering:pixelated;filter:drop-shadow(0 0 26px rgba(194,43,30,.5))}
 .jg-say{margin:0;max-width:30ch;font-size:clamp(1.2rem,.8rem + 1.8vw,2.4rem);line-height:1.3;min-height:2.6em;text-wrap:balance}
 .jg-say .cur{display:inline-block;width:.5em;height:.95em;background:#c22b1e;vertical-align:-.1em;animation:jgBlink 1s steps(2) infinite}
 @keyframes jgBlink{50%{opacity:0}}
@@ -564,7 +564,7 @@ body.terror .terror-fx{background:
   repeating-linear-gradient(0deg,rgba(194,43,30,.05) 0 1px,transparent 1px 64px)}
 
 /* O Bug espiando pelo canto (aparições no meio da apresentação) */
-.bug-cameo{position:fixed;right:max(0px,env(safe-area-inset-right,0px));bottom:calc(var(--bot-h) + 14px);width:clamp(84px,9vw,128px);height:auto;aspect-ratio:44/36;
+.bug-cameo{position:fixed;right:max(0px,env(safe-area-inset-right,0px));bottom:calc(var(--bot-h) + 14px);width:clamp(96px,10vw,148px);height:auto;aspect-ratio:52/42;
   z-index:26;pointer-events:none;image-rendering:pixelated;transform:translateX(140%);filter:drop-shadow(0 0 14px rgba(194,43,30,.55))}
 .bug-cameo.on{animation:bugEspia 4.4s cubic-bezier(.3,.8,.3,1) forwards}
 @keyframes bugEspia{0%{transform:translateX(140%)}22%{transform:translateX(18%)}30%{transform:translateX(22%) rotate(-6deg)}
@@ -587,6 +587,45 @@ body[data-bug="4"] .slide.is-active > .inner{animation:dgTear 2.4s steps(1) infi
 body[data-bug="4"] .bug-tint{animation:dgTint 1.4s ease-in-out infinite}
 body[data-bug="3"] .bug-tint{animation:dgTint 5s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){body[data-bug] .slide.is-active *, body[data-bug] .bug-tint{animation:none!important}}
+
+/* ---------- A INVASÃO ---------- */
+.inv{gap:clamp(10px,2vh,20px)}
+.inv-bug{width:clamp(140px,21vh,250px)!important}
+.inv-say{max-width:44ch;min-height:2.7em;font-size:clamp(1.1rem,.7rem + 1.3vw,1.9rem)}
+.inv-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:clamp(16px,3vw,40px);align-items:center;width:min(1080px,100%);text-align:left}
+.inv-rules{margin:0;padding-left:1.4em;display:grid;gap:10px;font-size:clamp(1rem,.75rem + .8vw,1.45rem);line-height:1.35}
+.inv-rules b{color:#ff6a5c;font-weight:400}
+.inv-rules li::marker{color:#c22b1e;font-family:var(--f-mono)}
+.inv-lock{display:grid;gap:10px;justify-items:center;padding:20px;border:1px solid #4c0d08;border-radius:14px;background:#0f0a0c}
+.inv-slots{display:flex;gap:10px}
+.inv-slots i{width:clamp(42px,4.4vw,64px);height:clamp(54px,5.6vw,80px);display:grid;place-items:center;border:2px solid #c22b1e;border-radius:8px;
+  font-style:normal;font-family:var(--f-mono);font-size:clamp(1.6rem,1rem + 2vw,2.6rem);color:#c22b1e;background:#140809;animation:invSlot 2.4s ease-in-out infinite}
+.inv-slots i:nth-child(2){animation-delay:.3s}.inv-slots i:nth-child(3){animation-delay:.6s}.inv-slots i:nth-child(4){animation-delay:.9s}
+@keyframes invSlot{50%{box-shadow:0 0 18px rgba(194,43,30,.6)}}
+.inv-lock span{font-family:var(--f-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#8d8676}
+.inv-slots.aberto i{border-color:#43e0a6;color:#43e0a6;animation:none}
+@media (max-width:760px){.inv-grid{grid-template-columns:1fr}}
+
+/* fala do Bug nas aparições */
+.bug-fala{position:fixed;right:clamp(84px,9vw,128px);bottom:calc(var(--bot-h) + 70px);z-index:27;max-width:min(360px,60vw);padding:12px 16px;border:1px solid #c22b1e;border-radius:12px 12px 2px 12px;
+  background:#0d0709;color:#efe6d2;font-family:"Special Elite","Courier New",monospace;font-size:clamp(.95rem,.8rem + .4vw,1.2rem);line-height:1.3;
+  opacity:0;transform:translateY(8px);pointer-events:none;box-shadow:0 10px 40px rgba(194,43,30,.35)}
+.bug-fala.on{animation:falaIn 5.6s ease forwards}
+@keyframes falaIn{0%,14%{opacity:0;transform:translateY(8px)}20%,82%{opacity:1;transform:none}100%{opacity:0}}
+.bug-cameo.on{animation-duration:6s}
+
+/* bordas da tela falhando (nível 2 a 4) */
+.bordas{position:fixed;inset:var(--top-h) 0 var(--bot-h) 0;z-index:23;pointer-events:none;opacity:0}
+.bordas::before,.bordas::after{content:"";position:absolute;top:0;bottom:0;width:var(--bw,10px);
+  background:repeating-linear-gradient(180deg,rgba(255,42,31,.75) 0 3px,transparent 3px 9px,rgba(82,213,255,.6) 9px 11px,transparent 11px 23px,rgba(239,230,210,.4) 23px 24px,transparent 24px 37px);
+  background-size:100% 220px;animation:bordaCorre .9s steps(6) infinite}
+.bordas::before{left:0}.bordas::after{right:0;animation-direction:reverse}
+@keyframes bordaCorre{to{background-position:0 220px}}
+@keyframes bordaPisca{0%,100%{opacity:var(--bo,.5)}40%{opacity:.1}45%{opacity:var(--bo,.5)}70%{opacity:.25}}
+body[data-bug="2"] .bordas{--bw:6px;--bo:.35;opacity:.35;animation:bordaPisca 3s steps(1) infinite}
+body[data-bug="3"] .bordas{--bw:14px;--bo:.6;opacity:.6;animation:bordaPisca 1.6s steps(1) infinite}
+body[data-bug="4"] .bordas{--bw:34px;--bo:.85;opacity:.85;animation:bordaPisca .6s steps(1) infinite}
+@media (prefers-reduced-motion:reduce){.bordas,.bordas::before,.bordas::after{animation:none!important}}
 /* ---------- ÚLTIMO CAPÍTULO: PLOT TWIST (Bootstrap) ---------- */
 :root{--bs:#7952b3;--bs2:#b9a2f0}
 /* A. rebobinar: os 8 consertos do dia */
@@ -1023,6 +1062,29 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= ATO 1 ================= -->
+<!-- ================= A INVASÃO DO BUG =================
+     O Bug toma o site e explica as regras da caça ao código.
+     Código: 4 números escondidos no site do celular; cada número só aparece
+     quando a parte certa do site é consertada. -->
+<section class="slide inv-slide" data-act="Abertura · A invasão" data-stage="0" data-codigo="1">
+  <div class="inner jg inv">
+    <canvas class="jg-bug inv-bug" width="52" height="42" aria-label="O Bug: uma aranha de pixels com olhos vermelhos que vaza para fora da tela"></canvas>
+    <p class="jg-say inv-say" id="invSay" data-text="Eu sou o Bug. Este site agora é meu. Tranquei ele com um código."></p>
+    <div class="inv-grid">
+      <ol class="inv-rules">
+        <li>O código tem <b>4 números</b>. Eles estão <b>escondidos no site</b> que está no celular de vocês.</li>
+        <li>Cada número só aparece quando <b>a parte certa do site for consertada</b>. Fiquem de olho.</li>
+        <li>Quem descobrir os 4 números corre até <b>o cadeado aqui na frente</b> e tenta abrir.</li>
+        <li>Os primeiros a abrir vão para o <b>duelo final</b>.</li>
+      </ol>
+      <div class="inv-lock" aria-label="Código de 4 números, ainda trancado">
+        <div class="inv-slots"><i>?</i><i>?</i><i>?</i><i>?</i></div>
+        <span>código do Bug</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="slide" data-act="Ato 1 · O problema" data-stage="0">
   <div class="inner act">
     <svg class="act-glyph" viewBox="0 0 190 250" aria-hidden="true"><text x="95" y="225" text-anchor="middle">1</text></svg>
@@ -1253,7 +1315,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= AINDA QUEBRADO ================= -->
-<section class="slide" data-act="Ato 1 → Ato 2" data-stage="1" data-cameo>
+<section class="slide" data-act="Ato 1 → Ato 2" data-stage="1" data-cameo="O primeiro número já dá pra ler. Procurem perto do hambúrguer.">
   <div class="inner split">
     <div class="stack" style="gap:20px">
       <div class="eyebrow"><span class="tag warn">Funcionou. Mas…</span></div>
@@ -1472,7 +1534,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= DETALHES QUEBRADOS ================= -->
-<section class="slide" data-act="Ato 2 → Ato 3" data-stage="2" data-cameo>
+<section class="slide" data-act="Ato 2 → Ato 3" data-stage="2" data-cameo="O segundo número se esconde dentro do menu ☰. Abram.">
   <div class="inner split">
     <div class="stack" style="gap:20px">
       <div class="eyebrow"><span class="tag warn">Funcionou. Mas…</span></div>
@@ -1590,7 +1652,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= RÉGUA ELÁSTICA ================= -->
-<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2" data-cameo>
+<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2">
   <div class="inner">
     <div class="eyebrow"><span class="tag warn">Interação</span> Régua elástica</div>
     <div class="split" style="align-items:start">
@@ -1671,7 +1733,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= FRAMEWORKS ================= -->
-<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2">
+<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2" data-cameo="O terceiro só aparece na Promoção do dia, quando a caixa fica grande.">
   <div class="inner">
     <div class="eyebrow"><span class="tag warn">Levantem a mão</span> Frameworks CSS</div>
     <p class="big-q" style="font-size:var(--fs-md);max-width:none">Quem já ouviu falar de Bootstrap? E de Tailwind?</p>
@@ -1699,7 +1761,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= COMO TESTAR ================= -->
-<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="3" data-bug="3" data-cameo>
+<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="3" data-bug="3" data-cameo="Estou me espalhando pelas bordas…">
   <div class="inner">
     <div class="eyebrow">Como sabemos que realmente funciona?</div>
     <div class="tests">
@@ -1767,7 +1829,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= UM SITE ================= -->
-<section class="slide" data-act="Fechamento" data-stage="4" data-bug="4" data-bug-delay="2600">
+<section class="slide" data-act="Fechamento" data-stage="4" data-bug="4" data-bug-delay="2600" data-cameo="O último número aparece quando TUDO quebrar. Não pisquem.">
   <div class="inner finale">
     <div class="morph-dev" aria-hidden="true"><div class="md-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
     <h2>Um site. <span class="accent">Todas as telas.</span></h2>
@@ -1794,15 +1856,15 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
     <div class="jg-top"><span class="jg-tag">O Jogo do Bug</span><span class="jg-locks" id="jgLocks"></span></div>
     <div class="jg-pane" data-p="intro">
       <canvas class="jg-bug" width="22" height="18" aria-label="O Bug: um inseto de pixels que vaza para fora da tela"></canvas>
-      <p class="jg-say" id="jgSay1" data-text="Vocês acharam que tinham consertado tudo? Eu estava escondido no código o tempo todo."></p>
+      <p class="jg-say" id="jgSay1" data-text="O código está completo. Quem tem os 4 números: corra até o cadeado. AGORA."></p>
     </div>
     <div class="jg-pane" data-p="regras">
-      <p class="jg-say" id="jgSay2" data-text="Vamos jogar um jogo. Cada erro que vocês acertarem me quebra um pouco."></p>
+      <p class="jg-say" id="jgSay2" data-text="Duelo final. Só quem abriu o cadeado joga. Cada acerto me quebra um pouco."></p>
       <ul class="jg-rules">
-        <li>Cada grupo é um jogador.</li>
-        <li>15 segundos por prova. Levantem a letra antes do tempo acabar.</li>
-        <li>Cada erro corrigido abre um cadeado e enfraquece o Bug.</li>
-        <li>Abram todos os cadeados para destruir o Bug e salvar o site.</li>
+        <li>Quem abriu o cadeado vira finalista (na ordem em que chegou).</li>
+        <li>3 perguntas, 15 segundos cada. Cada finalista mostra a resposta com a mão: 1, 2, 3 ou 4 dedos (A, B, C, D).</li>
+        <li>Cada acerto vale 1 ponto e enfraquece o Bug.</li>
+        <li>Quem fizer mais pontos destrói o Bug e salva o site.</li>
       </ul>
     </div>
     <div class="jg-pane jg-q" data-p="q" id="jgQ">
@@ -1820,7 +1882,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
       <p class="jg-win" id="jgWin"></p>
     </div>
     <div class="jg-board" id="jgBoard"></div>
-    <p class="jg-hint"><kbd>→</kbd> avança · depois de revelar, <kbd>1</kbd>–<kbd>5</kbd> (ou clique) marca os grupos que acertaram</p>
+    <p class="jg-hint"><kbd>→</kbd> avança · depois de revelar, <kbd>1</kbd>–<kbd>5</kbd> (ou clique) marca os finalistas que acertaram</p>
     <i data-frag="1" hidden></i>
     <i data-frag="2" hidden></i>
     <i data-frag="3" hidden></i>
@@ -1829,17 +1891,11 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
     <i data-frag="6" hidden></i>
     <i data-frag="7" hidden></i>
     <i data-frag="8" hidden></i>
-    <i data-frag="9" hidden></i>
-    <i data-frag="10" hidden></i>
-    <i data-frag="11" hidden></i>
-    <i data-frag="12" hidden></i>
-    <i data-frag="13" hidden></i>
-    <i data-frag="14" hidden></i>
   </div>
 </section>
 
 <!-- ================= A. REBOBINAR ================= -->
-<section class="slide" data-act="Último capítulo · Plot twist" data-stage="4" data-enter="rewind" data-bug="0">
+<section class="slide" data-act="Último capítulo · Plot twist" data-stage="4" data-enter="rewind" data-bug="0" data-codigo="0">
   <div class="inner">
     <div class="rw-head">
       <span class="rw-vhs" id="rwVhs">◀◀ REBOBINANDO</span>
@@ -1935,7 +1991,9 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 <i class="voz-line" aria-hidden="true"></i>
 <i class="terror-fx" aria-hidden="true"></i>
 <i class="bug-tint" aria-hidden="true"></i>
-<canvas class="bug-cameo" id="bugCameo" width="44" height="36" aria-hidden="true"></canvas>
+<canvas class="bug-cameo" id="bugCameo" width="52" height="42" aria-hidden="true"></canvas>
+<p class="bug-fala" id="bugFala" aria-live="polite"></p>
+<i class="bordas" aria-hidden="true"></i>
 <i class="jg-flash" id="jgFlash" aria-hidden="true"></i>
 <footer class="botbar">
   <div class="track" id="track"></div>
@@ -2592,7 +2650,7 @@ function autoHooks(s){
    Tons tirados da própria paleta dos slides (--ok, azul elétrico clareado, --warn).
    Um fragmento com data-voz troca a cor no meio do slide.
    ========================================================= */
-const VOZ_POR_SLIDE = 'LTMTLTMLMTMLTM' + 'LTMMTMLTLLT' + 'MLTMTLMTLMTL' + 'MA' + 'A' + 'MTT' + '-';
+const VOZ_POR_SLIDE = 'LTMATLTMLMTMLTM' + 'LTMMTMLTLLT' + 'MLTMTLMTLMTL' + 'MA' + 'A' + 'MTT' + '-';
 const VOZ_COR = { L:'#43e0a6', T:'#5b8cff', M:'#ffd25c' };
 const VOZ_TODOS = 'linear-gradient(90deg,#43e0a6,#5b8cff,#ffd25c)';
 function vozEm(n, fi){
@@ -2611,6 +2669,7 @@ function pintarVoz(){
   r.setProperty('--voz-next', prox === 'A' ? '#e8efff' : (VOZ_COR[prox] || 'var(--line)'));
   $('#voz').classList.toggle('troca', prox !== agora && prox !== '-');
   if(window.JOGO) window.JOGO.sync();
+  if(window.INVASAO) window.INVASAO.sync();
   if(window.BUGNIVEL) window.BUGNIVEL.sync();
 }
 
@@ -2625,7 +2684,7 @@ function prev(){ const s=slides[cur]; if(s._fi > 0){ s._fi--; s._frags[s._fi].cl
 const LIVE = (() => {
   const CANAL = 'lanchonete-pixel-ldb-oterimxu';   // o mesmo nome está no site (index.html)
   const NOMES = ['Site quebrado','Conserto 1 · meta viewport','Conserto 2 · Flexbox','Conserto 2 · Grid','Conserto 2 · media query','Conserto 3 · max-width: 100%','Conserto 3 · clamp()','Conserto 3 · container query','Caça ao bug','Site consertado','Plot twist · Bootstrap'];
-  let atual = null, envio = 0, rede = 'idle', jogo = null, bug = 0, tEnvio = null;   // jogo = tela do Jogo do Bug · bug = nível de falha (0 a 4)
+  let atual = null, envio = 0, rede = 'idle', jogo = null, bug = 0, cod = 0, tEnvio = null;   // jogo = tela do Jogo do Bug · bug = nível de falha (0 a 4)
   const pill = $('#livePill'), txt = $('#liveTxt'), panel = $('#livePanel'), grid = $('#lpGrid'), msg = $('#lpMsg');
   $('#lpCanal').textContent = 'ntfy.sh/' + CANAL;
   grid.innerHTML = NOMES.map((n,i) => `<button data-s="${i}" aria-pressed="false"><small>etapa ${i}</small>${esc(n)}</button>`).join('');
@@ -2649,7 +2708,7 @@ const LIVE = (() => {
     }
     const id = ++envio; confirmado = false;
     rede = 'sending'; pintar();
-    const tentar = (n) => fetch('https://ntfy.sh/' + CANAL, { method:'POST', body: JSON.stringify(Object.assign({ s, t: Date.now() }, jogo ? { j: jogo } : {}, bug ? { b: bug } : {})) })
+    const tentar = (n) => fetch('https://ntfy.sh/' + CANAL, { method:'POST', body: JSON.stringify(Object.assign({ s, t: Date.now() }, jogo ? { j: jogo } : {}, bug ? { b: bug } : {}, cod ? { k: cod } : {})) })
       .then(r => { if(!r.ok) throw new Error(r.status); if(id === envio){ rede = 'ok'; pintar(); } })
       .catch(() => { if(id !== envio) return; rede = 'off'; pintar(); if(n < 4) setTimeout(() => { if(id === envio) tentar(n + 1); }, 2000 * 2 ** n); });
     tentar(0);
@@ -2702,7 +2761,8 @@ const LIVE = (() => {
     jogo = j; if(atual !== null) enviar();
   }
   function setBug(n){ if(n === bug) return; bug = n; if(atual !== null) enviar(); }
-  return { set, get: () => atual, abrir, setJogo, setBug };
+  function setCodigo(n){ if(n === cod) return; cod = n; if(atual !== null) enviar(); }
+  return { set, get: () => atual, abrir, setJogo, setBug, setCodigo };
 })();
 
 
@@ -2714,69 +2774,75 @@ const LIVE = (() => {
    · último: grupo finalista. Cada passo também vai para os celulares.
    ========================================================= */
 /* =====================================================================
-   "O BUG" (mascote do jogo, personagem original)
-   Um besouro de pixels cujo casco é uma janela de navegador. A parte direita
-   VAZA da viewport (linha tracejada azul) e aparece deslocada e "fantasma",
-   como um layout quebrado. Uma barra de rolagem lateral fica embaixo dele.
-   op = { dano: 0..1 (rachaduras), some: 0..1 (desintegra em pixels) }
+   "O BUG" (mascote, personagem original): uma aranha-besouro de pixels,
+   casco preto com rachaduras vermelhas que brilham e um "</>" em brasa,
+   olhos vermelhos acesos, pinças e pernas longas com garras.
+   A parte direita VAZA da viewport (linha tracejada azul) e sai deslocada,
+   com um "fantasma" azul, como um layout quebrado.
+   op = { dano: 0..1 (rachaduras brancas), some: 0..1 (desintegra), falha: bool }
    ===================================================================== */
 function desenharBug(cv, t, op) {
   op = op || {};
-  var W = 44, H = 36, CX = 19, VX = 30;
+  var W = 52, H = 42, CX = 22, VX = 36;
   if (cv.width !== W) { cv.width = W; cv.height = H; }
   var g = cv.getContext('2d');
   var off = desenharBug._a || (desenharBug._a = document.createElement('canvas'));
   var fan = desenharBug._b || (desenharBug._b = document.createElement('canvas'));
   off.width = fan.width = W; off.height = fan.height = H;
   var o = off.getContext('2d');
-  function px(x, y, c) { o.fillStyle = c; o.fillRect(Math.round(x), Math.round(y), 1, 1); }
-  var passo = Math.floor(t / 170) % 2;
-  var aceso = (t % 2300) > 160;                 // pisca de vez em quando
-  var OSSO = '#efe6d2', CASCO = '#9a2016', CLARO = '#d8402f', BORDA = '#4c0d08', ESCURO = '#17121a';
+  function px(x, y, c) { if (x < 0 || y < 0 || x >= W || y >= H) return; o.fillStyle = c; o.fillRect(Math.round(x), Math.round(y), 1, 1); }
+  function linha(x0, y0, x1, y1, c) { var n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)) || 1; for (var i = 0; i <= n; i++) px(x0 + (x1 - x0) * i / n, y0 + (y1 - y0) * i / n, c); }
+  var passo = Math.floor(t / 150) % 2;
+  var aceso = (t % 2600) > 140;
+  var pulso = 0.5 + 0.5 * Math.sin(t / 380);
+  var OSSO = '#d9cfb8', GARRA = '#ffffff', BRASA = pulso > .5 ? '#ff2a1f' : '#d81e14', BRASA2 = '#6e0f0b';
 
-  // antenas (pontas vermelhas, como cursores)
-  var bal = Math.round(Math.sin(t / 260));
-  [[-1, 1], [1, 1]].forEach(function (lado) {
-    var s = lado[0];
-    for (var i = 0; i < 6; i++) px(CX + s * (2 + i), 5 - Math.floor(i / 1.6) + (i > 3 ? bal * s * 0 : 0) - (i === 5 ? bal : 0), i === 5 ? '#ff3b2f' : OSSO);
-  });
-  // pernas: 3 de cada lado, alternando o passo
-  [15, 21, 27].forEach(function (y, k) {
-    var sobe = ((k + passo) % 2) ? -1 : 1;
+  // antenas quebradas
+  linha(CX - 3, 7, CX - 7, 3, '#8a7f6c'); linha(CX - 7, 3, CX - 11, 1 + passo, '#8a7f6c'); px(CX - 12, 1 + passo, BRASA);
+  linha(CX + 3, 7, CX + 7, 3, '#8a7f6c'); linha(CX + 7, 3, CX + 11, 2 - passo, '#8a7f6c'); px(CX + 12, 2 - passo, BRASA);
+  // pernas longas com garras (4 de cada lado), tremendo
+  [20, 25, 30, 35].forEach(function (y, k) {
+    var tr = ((k + passo) % 2) ? -1 : 1;
     for (var s = -1; s <= 1; s += 2) {
-      var x0 = CX + s * 10;
-      px(x0 + s * 1, y, OSSO); px(x0 + s * 2, y, OSSO); px(x0 + s * 3, y + sobe * 0, OSSO);
-      px(x0 + s * 4, y + sobe, OSSO); px(x0 + s * 5, y + sobe * 2, OSSO);
+      var x0 = CX + s * 11, jx = x0 + s * 5, jy = y - 4 + tr, fx = x0 + s * 9, fy = y + 3 + (k > 1 ? 2 : 0);
+      linha(x0, y, jx, jy, OSSO); linha(jx, jy, fx, fy, OSSO); px(fx + s, fy + 1, GARRA);
     }
   });
-  // casco (elipse) com contorno, brilho e a divisão do meio
-  for (var y = 11; y <= 31; y++) for (var x = CX - 11; x <= CX + 11; x++) {
-    var dx = (x - CX) / 11, dy = (y - 21) / 10, d = dx * dx + dy * dy;
+  // casco (elipse)
+  for (var y = 16; y <= 39; y++) for (var x = CX - 12; x <= CX + 12; x++) {
+    var dx = (x - CX) / 12, dy = (y - 27.5) / 11.5, d = dx * dx + dy * dy;
     if (d > 1) continue;
-    var c = CASCO;
-    if (d > 0.78) c = BORDA; else if (dx + dy < -0.85) c = CLARO;
-    if (x === CX && y > 16) c = '#2a0706';
+    var c = '#2a0d10';
+    if (d > 0.8) c = '#12060a'; else if (dx + dy < -0.9) c = '#4a1418';
+    if (x === CX && y > 18) c = '#05020a';
     px(x, y, c);
   }
-  // barra de título de janela no casco, com os 3 botões
-  for (var x2 = CX - 8; x2 <= CX + 8; x2++) { px(x2, 14, '#2b2230'); px(x2, 15, '#2b2230'); }
-  px(CX - 7, 14, '#ff5a4f'); px(CX - 5, 14, '#ffbf52'); px(CX - 3, 14, '#43e0a6');
-  // "</>" gravado no casco
+  // rachaduras que brilham no casco
+  [[CX-9,22],[CX-8,23],[CX-7,23],[CX-6,24],[CX-6,25],[CX-5,26],[CX+6,20],[CX+7,21],[CX+7,22],[CX+8,23],[CX+9,24],[CX-4,33],[CX-5,34],[CX-6,35],[CX+4,32],[CX+5,33],[CX+5,34],[CX+6,35]]
+    .forEach(function (p, i) { px(p[0], p[1], (i % 3) ? BRASA : BRASA2); });
+  // "</>" em brasa
   var G = { '<': [[2,0],[1,1],[0,2],[1,3],[2,4]], '/': [[2,0],[2,1],[1,2],[0,3],[0,4]], '>': [[0,0],[1,1],[2,2],[1,3],[0,4]] };
-  ['<', '/', '>'].forEach(function (ch, i) { G[ch].forEach(function (p) { px(CX - 6 + i * 4 + p[0], 20 + p[1], '#f6c9b8'); }); });
-  // cabeça e olhos
-  for (var y3 = 6; y3 <= 12; y3++) for (var x3 = CX - 6; x3 <= CX + 6; x3++) {
-    var a = (x3 - CX) / 6.2, b = (y3 - 9.5) / 3.6; if (a * a + b * b <= 1) px(x3, y3, ESCURO);
+  ['<', '/', '>'].forEach(function (ch, i) { G[ch].forEach(function (p) { px(CX - 6 + i * 4 + p[0], 26 + p[1], BRASA); }); });
+  // cabeça
+  for (var y3 = 5; y3 <= 17; y3++) for (var x3 = CX - 8; x3 <= CX + 8; x3++) {
+    var a = (x3 - CX) / 7.5, b = (y3 - 11) / 5.6; if (a * a + b * b <= 1) px(x3, y3, '#0d0709');
   }
-  var olho = aceso ? '#ff3b2f' : '#3a1210';
-  [[CX - 4, 8], [CX + 2, 8]].forEach(function (e) { px(e[0], e[1], olho); px(e[0] + 1, e[1], olho); px(e[0], e[1] + 1, olho); px(e[0] + 1, e[1] + 1, olho); if (aceso) px(e[0], e[1], '#ffd2c8'); });
-  px(CX - 2, 12, OSSO); px(CX + 2, 12, OSSO);       // pinças
-  // rachaduras (dano)
-  var R = [[CX+4,13],[CX+5,14],[CX+5,15],[CX+6,16],[CX+5,17],[CX+6,18],[CX+7,19],[CX+6,20],[CX+7,21],[CX+8,22],[CX-6,24],[CX-5,25],[CX-6,26],[CX-4,27],[CX-5,28],[CX-3,29],[CX+3,26],[CX+4,27],[CX+2,28],[CX+3,29]];
+  // pinças
+  [[-1],[1]].forEach(function (s) { s = s[0];
+    px(CX + s * 3, 16, OSSO); px(CX + s * 4, 17, OSSO); px(CX + s * 4, 18, OSSO); px(CX + s * 3, 19, OSSO); px(CX + s * 2, 20, GARRA); });
+  // olhos (com brilho em volta)
+  var olho = aceso ? '#ff2a1f' : '#3a0a08';
+  [[CX - 5, 9], [CX + 2, 9]].forEach(function (e) {
+    if (aceso) for (var yy = -1; yy <= 3; yy++) for (var xx = -1; xx <= 3; xx++) if (xx < 0 || yy < 0 || xx > 2 || yy > 2) px(e[0] + xx, e[1] + yy, '#3d0806');
+    for (var yy2 = 0; yy2 < 3; yy2++) for (var xx2 = 0; xx2 < 3; xx2++) px(e[0] + xx2, e[1] + yy2, olho);
+    if (aceso) px(e[0] + 1, e[1] + 1, '#ffe2d8');
+  });
+  // dano: rachaduras brancas
+  var R = [[CX+3,18],[CX+4,19],[CX+4,20],[CX+5,21],[CX+4,22],[CX+5,23],[CX+6,24],[CX+5,25],[CX-3,29],[CX-2,30],[CX-3,31],[CX-1,32],[CX-2,33],[CX,34],[CX+2,29],[CX+3,30],[CX+1,31],[CX+2,32],[CX-6,18],[CX-7,19]];
   var nR = Math.floor((op.dano || 0) * R.length);
-  for (var r = 0; r < nR; r++) px(R[r][0], R[r][1], '#0b0809');
+  for (var r = 0; r < nR; r++) px(R[r][0], R[r][1], '#f4efe6');
 
-  // monta: parte dentro da viewport normal; parte de fora deslocada + fantasma azul
+  // monta: dentro da viewport normal; fora, deslocado + fantasma azul
   g.clearRect(0, 0, W, H);
   g.drawImage(off, 0, 0, VX, H, 0, 0, VX, H);
   var f = fan.getContext('2d'); f.clearRect(0, 0, W, H);
@@ -2784,32 +2850,34 @@ function desenharBug(cv, t, op) {
   f.globalCompositeOperation = 'source-atop'; f.fillStyle = 'rgba(82,213,255,.85)'; f.fillRect(0, 0, W, H); f.globalCompositeOperation = 'source-over';
   g.globalAlpha = .55; g.drawImage(fan, 2, 1); g.globalAlpha = 1;
   g.drawImage(off, VX, 0, W - VX, H, VX + 1, 2, W - VX, H);
-  // falha: uma faixa horizontal escorrega de vez em quando
-  if ((t % 1700) < 140 || op.falha) {
-    var fy = 8 + Math.floor((t / 140) % 18);
-    var tira = g.getImageData(0, fy, W, 3); g.clearRect(0, fy, W, 3); g.putImageData(tira, (t % 2) ? 2 : -2, fy);
+  // falha: faixas escorregam
+  if ((t % 1500) < 160 || op.falha) {
+    var fy = 6 + Math.floor((t / 130) % 28);
+    var tira = g.getImageData(0, fy, W, 3); g.clearRect(0, fy, W, 3); g.putImageData(tira, (Math.floor(t / 60) % 2) ? 3 : -3, fy);
   }
-  // borda da viewport (tracejada) e barra de rolagem lateral
-  g.fillStyle = '#52d5ff'; for (var yy = 0; yy < H - 3; yy += 3) g.fillRect(VX, yy, 1, 2);
+  // estática em volta
+  for (var k2 = 0; k2 < 7; k2++) {
+    var hx = Math.floor(((t / 90 + k2 * 37) * 7919) % W), hy = Math.floor(((t / 90 + k2 * 53) * 104729) % (H - 4));
+    g.fillStyle = k2 % 2 ? 'rgba(255,42,31,.7)' : 'rgba(82,213,255,.6)'; g.fillRect(hx, hy, 1, 1);
+  }
+  // borda da viewport e barra de rolagem lateral
+  g.fillStyle = '#52d5ff'; for (var yy3 = 0; yy3 < H - 3; yy3 += 3) g.fillRect(VX, yy3, 1, 2);
   g.fillStyle = '#2a2630'; g.fillRect(2, H - 2, W - 4, 1);
   g.fillStyle = '#8d8676'; g.fillRect(2, H - 2, VX - 4, 1);
-  // desintegra em pixels (fim do jogo)
+  // desintegra
   if (op.some > 0) {
     var img = g.getImageData(0, 0, W, H), dd = img.data;
-    for (var i2 = 0; i2 < W * H; i2++) {
-      var h = ((i2 * 2654435761) >>> 0) % 1000 / 1000;
-      if (h < op.some) dd[i2 * 4 + 3] = 0;
-    }
+    for (var i2 = 0; i2 < W * H; i2++) { if ((((i2 * 2654435761) >>> 0) % 1000) / 1000 < op.some) dd[i2 * 4 + 3] = 0; }
     g.putImageData(img, 0, 0);
   }
 }
-/* anima um canvas do Bug (~9 quadros por segundo); op pode ser uma função */
+/* anima um canvas do Bug (~10 quadros por segundo); op pode ser uma função */
 function animarBug(cv, op) {
   var vivo = true, ultimo = 0, t0 = performance.now();
   var calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
   function loop(agora) {
     if (!vivo) return;
-    if (agora - ultimo > 110) {
+    if (agora - ultimo > 100) {
       ultimo = agora;
       var o = typeof op === 'function' ? op() : op;
       if (o) desenharBug(cv, calmo ? 1000 : agora - t0, o);
@@ -2821,8 +2889,9 @@ function animarBug(cv, op) {
 }
 
 window.JOGO = (() => {
-  const PROVAS = [{"e": "viewport", "q": "Sem a meta viewport, o navegador do celular finge ter uma tela de uns…", "o": ["320px", "980px", "1920px", "100%"], "c": 1, "why": "Por isso o site aparecia minúsculo: a página era desenhada em ~980px e encolhida."}, {"e": "viewport", "q": "O que `width=device-width` faz?", "o": ["Trava o zoom", "Usa a largura real da tela do aparelho", "Deixa as imagens maiores", "Esconde o menu"], "c": 1, "why": "É o Conserto 1: a página passa a ter a largura de verdade do celular."}, {"e": "layout", "q": "Para organizar em DUAS dimensões (linhas e colunas), o melhor é…", "o": ["Flexbox", "Grid", "`float`", "`position`"], "c": 1, "why": "Flexbox trabalha numa dimensão (o menu); Grid em duas (o cardápio, a página)."}, {"e": "breakpoint", "q": "Mobile-first: você começa pela tela menor e vai adicionando com…", "o": ["`max-width`", "`min-width`", "`!important`", "`display: none`"], "c": 1, "why": "Media queries com min-width acrescentam regras conforme a tela cresce."}, {"e": "tipografia", "q": "Em `clamp(1.5rem, 5vw, 3rem)`, o primeiro valor é o…", "o": ["Máximo", "Ideal", "Mínimo", "Breakpoint"], "c": 2, "why": "Mínimo, ideal e máximo: o título nunca fica menor que 1.5rem nem maior que 3rem."}, {"e": "imagem", "q": "Qual atributo oferece a MESMA foto em vários tamanhos?", "o": ["`alt`", "`srcset`", "`loading`", "`class`"], "c": 1, "why": "Com srcset, o navegador escolhe o arquivo do tamanho certo e economiza internet."}];
-  const GRUPOS = [{"n": "Grupo 1", "c": "#ff5a4f"}, {"n": "Grupo 2", "c": "#ffbf52"}, {"n": "Grupo 3", "c": "#43e0a6"}, {"n": "Grupo 4", "c": "#52d5ff"}, {"n": "Grupo 5", "c": "#b9a2f0"}];
+  const PROVAS = [{"e": "viewport", "q": "Sem a meta viewport, o navegador do celular finge ter uma tela de uns…", "o": ["320px", "980px", "1920px", "100%"], "c": 1, "why": "Por isso o site aparecia minúsculo: a página era desenhada em ~980px e encolhida."}, {"e": "breakpoint", "q": "Mobile-first: você começa pela tela menor e vai adicionando com…", "o": ["`max-width`", "`min-width`", "`!important`", "`display: none`"], "c": 1, "why": "Media queries com min-width acrescentam regras conforme a tela cresce."}, {"e": "imagem", "q": "Qual atributo oferece a MESMA foto em vários tamanhos?", "o": ["`alt`", "`srcset`", "`loading`", "`class`"], "c": 1, "why": "Com srcset, o navegador escolhe o arquivo do tamanho certo e economiza internet."}];
+  const GRUPOS = [{"n": "Finalista 1", "c": "#ff5a4f"}, {"n": "Finalista 2", "c": "#ffbf52"}, {"n": "Finalista 3", "c": "#43e0a6"}, {"n": "Finalista 4", "c": "#52d5ff"}, {"n": "Finalista 5", "c": "#b9a2f0"}];
+  const CODIGO = "3816";
   const TEMPO = 15;
     const slide = $('.jogo-slide'); if(!slide) return { sync(){} };
   const pontos = GRUPOS.map(() => 0), marcados = PROVAS.map(() => new Set());
@@ -2882,8 +2951,8 @@ window.JOGO = (() => {
       painel('fim'); digitar($('#jgSay3')); cadeados(PROVAS.length); placar(-1); vida(1); desintegrar();
       const f = finalista();
       $('#jgWin').style.setProperty('--c', f ? f.cor : '#e9e2d0');
-      $('#jgWin').innerHTML = f ? `<small>${f.empate ? 'Grupos finalistas' : 'Grupo finalista'} · destruíram o Bug</small>${esc2(f.nome)}` : '<small>O Bug foi destruído pela turma toda</small>';
-      LIVE.setJogo({ p:'fim', g: f ? f.nome : '', c: f ? f.cor : '', e: f ? f.empate : false });
+      $('#jgWin').innerHTML = (f ? `<small>${f.empate ? 'Empate' : 'Destruiu o Bug'}</small>${esc2(f.nome)}` : '<small>O Bug foi destruído pela turma toda</small>') + `<small style="margin-top:14px">o código era ${CODIGO}</small>`;
+      LIVE.setJogo({ p:'fim', g: f ? f.nome : '', c: f ? f.cor : '', e: f ? f.empate : false, cod: CODIGO });
       return;
     }
     const qi = Math.floor((passo - 2) / 2), revelado = (passo - 2) % 2 === 1, pv = PROVAS[qi];
@@ -2924,20 +2993,55 @@ window.JOGO = (() => {
 })();
 
 /* =========================================================
+   A INVASÃO: o Bug toma o site e explica a caça ao código.
+   Os celulares mostram as mesmas regras enquanto este slide estiver na tela.
+   ========================================================= */
+window.INVASAO = (() => {
+  const slide = $('.inv-slide'); if(!slide) return { sync(){} };
+  const bug = $('.inv-bug', slide);
+  animarBug(bug, () => slide.classList.contains('is-active') ? { falha: false } : null);
+  let estava = false;
+  function sync(){
+    const ativo = slides[cur] === slide;
+    if(ativo){
+      document.body.classList.add('terror');
+      LIVE.setJogo({ p: 'inv' });
+      if(!estava){
+        const say = $('#invSay'), txt = say.dataset.text; let i = 0; clearInterval(say._t);
+        if(REDUCED) say.textContent = txt;
+        else { say.innerHTML = '<span class="cur"></span>'; say._t = setInterval(() => { i++; say.innerHTML = txt.slice(0, i) + '<span class="cur"></span>'; if(i >= txt.length) clearInterval(say._t); }, 40); }
+        if(!REDUCED){
+          const f = $('#jgFlash'); f.classList.remove('go'); void f.offsetWidth; f.classList.add('go');
+          const m = document.querySelector('main'); m.classList.remove('jg-shake'); void m.offsetWidth; m.classList.add('jg-shake');
+          bug.animate([{ transform:'scale(.2)', opacity:0 }, { transform:'scale(1.35)', opacity:1, offset:.55 }, { transform:'scale(1)' }], { duration: 900, easing:'cubic-bezier(.2,.9,.3,1.3)' });
+        }
+      }
+    }
+    estava = ativo;
+  }
+  return { sync };
+})();
+
+/* =========================================================
    O BUG NO MEIO DA APRESENTAÇÃO
    data-cameo: o Bug espia pelo canto ao entrar no slide.
    data-bug="N": a partir daquele slide, tudo "buga" no nível N (0 a 4),
    nos slides e nos celulares. data-bug-delay: espera antes de piorar.
    ========================================================= */
 window.BUGNIVEL = (() => {
-  const niveis = []; let n = 0;
-  slides.forEach((s, i) => { if(s.dataset.bug !== undefined) n = +s.dataset.bug; niveis[i] = n; });
+  const niveis = [], codigo = []; let n = 0, k = 0;
+  slides.forEach((s, i) => {
+    if(s.dataset.bug !== undefined) n = +s.dataset.bug; niveis[i] = n;
+    if(s.dataset.codigo !== undefined) k = +s.dataset.codigo; codigo[i] = k;
+  });
+  const fala = $('#bugFala');
   const cameo = $('#bugCameo');
   if(cameo) animarBug(cameo, () => cameo.classList.contains('on') ? { falha: false } : null);
   let anterior = -1, atraso = null;
-  function aparecer(){
-    if(REDUCED || !cameo) return;
-    cameo.classList.remove('on'); void cameo.offsetWidth; cameo.classList.add('on');
+  function aparecer(texto){
+    if(!cameo) return;
+    if(!REDUCED){ cameo.classList.remove('on'); void cameo.offsetWidth; cameo.classList.add('on'); }
+    if(fala && texto){ fala.textContent = texto; fala.classList.remove('on'); void fala.offsetWidth; fala.classList.add('on'); }
   }
   function aplicar(nv){ if(nv) document.body.dataset.bug = nv; else delete document.body.dataset.bug; LIVE.setBug(nv); }
   function sync(){
@@ -2946,7 +3050,8 @@ window.BUGNIVEL = (() => {
     const s = slides[cur], nv = niveis[cur];
     if(indo && s.dataset.bugDelay){ aplicar(niveis[Math.max(0, cur - 1)]); atraso = setTimeout(() => { if(slides[cur] === s) aplicar(nv); }, +s.dataset.bugDelay); }
     else aplicar(nv);
-    if(indo && s.dataset.cameo !== undefined) setTimeout(() => { if(slides[cur] === s) aparecer(); }, 1100);
+    LIVE.setCodigo(codigo[cur]);
+    if(indo && s.dataset.cameo !== undefined) setTimeout(() => { if(slides[cur] === s) aparecer(s.dataset.cameo); }, s.dataset.bugDelay ? +s.dataset.bugDelay + 300 : 1100);
   }
   return { sync, aparecer };
 })();

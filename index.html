@@ -309,6 +309,12 @@
     .jogo .slots { display: flex; gap: 8px; }
     .jogo .slots i { width: 38px; height: 48px; display: grid; place-items: center; border: 2px solid #c22b1e; border-radius: 7px; font: 700 24px "Courier New", monospace; font-style: normal; color: #c22b1e; }
     .jogo .slots.ok i { border-color: #43e0a6; color: #43e0a6; }
+
+    /* susto: o Bug pula na tela inteira (fica mais frequente conforme a turma vence) */
+    .susto { position: fixed; inset: 0; z-index: 62; display: none; place-items: center; background: #000; pointer-events: none; }
+    .susto canvas { width: 96vw; height: auto; aspect-ratio: 52 / 42; image-rendering: pixelated; }
+    .susto.on { display: grid; animation: sustoPula .75s steps(5) forwards; }
+    @keyframes sustoPula { 0% { background: #c22b1e; transform: scale(1.5) } 20% { background: #000; transform: scale(1) translate(-10px, 6px) } 40% { transform: translate(9px, -7px); filter: invert(1) } 60% { filter: none; transform: translate(-5px, 3px) } 100% { opacity: 0 } }
     .jogo.entra { animation: jgEntra .9s steps(6); }
     @keyframes jgEntra { 0% { opacity: 0 } 20% { opacity: 1; filter: invert(1) } 35% { filter: none; transform: translate(-6px, 3px) } 55% { transform: translate(5px, -4px) } 100% { transform: none } }
     .jogo.sai { animation: jgSai .8s steps(8) forwards; }
@@ -404,6 +410,7 @@
     </ol>
     <button type="button" id="regrasOk">Voltar à caça</button>
   </div></div>
+  <div class="susto" id="susto" aria-hidden="true"><canvas width="52" height="42"></canvas></div>
   <div class="bug-fala" id="bugFala" aria-live="polite"><canvas width="52" height="42" aria-hidden="true"></canvas><span></span></div>
   <div class="bug-tinta" aria-hidden="true"></div>
   <!-- O JOGO DO BUG: aparece sozinho quando a apresentação chega no jogo -->
@@ -834,11 +841,12 @@
      ===================================================================== */
   const hud = document.getElementById('hud'), regras = document.getElementById('regras');
   const falaBug = document.getElementById('bugFala');
+  /* o Bug avisa que um número escapou, mas nunca diz onde: a turma procura */
   const DICAS = [
-    'Agora dá pra ler o 1º número. Procurem perto do hambúrguer.',
-    'O 2º número está dentro do menu ☰. Abram.',
-    'O 3º apareceu na Promoção do dia.',
-    'O último número pisca na tela quando tudo quebra. Não pisquem.'
+    'Um número escapou de mim. Ele está em algum lugar deste site. Procurem.',
+    'Outro número escapou… Vocês estão me irritando.',
+    'Três números à vista. Eu não vou deixar barato.',
+    'Vocês me quebraram demais… NÃO PISQUEM.'
   ];
   let caca = 0, liberados = 0, pararFala = null, timerFala = null;
   function contarLiberados() {
@@ -852,6 +860,25 @@
     timerFala = setTimeout(() => falaBug.classList.remove('on'), 6500);
     try { navigator.vibrate && navigator.vibrate([60, 40, 60]); } catch (e) {}
   }
+  /* SUSTOS: com 2 números liberados o Bug começa a pular na tela de vez em
+     quando; quanto mais a turma avança, mais ele se desespera e pula. */
+  const susto = document.getElementById('susto');
+  let pararSusto = null, timerSusto = null;
+  function assustar() {
+    if (calmo || !susto || !telaJogo.hidden || !regras.hidden) return;
+    if (!pararSusto) pararSusto = animarBug(susto.querySelector('canvas'), () => (susto.classList.contains('on') ? { falha: true } : null));
+    susto.classList.remove('on'); void susto.offsetWidth; susto.classList.add('on');
+    setTimeout(() => susto.classList.remove('on'), 800);
+    try { navigator.vibrate && navigator.vibrate([220, 70, 220]); } catch (e) {}
+  }
+  function agendarSusto() {
+    clearTimeout(timerSusto);
+    const n = contarLiberados();
+    if (!caca || n < 2) return;
+    const faixa = { 2: [45000, 80000], 3: [25000, 45000], 4: [12000, 22000] }[n];
+    timerSusto = setTimeout(() => { assustar(); agendarSusto(); }, faixa[0] + Math.random() * (faixa[1] - faixa[0]));
+  }
+
   function atualizarCaca(k) {
     caca = k ? 1 : 0;
     if (caca) raiz.dataset.k = '1'; else { delete raiz.dataset.k; regras.hidden = true; }
@@ -859,8 +886,11 @@
     hud.querySelectorAll('i').forEach((el, i) => el.classList.toggle('on', i < n));
     if (n > liberados && caca) {
       hud.classList.remove('pulsa'); void hud.offsetWidth; hud.classList.add('pulsa');
-      setTimeout(() => falar(DICAS[n - 1]), 2400);      // depois do aviso do conserto
+      if (n >= 3) setTimeout(assustar, 1600);            // a turma avançou: o Bug revida
+      setTimeout(() => falar(DICAS[n - 1]), n >= 3 ? 3200 : 2400);
     }
+    if (n !== liberados || !timerSusto) agendarSusto();
+    if (!caca) clearTimeout(timerSusto), timerSusto = null;
     liberados = n;
   }
   hud.addEventListener('click', () => { regras.hidden = false; });

@@ -626,6 +626,11 @@ body[data-bug="2"] .bordas{--bw:6px;--bo:.35;opacity:.35;animation:bordaPisca 3s
 body[data-bug="3"] .bordas{--bw:14px;--bo:.6;opacity:.6;animation:bordaPisca 1.6s steps(1) infinite}
 body[data-bug="4"] .bordas{--bw:34px;--bo:.85;opacity:.85;animation:bordaPisca .6s steps(1) infinite}
 @media (prefers-reduced-motion:reduce){.bordas,.bordas::before,.bordas::after{animation:none!important}}
+/* susto: o Bug pula na tela inteira por menos de 1 segundo */
+.bug-susto{position:fixed;inset:0;z-index:70;display:none;place-items:center;background:#000;pointer-events:none}
+.bug-susto canvas{width:min(92vw,140vh);height:auto;aspect-ratio:52/42;image-rendering:pixelated}
+.bug-susto.on{display:grid;animation:sustoPula .75s steps(5) forwards}
+@keyframes sustoPula{0%{background:#c22b1e;transform:scale(1.4)}20%{background:#000;transform:scale(1) translate(-12px,6px)}40%{transform:translate(10px,-8px);filter:invert(1)}60%{filter:none;transform:translate(-6px,4px)}100%{opacity:0}}
 /* ---------- ÚLTIMO CAPÍTULO: PLOT TWIST (Bootstrap) ---------- */
 :root{--bs:#7952b3;--bs2:#b9a2f0}
 /* A. rebobinar: os 8 consertos do dia */
@@ -1315,7 +1320,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= AINDA QUEBRADO ================= -->
-<section class="slide" data-act="Ato 1 → Ato 2" data-stage="1" data-cameo="O primeiro número já dá pra ler. Procurem perto do hambúrguer.">
+<section class="slide" data-act="Ato 1 → Ato 2" data-stage="1" data-cameo="Um número já escapou de mim. Procurem.">
   <div class="inner split">
     <div class="stack" style="gap:20px">
       <div class="eyebrow"><span class="tag warn">Funcionou. Mas…</span></div>
@@ -1534,7 +1539,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= DETALHES QUEBRADOS ================= -->
-<section class="slide" data-act="Ato 2 → Ato 3" data-stage="2" data-cameo="O segundo número se esconde dentro do menu ☰. Abram.">
+<section class="slide" data-act="Ato 2 → Ato 3" data-stage="2" data-cameo="Outro número escapou… vocês estão me irritando.">
   <div class="inner split">
     <div class="stack" style="gap:20px">
       <div class="eyebrow"><span class="tag warn">Funcionou. Mas…</span></div>
@@ -1733,7 +1738,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= FRAMEWORKS ================= -->
-<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2" data-cameo="O terceiro só aparece na Promoção do dia, quando a caixa fica grande.">
+<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2" data-cameo="Três números à vista. Eu não vou deixar barato.">
   <div class="inner">
     <div class="eyebrow"><span class="tag warn">Levantem a mão</span> Frameworks CSS</div>
     <p class="big-q" style="font-size:var(--fs-md);max-width:none">Quem já ouviu falar de Bootstrap? E de Tailwind?</p>
@@ -1829,7 +1834,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= UM SITE ================= -->
-<section class="slide" data-act="Fechamento" data-stage="4" data-bug="4" data-bug-delay="2600" data-cameo="O último número aparece quando TUDO quebrar. Não pisquem.">
+<section class="slide" data-act="Fechamento" data-stage="4" data-bug="4" data-bug-delay="2600" data-cameo="Vocês me quebraram demais… NÃO PISQUEM.">
   <div class="inner finale">
     <div class="morph-dev" aria-hidden="true"><div class="md-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
     <h2>Um site. <span class="accent">Todas as telas.</span></h2>
@@ -1993,6 +1998,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 <i class="bug-tint" aria-hidden="true"></i>
 <canvas class="bug-cameo" id="bugCameo" width="52" height="42" aria-hidden="true"></canvas>
 <p class="bug-fala" id="bugFala" aria-live="polite"></p>
+<div class="bug-susto" id="bugSusto" aria-hidden="true"><canvas width="52" height="42"></canvas></div>
 <i class="bordas" aria-hidden="true"></i>
 <i class="jg-flash" id="jgFlash" aria-hidden="true"></i>
 <footer class="botbar">
@@ -3043,7 +3049,19 @@ window.BUGNIVEL = (() => {
     if(!REDUCED){ cameo.classList.remove('on'); void cameo.offsetWidth; cameo.classList.add('on'); }
     if(fala && texto){ fala.textContent = texto; fala.classList.remove('on'); void fala.offsetWidth; fala.classList.add('on'); }
   }
-  function aplicar(nv){ if(nv) document.body.dataset.bug = nv; else delete document.body.dataset.bug; LIVE.setBug(nv); }
+  const susto = $('#bugSusto');
+  if(susto) animarBug($('canvas', susto), () => susto.classList.contains('on') ? { falha: true } : null);
+  function assustar(){
+    if(REDUCED || !susto) return;
+    susto.classList.remove('on'); void susto.offsetWidth; susto.classList.add('on');
+    setTimeout(() => susto.classList.remove('on'), 800);
+  }
+  function aplicar(nv){
+    const antes = +(document.body.dataset.bug || 0);
+    if(nv) document.body.dataset.bug = nv; else delete document.body.dataset.bug;
+    if(nv === 4 && antes < 4) assustar();       // quando tudo quebra, o Bug pula na tela
+    LIVE.setBug(nv);
+  }
   function sync(){
     if(cur === anterior) return;
     const indo = cur > anterior; anterior = cur; clearTimeout(atraso);

@@ -1988,7 +1988,6 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
       <p class="jg-win" id="jgWin"></p>
     </div>
     <div class="jg-board" id="jgBoard"></div>
-    <p class="jg-hint"><kbd>→</kbd> avança · <kbd>C</kbd> faz o corte agora · clique num nome da fuga para tirá-lo · depois de revelar, <kbd>1</kbd>–<kbd>5</kbd> corrige pontos à mão</p>
     <i data-frag="1" hidden></i>
     <i data-frag="2" hidden></i>
     <i data-frag="3" hidden></i>
@@ -3363,7 +3362,7 @@ window.FALHA = (() => {
    - rajadas: chiado de TV + a tela inteira treme e separa as cores
    - janelas de erro em cascata (com mensagens sobre o próprio conteúdo)
    - enxame: vários Bugs atravessando a tela juntos (clima 5)
-   - som de fundo: zumbido grave e, no fim, batida de coração (tecla M = mudo)
+   - som de fundo: zumbido grave e, no fim, batida de coração
    Nada disso aparece na invasão, no jogo ou com animações reduzidas.
    ========================================================= */
 window.CAOS = (() => {
@@ -3493,14 +3492,6 @@ window.CAOS = (() => {
     if(ac || c >= 3) ligarDrone({ 3: .025, 4: .045, 5: .07 }[c] || 0);
     if(!c) $$('.erro-win, .bug-enxame').forEach(e => e.remove());
   }
-  document.addEventListener('keydown', e => {
-    if(e.target.closest('textarea,input,select,[contenteditable]') || e.ctrlKey || e.metaKey || e.altKey) return;
-    if(e.key === 'm' || e.key === 'M'){
-      mudo = !mudo; if(drone) drone.g.gain.setTargetAtTime(mudo ? 0 : ({ 3: .025, 4: .045, 5: .07 }[clima] || 0), ac.currentTime, .3);
-      let av = $('.mudo-aviso'); if(!av){ av = document.createElement('div'); av.className = 'mudo-aviso'; document.body.appendChild(av); }
-      av.textContent = mudo ? 'som do Bug: desligado (M)' : 'som do Bug: ligado (M)'; av.classList.add('on'); clearTimeout(av._t); av._t = setTimeout(() => av.classList.remove('on'), 1600);
-    }
-  });
   return { setClima, rajada, cascata, enxame };
 })();
 
@@ -3509,7 +3500,8 @@ window.CAOS = (() => {
    escurece e fica mais vermelho a cada ato, o Bug passeia pela tela
    cada vez mais vezes e, num momento, a luz apaga. No "rebobinar"
    tudo volta ao normal, como se nada tivesse acontecido.
-   Teclas: B = o Bug passeia agora · X = apagão agora · V = o Bug fala de alguém da sala · M = mudo.
+   Tudo acontece sozinho. Teclas de reserva (não aparecem na tela):
+   B = o Bug passeia agora · X = apagão agora · V = o Bug fala de alguém da sala.
    ========================================================= */
 window.CLIMA = (() => {
   const climas = []; let n = 0, k = 0;

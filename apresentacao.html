@@ -1161,7 +1161,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
     <p class="jg-say inv-say" id="invSay" data-text="Eu sou o Bug. Este site agora é meu. Tranquei ele com um código."></p>
     <div class="inv-grid">
       <ol class="inv-rules">
-        <li>O código tem <b>4 números</b>. Eles estão <b>escondidos no site</b> que está no celular de vocês.</li>
+        <li>O código tem <b>4 números</b>, <b>escondidos no site</b> do celular de vocês. <b>Cada celular tem o seu</b>: copiar do colega não adianta.</li>
         <li>Cada número só aparece quando <b>a parte certa do site for consertada</b>. Fiquem de olho.</li>
         <li>Achou os 4? Toque em <b>🔒 código</b> no celular e digite. O sistema anota quem chegou primeiro.</li>
         <li>Só os <b>5 primeiros</b> escapam e vão para o <b>duelo final</b>. O resto… fica comigo.</li>
@@ -2992,6 +2992,13 @@ function animarBug(cv, op) {
    (e, no duelo, a resposta de cada finalista) num segundo canal.
    A apresentação anota a ordem de chegada e faz o corte nos 5 primeiros.
    ========================================================= */
+function codigoDe(id, rodada) {
+  /* o código de cada celular sai do id do aparelho + a rodada da apresentação
+     (a mesma conta existe na apresentação, que confere quem mandou) */
+  let h = 2166136261; const t = id + ':' + (rodada || 'sem-rede') + ':bug';
+  for (let i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return String((h >>> 0) % 10000).padStart(4, '0');
+}
 window.FUGA = (() => {
   const CANAL_R = 'lanchonete-pixel-ldb-oterimxu-r';   // o mesmo nome está no site (index.html)
   const TOP = 5;
@@ -3006,6 +3013,7 @@ window.FUGA = (() => {
   function receber(m){
     if(!m || m.r !== RODADA || typeof m.id !== 'string' || !/^[a-z0-9]{3,10}$/.test(m.id)) return;
     if(m.tp === 'c'){
+      if(m.cod !== codigoDe(m.id, RODADA)) return;     // código de outro celular (ou inventado): não vale
       if(fila.some(p => p.id === m.id)) return;
       if(corte){ fila.push({ id: m.id, n: limpaNome(m.n), tarde: true }); aoMudar('tarde'); return; }
       fila.push({ id: m.id, n: limpaNome(m.n) });
@@ -3147,8 +3155,8 @@ window.JOGO = (() => {
       painel('fim'); digitar($('#jgSay3')); cadeados(PROVAS.length); placar(-1); vida(1); desintegrar();
       const f = finalista();
       $('#jgWin').style.setProperty('--c', f ? f.cor : '#e9e2d0');
-      $('#jgWin').innerHTML = (f ? `<small>${f.empate ? 'Empate' : 'Destruiu o Bug'}</small>${esc2(f.nome)}` : '<small>O Bug foi destruído pela turma toda</small>') + `<small style="margin-top:14px">o código era ${CODIGO}</small>`;
-      LIVE.setJogo(comFuga({ p:'fim', g: f ? f.nome : '', c: f ? f.cor : '', e: f ? f.empate : false, cod: CODIGO }));
+      $('#jgWin').innerHTML = (f ? `<small>${f.empate ? 'Empate' : 'Destruiu o Bug'}</small>${esc2(f.nome)}` : '<small>O Bug foi destruído pela turma toda</small>') + `<small style="margin-top:14px">cada celular tinha o seu próprio código</small>`;
+      LIVE.setJogo(comFuga({ p:'fim', g: f ? f.nome : '', c: f ? f.cor : '', e: f ? f.empate : false }));
       return;
     }
     const qi = Math.floor((passo - 2) / 2), revelado = (passo - 2) % 2 === 1, pv = PROVAS[qi];

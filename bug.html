@@ -455,7 +455,7 @@
   <header class="topo">
     <a class="logo" href="#"><span></span>Lanchonete Pixel</a>
     <button class="btn-menu" type="button" aria-expanded="false">☰ Menu</button>
-    <nav class="menu"><a href="#">Início</a><a href="#cardapio">Cardápio</a><a href="#promo">Promoções</a><a href="#contato">Contato</a><span class="pista pista-2" aria-hidden="true">🔒 8</span></nav>
+    <nav class="menu"><a href="#">Início</a><a href="#cardapio">Cardápio</a><a href="#promo">Promoções</a><a href="#contato">Contato</a><span class="pista pista-2" aria-hidden="true">🔒 ?</span></nav>
   </header>
 
   <section class="hero">
@@ -465,7 +465,7 @@
       <a class="btn-pedido" href="#cardapio">Fazer pedido</a>
     </div>
     <img src="burger.svg" width="900" height="560" alt="Hambúrguer artesanal da Lanchonete Pixel">
-    <span class="pista pista-1" aria-hidden="true">🔒 3</span>
+    <span class="pista pista-1" aria-hidden="true">🔒 ?</span>
   </section>
 
   <main class="layout">
@@ -484,7 +484,7 @@
       <div class="area-do-card">
         <article class="card-promo">
           <img src="burger.svg" width="900" height="560" alt="">
-          <div><h3>Promoção do dia</h3><p>Combo Pixel: burger + batata + refri</p><p class="preco">R$ 39,90</p><p class="pista pista-3" aria-hidden="true">🔒 1</p></div>
+          <div><h3>Promoção do dia</h3><p>Combo Pixel: burger + batata + refri</p><p class="preco">R$ 39,90</p><p class="pista pista-3" aria-hidden="true">🔒 ?</p></div>
         </article>
       </div>
     </aside>
@@ -498,12 +498,12 @@
   <!-- O BUG andando pela tela e a "tinta" de falha (aparecem conforme a apresentação avança) -->
   <canvas class="bug-anda" id="bugAnda" width="52" height="42" aria-hidden="true"></canvas>
   <div class="bordas" aria-hidden="true"></div>
-  <div class="pista-4" aria-hidden="true">6</div>
+  <div class="pista-4" aria-hidden="true">?</div>
   <button class="hud" id="hud" type="button" aria-label="Código do Bug: ver regras">🔒 código <i></i><i></i><i></i><i></i></button>
   <div class="regras" id="regras" hidden role="dialog" aria-label="Regras do código do Bug"><div>
     <h2>O código do Bug</h2>
     <ol>
-      <li>O código tem <b>4 números</b>, escondidos neste site.</li>
+      <li>O código tem <b>4 números</b>, escondidos neste site. <b>Cada celular tem o seu</b>: o do colega não serve para você.</li>
       <li>Cada número só aparece quando a parte certa do site é consertada. Os quadradinhos vermelhos aqui embaixo mostram quantos já foram liberados.</li>
       <li>Achou os 4? Digite aqui embaixo. O sistema anota quem chegou primeiro.</li>
       <li>Só os <b>5 primeiros</b> escapam e vão para o duelo final.</li>
@@ -897,6 +897,22 @@
   });
   if (!meuNome) setTimeout(() => pedirNome(), 900);
 
+  /* CADA CELULAR TEM O SEU CÓDIGO: copiar o do colega não adianta */
+  function codigoDe(id, rodada) {
+    /* o código de cada celular sai do id do aparelho + a rodada da apresentação
+       (a mesma conta existe na apresentação, que confere quem mandou) */
+    let h = 2166136261; const t = id + ':' + (rodada || 'sem-rede') + ':bug';
+    for (let i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return String((h >>> 0) % 10000).padStart(4, '0');
+  }
+  const meuCodigo = () => codigoDe(meuId, rodada);
+  function pintarPistas() {
+    const c = meuCodigo();
+    [1, 2, 3].forEach((n) => { const el = document.querySelector('.pista-' + n); if (el) el.textContent = '🔒 ' + c[n - 1]; });
+    const p4 = document.querySelector('.pista-4'); if (p4) p4.textContent = c[3];
+  }
+  pintarPistas();
+
   function postar(msg, tentativa) {
     tentativa = tentativa || 0;
     fetch('https://ntfy.sh/' + CANAL_R, { method: 'POST', body: JSON.stringify(Object.assign({ r: rodada, id: meuId }, msg)) })
@@ -936,14 +952,14 @@
     if (Date.now() < bloqueadoAte) return dizer('Espere um pouco antes de tentar de novo.');
     if (v.length !== 4) return dizer('O código tem 4 números.');
     if (corteFeito && !finAtual.includes(meuId)) return dizer('Tarde demais. O corte já foi feito.');
-    if (btoa(v.split('').reverse().join('')) !== 'NjE4Mw==') {
+    if (v !== meuCodigo()) {
       bloqueadoAte = Date.now() + 3000; void form.offsetWidth; form.classList.add('erro');
       try { navigator.vibrate && navigator.vibrate([90, 50, 90]); } catch (e) {}
       return dizer('Errado. O Bug riu de você. Espere 3 segundos.');
     }
     if (!meuNome) return pedirNome('Antes de escapar…', 'Qual é o seu nome? Ele aparece no telão.', () => tentarCodigo(form));
     escapei = true; if (rodada) guarda.pôr('lp-escapou', rodada);
-    if (rodada) postar({ tp: 'c', n: meuNome });
+    if (rodada) postar({ tp: 'c', n: meuNome, cod: v });
     regras.hidden = true; hud.classList.add('livre');
     try { navigator.vibrate && navigator.vibrate([60, 40, 60, 40, 200]); } catch (e) {}
     if (ultimoJogo) mostrarJogo(ultimoJogo, ultimoQuando);
@@ -1005,7 +1021,7 @@
     let h = '';
     if (j.p === 'intro' || j.p === 'regras' || j.p === 'fim' || j.p === 'inv') h += '<canvas width="52" height="42" aria-label="O Bug"></canvas>';
     if (j.p === 'inv') h += '<span class="jt">Invasão</span><p class="js">Eu sou o Bug. Este site agora é meu. Tranquei ele com um código.</p><div class="slots"><i>?</i><i>?</i><i>?</i><i>?</i></div>' +
-      '<ol class="inv-r"><li>O código tem <b>4 números</b>, escondidos neste site.</li><li>Cada número só aparece quando <b>a parte certa do site for consertada</b>.</li>' +
+      '<ol class="inv-r"><li>O código tem <b>4 números</b>, escondidos neste site. <b>Cada celular tem o seu</b>: copiar do colega não adianta.</li><li>Cada número só aparece quando <b>a parte certa do site for consertada</b>.</li>' +
       '<li>Achou os 4? Toque em <b>🔒 código</b> (canto de baixo) e digite.</li><li>Só os <b>5 primeiros</b> escapam e vão para o <b>duelo final</b>.</li></ol>';
     if (j.p === 'inv' && meuNome) h = h.replace('<div class="slots">', '<p class="js">Eu sei o seu nome, <b>' + escJ(meuNome) + '</b>.</p><div class="slots">');
     if (j.p === 'intro') h += telaFuga(j);
@@ -1028,7 +1044,7 @@
     if (j.p === 'fim') {
       h += '<p class="js">O Bug foi destruído. O site é de vocês de novo.</p>';
       h += j.g ? '<p class="jf" style="--c:' + (/^#[0-9a-f]{6}$/i.test(j.c) ? j.c : '#43e0a6') + '"><small>' + (j.e ? 'Empate' : 'Destruiu o Bug') + '</small>' + escJ(j.g) + '</p>' : '<p class="js">A turma toda venceu.</p>';
-      if (/^[0-9]{4}$/.test(j.cod || '')) h += '<div class="slots ok">' + [...j.cod].map((d) => '<i>' + d + '</i>').join('') + '</div><span class="jt">o código era</span>';
+      h += '<div class="slots ok">' + [...meuCodigo()].map((d) => '<i>' + d + '</i>').join('') + '</div><span class="jt">o seu código era</span>';
     }
     conteudoJogo.innerHTML = h;
     telaJogo.classList.toggle('rev', !!(j.p === 'q' && j.r));
@@ -1397,7 +1413,7 @@
         if (d.event !== 'message') return;
         const m = JSON.parse(d.message);
         if (typeof m.r === 'string' && /^[a-z0-9]{3,10}$/.test(m.r) && m.r !== rodada) {
-          rodada = m.r; escapei = guarda.ler('lp-escapou') === rodada; hud.classList.toggle('livre', escapei); minhasResp = {};
+          rodada = m.r; escapei = guarda.ler('lp-escapou') === rodada; hud.classList.toggle('livre', escapei); minhasResp = {}; pintarPistas();
         }
         if (typeof m.a === 'number' && aquecido && m.a !== ultimoApagao) { ultimoApagao = m.a; apagao(m.cd ? ('OLHA O CARDÁPIO, ' + (meuNome || 'você') + '.').toUpperCase() : ''); }
         if (m.cd) tomarCardapio(Array.isArray(m.pf) ? m.pf : []); else if (cardapioTomado && typeof m.s === 'number') devolverCardapio();

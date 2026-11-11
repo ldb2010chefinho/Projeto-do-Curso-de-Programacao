@@ -318,6 +318,25 @@
       68% { opacity: .9; transform: scale(.6); filter: brightness(.4) } 69% { opacity: 1; transform: scale(1.25); filter: brightness(1.25) }
       72% { transform: scale(1.18) translate(-2%, 1%) } 75% { transform: scale(1.22) translate(2%, -1%) } 90% { opacity: 1 } 91%, 100% { opacity: 0 } }
 
+
+    /* ---------- o Bug piorando: fala com texto falhando, bateria e sinal "drenados" ---------- */
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .bug-fala.grave { border-color: #ff2a1f; background: #140405; box-shadow: 0 0 0 1px rgba(255, 42, 31, .4), 0 10px 40px rgba(194, 43, 30, .55); animation: falaTreme .16s steps(2) 6; }
+    .bug-fala.grave span { color: #ffd2cb; text-shadow: -1px 0 rgba(255, 42, 31, .8), 1px 0 rgba(82, 213, 255, .6); }
+    @keyframes falaTreme { 50% { transform: translate(-2px, 1px); } }
+    .dreno { position: fixed; right: max(10px, env(safe-area-inset-right, 0px)); bottom: calc(10px + env(safe-area-inset-bottom, 0px)); z-index: 57; display: none; gap: 6px;
+      zoom: var(--k, 1); font: 700 12px "Courier New", monospace; pointer-events: none; }
+    html[data-dreno] .dreno { display: flex; }
+    .dreno span { display: flex; align-items: center; gap: 6px; padding: 5px 9px; border: 1px solid #c22b1e; border-radius: 999px; background: rgba(13, 7, 9, .92); color: #efe6d2; }
+    .dreno .bat i { position: relative; width: 22px; height: 11px; border: 1.5px solid currentColor; border-radius: 3px; }
+    .dreno .bat i::before { content: ""; position: absolute; inset: 1px; right: auto; width: calc((100% - 2px) * var(--nivel, .5)); background: currentColor; border-radius: 1px; }
+    .dreno .bat i::after { content: ""; position: absolute; right: -4px; top: 2px; width: 2px; height: 5px; background: currentColor; border-radius: 0 1px 1px 0; }
+    .dreno .bat.baixa { color: #ff4a3d; animation: drenoPisca 1s steps(1) infinite; }
+    .dreno .sinal { color: #ff4a3d; display: none; }
+    html[data-dreno="2"] .dreno .sinal { display: flex; animation: drenoPisca 1.4s steps(1) infinite; }
+    @keyframes drenoPisca { 50% { opacity: .35; } }
+    @media (prefers-reduced-motion: reduce) { .bug-fala.grave, .dreno * { animation: none !important; } }
+
     /* ---------- A CAÇA AO CÓDIGO DO BUG ----------
        4 números: 1º perto do hambúrguer (depois do Conserto 1, meta viewport),
        2º dentro do menu ☰ (depois da media query), 3º na Promoção do dia
@@ -484,7 +503,8 @@
     <p id="pedidoTxt">A gente chama o seu nome quando ficar pronto.</p>
     <input id="pedidoNome" maxlength="16" placeholder="Seu nome" aria-label="Seu nome" required>
     <button type="submit">Fazer pedido</button></form></div>
-  <div class="bug-fala" id="bugFala" aria-live="polite"><canvas width="52" height="42" aria-hidden="true"></canvas><span></span></div>
+  <div class="bug-fala" id="bugFala"><canvas width="52" height="42" aria-hidden="true"></canvas><span aria-hidden="true"></span><b class="sr" aria-live="polite"></b></div>
+  <div class="dreno" aria-hidden="true"><span class="bat"><i></i><b>--%</b></span><span class="sinal">sem serviço</span></div>
   <div class="bug-tinta" aria-hidden="true"></div>
   <!-- O JOGO DO BUG: aparece sozinho quando a apresentação chega no jogo -->
   <div class="jogo" id="jogo" hidden aria-live="polite"><div class="jc" id="jogoC"></div></div>
@@ -956,7 +976,7 @@
     clearInterval(relogioJogo); if (pararBugJogo) { pararBugJogo(); pararBugJogo = null; }
     if (j && j.p === 'volta') {                // o último slide: o Bug derrotado promete voltar
       telaJogo.hidden = true;
-      falar((meuNome ? meuNome + '… ' : '') + 'isso não acabou. Eu vou voltar.');
+      falar((meuNome ? meuNome + '… ' : '') + 'isso não acabou. Eu vou voltar.', true);
       return;
     }
     if (!j) {                                   // fim do jogo: rebobina e some
@@ -1028,10 +1048,13 @@
     if (b === nivelBug) return;
     const subiu = b > nivelBug; nivelBug = b;
     if (b) raiz.dataset.bug = b; else delete raiz.dataset.bug;
+    if (b < 3) ligarDreno(0); else if (drenoAtual !== null) ligarDreno(b >= 4 ? 2 : 1);
+    agendarCorrompe(); agendarSabe();
     clearInterval(timerAnda);
     if (b) {
       if (subiu) setTimeout(passearBug, 600);
       if (subiu && b >= 2) setTimeout(() => { if (typeof falaQueSabe === 'function') falaQueSabe(); }, 12000);
+      if (subiu && b >= 3) setTimeout(() => ligarDreno(b >= 4 ? 2 : 1), 4000);
       timerAnda = setInterval(passearBug, [0, 26000, 17000, 11000, 7000][b]);
     }
   }
@@ -1056,12 +1079,39 @@
   function contarLiberados() {
     return caca ? [atual >= 1, atual >= 4, atual >= 7, nivelBug >= 4].filter(Boolean).length : 0;
   }
-  function falar(texto) {
+  const GLIFOS = '█▓▒░#%&@$<>/\\|*';
+  const glifo = () => GLIFOS[Math.floor(Math.random() * GLIFOS.length)];
+  let timerTexto = null;
+  /* o texto aparece "decodificando" da esquerda para a direita; no nível 4 ele segue falhando */
+  function escreverFalhando(el, texto, nivel) {
+    clearInterval(timerTexto);
+    if (calmo || nivel < 2) { el.textContent = texto; return; }
+    const t0 = Date.now(), dur = 380 + texto.length * 14;
+    timerTexto = setInterval(() => {
+      const p = Math.min(1, (Date.now() - t0) / dur), ate = Math.floor(texto.length * p);
+      let out = '';
+      for (let i = 0; i < texto.length; i++) {
+        const c = texto[i];
+        if (c === ' ') out += ' ';
+        else if (i < ate) out += (nivel >= 4 && p === 1 && Math.random() < .035) ? glifo() : c;
+        else out += Math.random() < .5 ? glifo() : c;
+      }
+      el.textContent = out;
+      if (p === 1 && nivel < 4) { el.textContent = texto; clearInterval(timerTexto); }
+    }, 55);
+  }
+  let travaFala = 0;
+  function falar(texto, grave, prioridade) {
     if (!falaBug) return;
-    falaBug.querySelector('span').textContent = texto;
+    /* quando o Bug fala de VOCÊ no telão, essa fala não pode ser atropelada */
+    if (!prioridade && Date.now() < travaFala) { setTimeout(() => falar(texto, grave), travaFala - Date.now() + 400); return; }
+    if (prioridade) travaFala = Date.now() + 7600;
+    falaBug.querySelector('.sr').textContent = texto;
+    falaBug.classList.toggle('grave', !!grave);
+    escreverFalhando(falaBug.querySelector('span'), texto, grave ? Math.max(nivelBug, 3) : nivelBug);
     if (!pararFala) pararFala = animarBug(falaBug.querySelector('canvas'), () => (falaBug.classList.contains('on') ? {} : null));
     falaBug.classList.add('on'); clearTimeout(timerFala);
-    timerFala = setTimeout(() => falaBug.classList.remove('on'), 6500);
+    timerFala = setTimeout(() => { falaBug.classList.remove('on'); clearInterval(timerTexto); }, grave ? 7500 : 6500);
     try { navigator.vibrate && navigator.vibrate([60, 40, 60]); } catch (e) {}
   }
   /* SUSTOS: com 2 números liberados o Bug começa a pular na tela de vez em
@@ -1077,35 +1127,151 @@
   }
 
   /* =====================================================================
-     O BUG "SABE COISAS": só o que o próprio navegador já informa
-     (bateria, hora, tipo de celular, quantos toques...). É lido aqui no
-     aparelho e NUNCA é enviado para lugar nenhum. Serve só para assustar.
+     O BUG "SABE COISAS" e vai piorando: curioso -> ameaçador -> grave.
+     Só usa o que o próprio navegador informa (bateria, hora, tipo de
+     celular, quantos toques...). Tudo é lido aqui e NUNCA sai do aparelho.
+     A bateria e o sinal que ele "drena" no fim são de mentira (só desenho).
      ===================================================================== */
-  const sabe = { toques: 0, rolagens: 0, inicio: Date.now(), bateria: null, carregando: false, usadas: new Set() };
+  const sabe = { toques: 0, rolagens: 0, inicio: Date.now(), bateria: null, carregando: false, usadas: new Set(), saiu: 0 };
   addEventListener('pointerdown', () => { sabe.toques++; }, { passive: true });
   let ultimaRolagem = 0;
   addEventListener('scroll', () => { const t = Date.now(); if (t - ultimaRolagem > 700) sabe.rolagens++; ultimaRolagem = t; }, { passive: true });
   try { navigator.getBattery && navigator.getBattery().then((b) => { const ler = () => { sabe.bateria = Math.round(b.level * 100); sabe.carregando = b.charging; }; ler(); b.addEventListener('levelchange', ler); b.addEventListener('chargingchange', ler); }).catch(() => {}); } catch (e) {}
+  /* saiu do site e voltou? o Bug percebe */
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') { sabe.saiu = Date.now(); return; }
+    if (!sabe.saiu || !caca || nivelBug < 1) return;
+    const seg = Math.round((Date.now() - sabe.saiu) / 1000); sabe.saiu = 0;
+    if (seg >= 4) setTimeout(() => falar((meuNome ? meuNome + '. ' : '') + 'Você sumiu por ' + seg + ' segundos. Eu esperei aqui.', nivelBug >= 3), 900);
+  });
+  function fatos() {
+    const ua = navigator.userAgent, rede = navigator.connection && navigator.connection.type;
+    return {
+      nome: meuNome || 'você',
+      aparelho: /iPhone|iPad/.test(ua) ? 'iPhone' : /Android/.test(ua) ? 'Android' : 'celular',
+      hora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+      min: Math.max(1, Math.round((Date.now() - sabe.inicio) / 60000)),
+      rede: rede === 'wifi' ? 'Wi-Fi' : rede === 'cellular' ? '4G' : '',
+      escuro: matchMedia('(prefers-color-scheme: dark)').matches
+    };
+  }
+  /* cada fala: [id, texto, só aparece se...] — três camadas que vão ficando mais pesadas */
+  function falasDoNivel(camada) {
+    const f = fatos(), b = drenoAtual !== null ? drenoAtual : sabe.bateria;
+    const C = [
+      [ // 1 · curioso
+        ['ap', 'Oi, ' + f.nome + '. Bonito esse ' + f.aparelho + '.'],
+        ['hora', 'São ' + f.hora + '. Guarde esse horário, ' + f.nome + '. Foi quando eu cheguei.'],
+        ['esc', 'Modo escuro? Você gosta do escuro, ' + f.nome + '… eu também.', f.escuro],
+        ['claro', 'Tela clarinha, ' + f.nome + '. Vai ficar escura daqui a pouco.', !f.escuro],
+        ['carga', 'Carregando o celular, ' + f.nome + '? Ótimo. Eu me alimento de energia.', sabe.carregando]
+      ],
+      [ // 2 · ameaçador
+        ['bat', f.nome + '… ' + b + '% de bateria. Eu estou com fome.', b !== null],
+        ['toq', 'Você já tocou na tela ' + sabe.toques + ' vezes. Eu contei cada uma.', sabe.toques > 6],
+        ['rol', 'Eu vi você rolar a página ' + sabe.rolagens + ' vezes, ' + f.nome + '. Procurando o quê?', sabe.rolagens > 3],
+        ['rede', f.rede + ', ' + f.nome + '? Eu estou em todos os celulares desta sala.', !!f.rede],
+        ['tempo', 'Você está comigo há ' + f.min + ' minuto' + (f.min > 1 ? 's' : '') + ', ' + f.nome + '. Não vai sair tão fácil.']
+      ],
+      [ // 3 · grave (o Bug "drena" a bateria e corta o sinal — tudo de mentira)
+        ['beber', b !== null ? 'Bateria: ' + b + '%… ' + Math.max(1, b - 1) + '%… ' + Math.max(1, b - 2) + '%… Eu estou bebendo ela, ' + f.nome + '.' : 'Estou drenando o seu celular, ' + f.nome + '. Gota por gota.'],
+        ['sinal', 'Cortei o seu sinal, ' + f.nome + '. Agora só existe eu.'],
+        ['toq2', sabe.toques + ' toques. Nenhum deles vai te salvar.', sabe.toques > 6],
+        ['olho', 'Não adianta abaixar o celular, ' + f.nome + '. Eu continuo olhando.'],
+        ['fim', f.nome + '… quando a bateria acabar, o site é meu pra sempre.']
+      ]
+    ][camada];
+    return C.filter((x) => x[2] === undefined || x[2]);
+  }
+  function camadaAtual() { return nivelBug >= 3 ? 2 : nivelBug >= 2 ? 1 : 0; }
   function falaQueSabe() {
-    const nome = meuNome || 'você', ua = navigator.userAgent;
-    const aparelho = /iPhone|iPad/.test(ua) ? 'iPhone' : /Android/.test(ua) ? 'Android' : '';
-    const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    const minutos = Math.max(1, Math.round((Date.now() - sabe.inicio) / 60000));
-    const rede = navigator.connection && navigator.connection.type;
-    const op = [];
-    if (sabe.bateria !== null && !sabe.carregando) op.push(['bat', nome + '… ' + sabe.bateria + '% de bateria. Eu não gastaria com calma.']);
-    if (sabe.carregando) op.push(['carga', 'Carregando o celular, ' + nome + '? Eu também me alimento de energia.']);
-    if (aparelho) op.push(['ap', 'Bonito esse ' + aparelho + ', ' + nome + '. Agora ele é meu.']);
-    if (sabe.toques > 8) op.push(['toq', 'Você já tocou na tela ' + sabe.toques + ' vezes. Eu contei cada uma.']);
-    if (sabe.rolagens > 4) op.push(['rol', 'Eu vi você rolar a página ' + sabe.rolagens + ' vezes, ' + nome + '. Procurando o quê?']);
-    op.push(['hora', 'São ' + hora + '. Você está comigo há ' + minutos + ' minuto' + (minutos > 1 ? 's' : '') + ', ' + nome + '.']);
-    if (rede === 'wifi') op.push(['rede', 'Wi-Fi da escola, ' + nome + '? Eu estou em todos os celulares desta sala.']);
-    if (rede === 'cellular') op.push(['rede', 'Usando os seus dados móveis, ' + nome + '? Eu estou em todos os celulares desta sala.']);
-    if (matchMedia('(prefers-color-scheme: dark)').matches) op.push(['esc', 'Modo escuro, ' + nome + '? Você gosta do escuro… eu também.']);
+    if (!caca && nivelBug < 1) return;
+    if (falaBug.classList.contains('on') || !telaJogo.hidden || !regras.hidden || !pedido.hidden) return;
+    const cam = camadaAtual(), op = falasDoNivel(cam);
     const novas = op.filter((o) => !sabe.usadas.has(o[0]));
-    const esc = (novas.length ? novas : op)[Math.floor(Math.random() * (novas.length ? novas : op).length)];
+    const lista = novas.length ? novas : op;
+    const esc = lista[Math.floor(Math.random() * lista.length)];
     sabe.usadas.add(esc[0]);
-    if (!falaBug.classList.contains('on') && telaJogo.hidden && regras.hidden) falar(esc[1]);
+    if (esc[0] === 'sinal') ligarDreno(2);
+    falar(esc[1], cam === 2);
+  }
+  /* falas de tempos em tempos enquanto a caça está valendo (cada vez mais seguidas) */
+  let timerSabe = null;
+  function agendarSabe() {
+    clearTimeout(timerSabe);
+    if (!caca) return;
+    const faixa = [[80, 120], [80, 120], [50, 75], [32, 48], [20, 30]][nivelBug];
+    timerSabe = setTimeout(() => { falaQueSabe(); agendarSabe(); }, (faixa[0] + Math.random() * (faixa[1] - faixa[0])) * 1000);
+  }
+
+  /* BATERIA E SINAL "DRENADOS" (de mentira): do nível 3 em diante aparece um
+     indicador no topo que cai sozinho; no nível 4 o "sinal" some. */
+  const dreno = document.querySelector('.dreno');
+  let drenoAtual = null, timerDreno = null;
+  function pintarDreno() {
+    if (drenoAtual === null) return;
+    dreno.querySelector('b').textContent = drenoAtual + '%';
+    dreno.querySelector('i').style.setProperty('--nivel', Math.max(.04, drenoAtual / 100));
+    dreno.querySelector('.bat').classList.toggle('baixa', drenoAtual <= 15);
+  }
+  function ligarDreno(fase) {
+    if (calmo) return;
+    if (!fase) { delete raiz.dataset.dreno; clearInterval(timerDreno); drenoAtual = null; return; }
+    if (drenoAtual === null) drenoAtual = sabe.bateria !== null ? sabe.bateria : 38 + Math.floor(Math.random() * 30);
+    raiz.dataset.dreno = Math.max(fase, +(raiz.dataset.dreno || 0));
+    pintarDreno(); clearInterval(timerDreno);
+    timerDreno = setInterval(() => {
+      const passo = nivelBug >= 4 ? (Math.random() < .3 ? 3 : 1) : 1;
+      drenoAtual = Math.max(1, drenoAtual - passo); pintarDreno();
+    }, nivelBug >= 4 ? 2600 : 6000);
+  }
+
+  /* TEXTOS DO SITE FALHANDO (nível 3 e 4): de vez em quando um pedaço de
+     texto vira lixo por uma fração de segundo e volta ao normal. */
+  let timerCorrompe = null;
+  function corromper() {
+    if (calmo || nivelBug < 3 || document.hidden) return;
+    const nos = [], fora = '#jogo, #regras, #hud, #bugFala, #pedido, .aviso, .dreno, script, style, textarea, input';
+    const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: (n) => n.nodeValue.trim().length > 3 && !n.parentElement.closest(fora) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
+    });
+    while (w.nextNode()) nos.push(w.currentNode);
+    const quantos = nivelBug >= 4 ? 2 + Math.floor(Math.random() * 2) : 1;
+    for (let k = 0; k < quantos && nos.length; k++) {
+      const n = nos.splice(Math.floor(Math.random() * nos.length), 1)[0], orig = n.nodeValue;
+      const taxa = nivelBug >= 4 ? .55 : .3;
+      n.nodeValue = orig.replace(/\S/g, (c) => (Math.random() < taxa ? glifo() : c));
+      setTimeout(() => { n.nodeValue = orig; }, 110 + Math.random() * 200);
+    }
+  }
+  function agendarCorrompe() {
+    clearTimeout(timerCorrompe);
+    if (nivelBug < 3) return;
+    const ms = nivelBug >= 4 ? 700 + Math.random() * 1100 : 2400 + Math.random() * 2600;
+    timerCorrompe = setTimeout(() => { corromper(); agendarCorrompe(); }, ms);
+  }
+
+  /* O BUG NO TELÃO: uma parte da sala (sorteada) manda UMA vez o nome do pedido,
+     a bateria e o tipo de celular. A apresentação escolhe alguém e fala dele.
+     Nada fica guardado em lugar nenhum. */
+  let perfilDecidido = null, ultimaVitima = '';
+  function enviarPerfil() {
+    if (!rodada || !meuNome || perfilDecidido === rodada) return;
+    perfilDecidido = rodada;
+    if (Math.random() > .45) return;                       // só ~45% da sala manda (menos mensagens na rede)
+    setTimeout(() => {
+      const ua = navigator.userAgent;
+      postar({ tp: 'p', n: meuNome, b: sabe.bateria, ap: /iPhone|iPad/.test(ua) ? 'iPhone' : /Android/.test(ua) ? 'Android' : '' });
+    }, 5000 + Math.random() * 55000);                       // espalhado em 1 minuto
+  }
+  function fuiEscolhido(v) {
+    if (typeof v !== 'string' || v === ultimaVitima) return;
+    ultimaVitima = v;
+    if (v.split(':')[0] !== meuId || !aquecido) return;
+    setTimeout(() => {
+      falar('Isso mesmo, ' + (meuNome || 'você') + '. Estou falando de você. Olhe para o telão.', true, true);
+      try { navigator.vibrate && navigator.vibrate([300, 80, 300, 80, 300]); } catch (e) {}
+    }, 400);
   }
   function agendarSusto() {
     clearTimeout(timerSusto);
@@ -1123,9 +1289,12 @@
     if (n > liberados && caca) {
       hud.classList.remove('pulsa'); void hud.offsetWidth; hud.classList.add('pulsa');
       if (n >= 3) setTimeout(assustar, 1600);            // a turma avançou: o Bug revida
-      setTimeout(() => falar(comNome(DICAS[n - 1], n - 1)), n >= 3 ? 3200 : 2400);
+      setTimeout(() => falar(comNome(DICAS[n - 1], n - 1), n >= 3), n >= 3 ? 3200 : 2400);
     }
     if (n !== liberados || !timerSusto) agendarSusto();
+    if (caca && !timerSabe) agendarSabe();
+    if (caca) setTimeout(enviarPerfil, 1500);
+    if (!caca) { clearTimeout(timerSabe); timerSabe = null; }
     if (!caca) clearTimeout(timerSusto), timerSusto = null;
     liberados = n;
   }
@@ -1167,6 +1336,7 @@
           rodada = m.r; escapei = guarda.ler('lp-escapou') === rodada; hud.classList.toggle('livre', escapei); minhasResp = {};
         }
         if (typeof m.a === 'number' && aquecido && m.a !== ultimoApagao) { ultimoApagao = m.a; apagao(); }
+        if (m.v) fuiEscolhido(m.v);
         if (typeof m.s === 'number') receber(m.s, (m.j && typeof m.j === 'object') ? m.j : null, typeof m.t === 'number' ? Math.min(m.t, Date.now()) : Date.now(), typeof m.b === 'number' ? m.b : 0, m.k === 1 ? 1 : 0);
       } catch (erro) {}
     };

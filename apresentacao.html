@@ -715,6 +715,21 @@ body:is([data-clima="4"],[data-clima="5"]) .clima-fx{opacity:1;animation:tfFlick
 .apagao.on b{animation:apagTxt 3.8s steps(1) forwards}
 @keyframes apagTxt{0%,68%{opacity:0}69%,90%{opacity:1}91%,100%{opacity:0}}
 .bug-susto.on{animation-duration:1.25s}
+
+/* ---------- CAOS (fim da apresentação) ---------- */
+.estatica{position:fixed;inset:0;z-index:29;width:100%;height:100%;pointer-events:none;image-rendering:pixelated;opacity:0;mix-blend-mode:screen}
+.estatica.on{opacity:.55}
+.erro-win{position:fixed;z-index:28;width:min(340px,30vw);pointer-events:none;font-family:var(--f-mono);font-size:clamp(.78rem,.7rem + .25vw,.95rem);color:#f3dcd6;
+  background:#140608;border:2px solid #c22b1e;box-shadow:6px 6px 0 rgba(0,0,0,.7),0 0 30px rgba(194,43,30,.35)}
+.erro-win header{display:flex;align-items:center;gap:8px;padding:5px 8px;background:linear-gradient(90deg,#c22b1e,#5a0f0d);color:#fff;font-weight:700;letter-spacing:.04em}
+.erro-win header i{margin-left:auto;font-style:normal;border:1px solid #fff;width:16px;height:16px;display:grid;place-items:center;font-size:11px}
+.erro-win p{margin:0;padding:12px 12px 8px;line-height:1.35}
+.erro-win footer{display:flex;justify-content:flex-end;gap:8px;padding:0 12px 10px}
+.erro-win footer span{border:1px solid #8d4a48;padding:2px 14px;color:#d6b3ad}
+.bug-enxame{position:fixed;left:0;top:0;width:clamp(56px,5.5vw,90px);height:auto;aspect-ratio:52/42;z-index:25;pointer-events:none;image-rendering:pixelated;filter:drop-shadow(0 0 10px rgba(194,43,30,.6))}
+.mudo-aviso{position:fixed;left:50%;bottom:calc(var(--bot-h) + 12px);translate:-50% 0;z-index:40;padding:6px 14px;border-radius:999px;background:#140608;border:1px solid #c22b1e;color:#f3dcd6;font-family:var(--f-mono);font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none}
+.mudo-aviso.on{opacity:1}
+@media (prefers-reduced-motion:reduce){.estatica,.erro-win,.bug-enxame{display:none!important}}
 /* ---------- ÚLTIMO CAPÍTULO: PLOT TWIST (Bootstrap) ---------- */
 :root{--bs:#7952b3;--bs2:#b9a2f0}
 /* A. rebobinar: os 8 consertos do dia */
@@ -3344,11 +3359,157 @@ window.FALHA = (() => {
 })();
 
 /* =========================================================
+   CAOS: do clima 3 em diante a apresentação começa a "quebrar" de verdade.
+   - rajadas: chiado de TV + a tela inteira treme e separa as cores
+   - janelas de erro em cascata (com mensagens sobre o próprio conteúdo)
+   - enxame: vários Bugs atravessando a tela juntos (clima 5)
+   - som de fundo: zumbido grave e, no fim, batida de coração (tecla M = mudo)
+   Nada disso aparece na invasão, no jogo ou com animações reduzidas.
+   ========================================================= */
+window.CAOS = (() => {
+  const ERROS = [
+    ['Erro 404', 'Viewport não encontrada.'],
+    ['overflow-x', 'Largura atual: 9999px. A tela não aguenta.'],
+    ['Bug.exe', 'O programa não está respondendo. (Ele não quer responder.)'],
+    ['Media query', 'Tela de tamanho ∞ detectada.'],
+    ['font-size', 'A fonte está ficando… grande… GRANDE DEMAIS.'],
+    ['imagem.jpg', 'A imagem estourou a caixa. De novo.'],
+    ['z-index: 999999', 'Eu estou por cima de tudo.'],
+    ['Conserto falhou', 'Tentar de novo? [Não] [Não]'],
+    ['display: none', 'Aplicado em: esperança.'],
+    ['Grid', 'Seu layout foi para a coluna errada.'],
+    ['@container', 'A caixa é pequena demais para você.'],
+    ['Aviso', 'Não feche esta janela. Eu já fechei a saída.']
+  ];
+  let clima = 0, timers = {}, ac = null, mudo = false, drone = null;
+  const bloqueado = () => REDUCED || document.hidden || !clima || $('.slide.is-active.inv-slide, .slide.is-active.jogo-slide') || $('#apagao.on');
+
+  /* chiado de TV: um canvas pequeno com pixels aleatórios, esticado na tela */
+  const est = document.createElement('canvas'); est.className = 'estatica'; est.width = 192; est.height = 108; est.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(est);
+  function chiado(ms){
+    const g = est.getContext('2d'), fim = performance.now() + ms; est.classList.add('on');
+    (function quadro(){
+      const img = g.createImageData(est.width, est.height), dd = img.data;
+      for(let i = 0; i < dd.length; i += 4){ const v = Math.random() * 255 | 0; dd[i] = v; dd[i + 1] = v * .8; dd[i + 2] = v * .8; dd[i + 3] = 255; }
+      g.putImageData(img, 0, 0);
+      if(performance.now() < fim) requestAnimationFrame(quadro); else est.classList.remove('on');
+    })();
+  }
+  function rajada(){
+    if(bloqueado()) return;
+    const m = $('#deck'), forte = clima >= 5;
+    chiado(forte ? 260 : 170); somChiado(forte ? .3 : .18);
+    m.animate([
+      { transform:'none', filter:'none' },
+      { transform:'translate(-14px,4px) skewX(4deg)', filter:'drop-shadow(6px 0 #ff2a1f) drop-shadow(-6px 0 #52d5ff)' },
+      { transform:'translate(10px,-6px)', filter:'invert(1) hue-rotate(180deg)', offset:.45 },
+      { transform:'translate(-6px,2px) scaleY(1.02)', filter:'drop-shadow(-8px 0 #ff2a1f)' },
+      { transform:'none', filter:'none' }
+    ], { duration: forte ? 420 : 300, easing:'steps(5)' });
+  }
+
+  /* janelas de erro: aparecem nas bordas (nunca no meio do slide) e somem sozinhas */
+  function janela(i, base){
+    if(bloqueado()) return;
+    const [tit, txt] = ERROS[Math.floor(Math.random() * ERROS.length)];
+    const w = document.createElement('div'); w.className = 'erro-win'; w.setAttribute('aria-hidden', 'true');
+    w.innerHTML = '<header>⚠ <b></b><i>✕</i></header><p></p><footer><span>OK</span><span>OK</span></footer>';
+    w.querySelector('b').textContent = tit; w.querySelector('p').textContent = txt;
+    const W = innerWidth, H = innerHeight;
+    const lado = base || [Math.random() < .5 ? W * .02 : W * .68, H * (.14 + Math.random() * .5)];
+    w.style.left = Math.min(W - 40, lado[0] + i * 26) + 'px'; w.style.top = Math.min(H - 120, lado[1] + i * 26) + 'px';
+    document.body.appendChild(w);
+    w.animate([{ transform:'scale(.6)', opacity:0 }, { transform:'scale(1.06)', opacity:1, offset:.6 }, { transform:'none', opacity:1 }], { duration: 220, easing:'steps(4)' });
+    somBip();
+    setTimeout(() => w.animate([{ opacity:1 }, { opacity:0, transform:'translateY(8px)' }], { duration: 200, easing:'steps(3)' }).onfinish = () => w.remove(), 2600 + Math.random() * 2200 + i * 150);
+  }
+  function cascata(n){
+    const W = innerWidth, H = innerHeight, base = [Math.random() < .5 ? W * .02 : W * .62, H * (.12 + Math.random() * .3)];
+    for(let i = 0; i < n; i++) setTimeout(() => janela(i, base), i * 140);
+  }
+
+  /* enxame: 3 a 5 Bugs atravessam juntos */
+  function enxame(){
+    if(bloqueado()) return;
+    const W = innerWidth, H = innerHeight, n = 3 + Math.floor(Math.random() * 3);
+    for(let k = 0; k < n; k++){
+      const cv = document.createElement('canvas'); cv.width = 52; cv.height = 42; cv.className = 'bug-enxame'; cv.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(cv);
+      const parar = animarBug(cv, { falha: Math.random() < .5, dano: Math.random() * .6 });
+      const y0 = H * (.15 + Math.random() * .7), y1 = H * (.15 + Math.random() * .7), esq = Math.random() < .5;
+      const x0 = esq ? -100 : W + 100, x1 = esq ? W + 100 : -100, ang = Math.atan2(y1 - y0, x1 - x0) * 180 / Math.PI + 90;
+      const a = cv.animate([{ transform:`translate(${x0}px,${y0}px) rotate(${ang}deg)` }, { transform:`translate(${(x0 + x1) / 2}px,${(y0 + y1) / 2 + (Math.random() * 80 - 40)}px) rotate(${ang + 14}deg)` }, { transform:`translate(${x1}px,${y1}px) rotate(${ang}deg)` }],
+        { duration: 2600 + Math.random() * 1800, delay: k * 220, easing:'linear', fill:'backwards' });
+      a.onfinish = () => { parar(); cv.remove(); };
+    }
+  }
+
+  /* SOM: zumbido grave contínuo + batida de coração (clima 4 e 5) */
+  function audio(){ try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if(ac.state === 'suspended') ac.resume(); } catch(e){} return ac; }
+  addEventListener('keydown', audio); addEventListener('pointerdown', audio);
+  function somChiado(vol){
+    if(mudo || !audio()) return;
+    const t = ac.currentTime, len = ac.sampleRate * .25, b = ac.createBuffer(1, len, ac.sampleRate), x = b.getChannelData(0);
+    for(let i = 0; i < len; i++) x[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const s = ac.createBufferSource(), g = ac.createGain(), f = ac.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = 900;
+    s.buffer = b; s.connect(f); f.connect(g); g.connect(ac.destination); g.gain.value = vol; s.start(t);
+  }
+  function somBip(){
+    if(mudo || !audio()) return;
+    const t = ac.currentTime, o = ac.createOscillator(), g = ac.createGain(); o.type = 'square'; o.frequency.setValueAtTime(220 + Math.random() * 60, t);
+    o.connect(g); g.connect(ac.destination); g.gain.setValueAtTime(.05, t); g.gain.exponentialRampToValueAtTime(.0001, t + .16); o.start(t); o.stop(t + .17);
+  }
+  function batida(){
+    if(mudo || !audio()) return;
+    [0, .22].forEach((dt, i) => {
+      const t = ac.currentTime + dt, o = ac.createOscillator(), g = ac.createGain(); o.type = 'sine';
+      o.frequency.setValueAtTime(i ? 52 : 60, t); o.frequency.exponentialRampToValueAtTime(30, t + .18);
+      o.connect(g); g.connect(ac.destination); g.gain.setValueAtTime(i ? .28 : .4, t); g.gain.exponentialRampToValueAtTime(.0001, t + .22); o.start(t); o.stop(t + .24);
+    });
+  }
+  function ligarDrone(vol){
+    if(!audio()) return;
+    if(!drone){
+      const o1 = ac.createOscillator(), o2 = ac.createOscillator(), g = ac.createGain(), f = ac.createBiquadFilter();
+      o1.type = 'sawtooth'; o2.type = 'sawtooth'; o1.frequency.value = 41; o2.frequency.value = 41.7;   // duas notas quase iguais "batem" e tremem
+      f.type = 'lowpass'; f.frequency.value = 180; o1.connect(f); o2.connect(f); f.connect(g); g.connect(ac.destination); g.gain.value = 0;
+      o1.start(); o2.start(); drone = { g };
+    }
+    drone.g.gain.setTargetAtTime(mudo ? 0 : vol, ac.currentTime, 1.2);
+  }
+
+  function agendar(nome, faixa, fn){
+    clearTimeout(timers[nome]);
+    if(!faixa) return;
+    timers[nome] = setTimeout(() => { fn(); agendar(nome, faixa, fn); }, (faixa[0] + Math.random() * (faixa[1] - faixa[0])) * 1000);
+  }
+  function setClima(c){
+    if(c === clima) return; clima = c;
+    agendar('rajada', { 3: [26, 40], 4: [12, 20], 5: [6, 11] }[c], rajada);
+    agendar('janela', { 3: [40, 60], 4: [18, 28], 5: [12, 18] }[c], () => clima >= 5 ? cascata(3 + Math.floor(Math.random() * 3)) : janela(0));
+    agendar('enxame', { 5: [16, 26] }[c], enxame);
+    agendar('coracao', { 4: [1.3, 1.5], 5: [.72, .82] }[c], () => { if(!bloqueado() || $('.slide.is-active.jogo-slide')) batida(); });
+    if(ac || c >= 3) ligarDrone({ 3: .025, 4: .045, 5: .07 }[c] || 0);
+    if(!c) $$('.erro-win, .bug-enxame').forEach(e => e.remove());
+  }
+  document.addEventListener('keydown', e => {
+    if(e.target.closest('textarea,input,select,[contenteditable]') || e.ctrlKey || e.metaKey || e.altKey) return;
+    if(e.key === 'm' || e.key === 'M'){
+      mudo = !mudo; if(drone) drone.g.gain.setTargetAtTime(mudo ? 0 : ({ 3: .025, 4: .045, 5: .07 }[clima] || 0), ac.currentTime, .3);
+      let av = $('.mudo-aviso'); if(!av){ av = document.createElement('div'); av.className = 'mudo-aviso'; document.body.appendChild(av); }
+      av.textContent = mudo ? 'som do Bug: desligado (M)' : 'som do Bug: ligado (M)'; av.classList.add('on'); clearTimeout(av._t); av._t = setTimeout(() => av.classList.remove('on'), 1600);
+    }
+  });
+  return { setClima, rajada, cascata, enxame };
+})();
+
+/* =========================================================
    O CLIMA: até a invasão a apresentação é normal. Depois dela tudo
    escurece e fica mais vermelho a cada ato, o Bug passeia pela tela
    cada vez mais vezes e, num momento, a luz apaga. No "rebobinar"
    tudo volta ao normal, como se nada tivesse acontecido.
-   Teclas: B = o Bug passeia agora · X = apagão agora · V = o Bug fala de alguém da sala.
+   Teclas: B = o Bug passeia agora · X = apagão agora · V = o Bug fala de alguém da sala · M = mudo.
    ========================================================= */
 window.CLIMA = (() => {
   const climas = []; let n = 0, k = 0;
@@ -3407,6 +3568,7 @@ window.CLIMA = (() => {
       { de:[W - w * .8, H + h], para:[W - w * .8, -h], r: 0 }                   // subindo pela borda direita
     ];
     if(clima >= 4) rotas.push({ de:[-w, H * .3], para:[W + w, H * .62], r: 108, esbarra: true });   // atravessa o meio
+    if(clima >= 5 && window.CAOS && Math.random() < .5) CAOS.enxame();
     const rota = rotas[Math.floor(Math.random() * rotas.length)];
     const dur = clima >= 4 ? 4200 : 7000;
     cv._vivo = true; cv.style.opacity = 1;
@@ -3471,6 +3633,7 @@ window.CLIMA = (() => {
       if(subiu && clima >= 2) setTimeout(passear, 2500);   // mudou de nível: o Bug dá uma volta para avisar
     }
     if(window.FALHA){ FALHA.setClima(clima); if(indo) FALHA.entrar(s, clima); }
+    if(window.CAOS) CAOS.setClima(clima);
     clearTimeout(timerApagao);
     if(indo && s.dataset.apagao) timerApagao = setTimeout(() => { if(slides[cur] === s) apagao(); }, +s.dataset.apagao);
   }

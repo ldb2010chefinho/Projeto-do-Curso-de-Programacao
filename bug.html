@@ -449,6 +449,24 @@
     .cardapio.tomado .card.eu { border-color: #ff2a1f; box-shadow: 0 0 0 2px #ff2a1f, 0 0 34px rgba(255, 42, 31, .55); }
     .cardapio.tomado .card.eu h3::after { content: " ← você"; font: 700 .7em "Courier New", monospace; color: #ffd2cb; }
     h2.tomado { color: #c22b1e; }
+
+    /* ---------- CAOS no celular (nível 3 e 4) ---------- */
+    .estatica { position: fixed; inset: 0; z-index: 57; width: 100%; height: 100%; pointer-events: none; image-rendering: pixelated; opacity: 0; mix-blend-mode: screen; }
+    .estatica.on { opacity: .6; }
+    .erro-win { position: fixed; z-index: 57; width: min(270px, 78vw); pointer-events: none; zoom: var(--k, 1); font: 13px/1.35 "Courier New", monospace; color: #f3dcd6;
+      background: #140608; border: 2px solid #c22b1e; box-shadow: 5px 5px 0 rgba(0, 0, 0, .6), 0 0 24px rgba(194, 43, 30, .35); }
+    .erro-win header { display: flex; align-items: center; gap: 6px; padding: 4px 7px; background: linear-gradient(90deg, #c22b1e, #5a0f0d); color: #fff; font-weight: 700; }
+    .erro-win header i { margin-left: auto; font-style: normal; border: 1px solid #fff; width: 14px; height: 14px; display: grid; place-items: center; font-size: 10px; }
+    .erro-win p { margin: 0; padding: 10px 10px 6px; }
+    .erro-win footer { display: flex; justify-content: flex-end; gap: 6px; padding: 0 10px 8px; }
+    .erro-win footer span { border: 1px solid #8d4a48; padding: 1px 10px; color: #d6b3ad; }
+    .bug-enxame { position: fixed; left: 0; top: 0; width: 56px; height: auto; aspect-ratio: 52 / 42; z-index: 56; pointer-events: none; image-rendering: pixelated; }
+    .gotas { position: fixed; left: 0; right: 0; top: 0; height: 0; z-index: 55; pointer-events: none; }
+    html[data-bug="4"] .gotas { height: 100%; }
+    .gotas i { position: absolute; top: 0; width: var(--w); height: 0; background: linear-gradient(#5a0608, #c22b1e 70%, #ff2a1f); border-radius: 0 0 3px 3px;
+      box-shadow: 0 0 8px rgba(194, 43, 30, .5); animation: pingo var(--d) steps(14) infinite; animation-delay: var(--a); }
+    @keyframes pingo { 0% { height: 0; opacity: 1 } 70% { height: var(--h); opacity: 1 } 100% { height: var(--h); opacity: 0 } }
+    @media (prefers-reduced-motion: reduce) { .estatica, .erro-win, .bug-enxame, .gotas { display: none !important; } }
   </style>
 </head>
 <body>
@@ -523,6 +541,8 @@
   <div class="bug-fala" id="bugFala"><canvas width="52" height="42" aria-hidden="true"></canvas><span aria-hidden="true"></span><b class="sr" aria-live="polite"></b></div>
   <div class="dreno" aria-hidden="true"><span class="bat"><i></i><b>--%</b></span><span class="sinal">sem serviço</span></div>
   <div class="bug-tinta" aria-hidden="true"></div>
+  <div class="gotas" aria-hidden="true"></div>
+  <canvas class="estatica" width="96" height="170" aria-hidden="true"></canvas>
   <!-- O JOGO DO BUG: aparece sozinho quando a apresentação chega no jogo -->
   <div class="jogo" id="jogo" hidden aria-live="polite"><div class="jc" id="jogoC"></div></div>
 
@@ -963,7 +983,7 @@
     regras.hidden = true; hud.classList.add('livre');
     try { navigator.vibrate && navigator.vibrate([60, 40, 60, 40, 200]); } catch (e) {}
     if (ultimoJogo) mostrarJogo(ultimoJogo, ultimoQuando);
-    else falar(rodada ? 'Você escapou… por enquanto. Espere o corte.' : 'Código certo! Sem internet: mostre esta tela para o grupo.');
+    else falar(rodada ? 'Você escapou… por enquanto. Espere o corte.' : 'Código certo! Sem internet: mostre esta tela para o grupo.', false, false, 'pessoal');
   }
   document.addEventListener('submit', (e) => {
     const f = e.target.closest('#codForm, form[data-cod]'); if (!f) return;
@@ -993,7 +1013,7 @@
       const g = apagCara.getContext('2d'); g.clearRect(0, 0, 26, 21); g.drawImage(apagTmp, 9, 0, 26, 21, 0, 0, 26, 21);
       requestAnimationFrame(loop);
     })(t0);
-    setTimeout(() => { try { navigator.vibrate && navigator.vibrate([400, 80, 400]); } catch (e) {} }, 2600);
+    setTimeout(() => vibrar('susto'), 2600);
     setTimeout(() => apag.classList.remove('on'), 3900);
   }
 
@@ -1010,7 +1030,7 @@
     clearInterval(relogioJogo); if (pararBugJogo) { pararBugJogo(); pararBugJogo = null; }
     if (j && j.p === 'volta') {                // o último slide: o Bug derrotado promete voltar
       telaJogo.hidden = true;
-      falar((meuNome ? meuNome + '… ' : '') + 'isso não acabou. Eu vou voltar.', true);
+      falar((meuNome ? meuNome + '… ' : '') + 'isso não acabou. Eu vou voltar.', true, false, 'pessoal');
       return;
     }
     if (!j) {                                   // fim do jogo: rebobina e some
@@ -1083,12 +1103,12 @@
     const subiu = b > nivelBug; nivelBug = b;
     if (b) raiz.dataset.bug = b; else delete raiz.dataset.bug;
     if (b < 3) ligarDreno(0); else if (raiz.dataset.dreno) ligarDreno(1);
-    agendarCorrompe(); agendarSabe();
+    agendarCorrompe(); agendarSabe(); caosDoNivel(b);
     clearInterval(timerAnda);
     if (b) {
       if (subiu) setTimeout(passearBug, 600);
       if (subiu && b >= 2) setTimeout(() => { if (typeof falaQueSabe === 'function') falaQueSabe(); }, 12000);
-      if (subiu && b >= 3) setTimeout(() => { ligarDreno(1); if (sabe.bateria !== null) falar('Olha aí do lado, ' + (meuNome || 'você') + '. ' + sabe.bateria + '%. Achou que eu não ia ver?', true); }, 4000);
+      if (subiu && b >= 3) setTimeout(() => { ligarDreno(1); if (sabe.bateria !== null) falar('Olha aí do lado, ' + (meuNome || 'você') + '. ' + sabe.bateria + '%. Achou que eu não ia ver?', true, false, 'pessoal'); }, 4000);
       timerAnda = setInterval(passearBug, [0, 26000, 17000, 11000, 7000][b]);
     }
   }
@@ -1134,11 +1154,22 @@
       if (p === 1 && nivel < 4) { el.textContent = texto; clearInterval(timerTexto); }
     }, 55);
   }
+  /* VIBRAÇÃO: cada tipo de recado do Bug tem o seu jeito de vibrar
+     (só Android; o iPhone não deixa site nenhum vibrar) */
+  const VIBRA = {
+    geral:    [120, 80, 120, 80, 120],                  // o Bug fala com a sala toda: três toques
+    pessoal:  [600, 180, 110, 110, 110, 180, 700],      // fala só com você: longa e arrastada
+    telao:    [250, 80, 250, 80, 250, 80, 1000],        // você está no telão: a mais forte
+    susto:    [450, 50, 450, 50, 600],
+    fantasma: [35, 260, 35],                             // "vibrou do nada?"
+    coracao:  [70, 110, 50]
+  };
+  function vibrar(tipo) { try { if (!calmo && navigator.vibrate) navigator.vibrate(VIBRA[tipo] || tipo); } catch (e) {} }
   let travaFala = 0;
-  function falar(texto, grave, prioridade) {
+  function falar(texto, grave, prioridade, tipo) {
     if (!falaBug) return;
     /* quando o Bug fala de VOCÊ no telão, essa fala não pode ser atropelada */
-    if (!prioridade && Date.now() < travaFala) { setTimeout(() => falar(texto, grave), travaFala - Date.now() + 400); return; }
+    if (!prioridade && Date.now() < travaFala) { setTimeout(() => falar(texto, grave, false, tipo), travaFala - Date.now() + 400); return; }
     if (prioridade) travaFala = Date.now() + 7600;
     falaBug.querySelector('.sr').textContent = texto;
     falaBug.classList.toggle('grave', !!grave);
@@ -1146,7 +1177,7 @@
     if (!pararFala) pararFala = animarBug(falaBug.querySelector('canvas'), () => (falaBug.classList.contains('on') ? {} : null));
     falaBug.classList.add('on'); clearTimeout(timerFala);
     timerFala = setTimeout(() => { falaBug.classList.remove('on'); clearInterval(timerTexto); }, grave ? 7500 : 6500);
-    try { navigator.vibrate && navigator.vibrate([60, 40, 60]); } catch (e) {}
+    vibrar(tipo || (prioridade ? 'telao' : 'geral'));
   }
   /* SUSTOS: com 2 números liberados o Bug começa a pular na tela de vez em
      quando; quanto mais a turma avança, mais ele se desespera e pula. */
@@ -1161,7 +1192,7 @@
     susto.querySelector('.susto-txt').textContent = recados[Math.floor(Math.random() * recados.length)];
     susto.classList.remove('on'); void susto.offsetWidth; susto.classList.add('on');
     setTimeout(() => susto.classList.remove('on'), 1300);
-    try { navigator.vibrate && navigator.vibrate([220, 70, 220]); } catch (e) {}
+    vibrar('susto');
   }
 
   /* =====================================================================
@@ -1180,7 +1211,7 @@
     if (document.visibilityState === 'hidden') { sabe.saiu = Date.now(); return; }
     if (!sabe.saiu || !caca || nivelBug < 1) return;
     const seg = Math.round((Date.now() - sabe.saiu) / 1000); sabe.saiu = 0;
-    if (seg >= 4) setTimeout(() => falar((meuNome ? meuNome + '. ' : '') + 'Você sumiu por ' + seg + ' segundos. Eu esperei aqui.', nivelBug >= 3), 900);
+    if (seg >= 4) setTimeout(() => falar((meuNome ? meuNome + '. ' : '') + 'Você sumiu por ' + seg + ' segundos. Eu esperei aqui.', nivelBug >= 3, false, 'pessoal'), 900);
   });
   function fatos() {
     const ua = navigator.userAgent, rede = navigator.connection && navigator.connection.type;
@@ -1230,7 +1261,7 @@
     const lista = novas.length ? novas : op;
     const esc = lista[Math.floor(Math.random() * lista.length)];
     sabe.usadas.add(esc[0]);
-    falar(esc[1], cam === 2);
+    falar(esc[1], cam === 2, false, 'pessoal');
   }
   /* falas de tempos em tempos enquanto a caça está valendo (cada vez mais seguidas) */
   let timerSabe = null;
@@ -1288,7 +1319,7 @@
     });
     if (primeiraVez) {
       setTimeout(() => grade.scrollIntoView({ behavior: calmo ? 'auto' : 'smooth', block: 'center' }), 200);
-      setTimeout(() => falar('Olha o cardápio, ' + (meuNome || 'você') + '. Hoje o prato principal… são vocês.', true), 2400);
+      setTimeout(() => falar('Olha o cardápio, ' + (meuNome || 'você') + '. Hoje o prato principal… são vocês.', true, false, 'pessoal'), 2400);
     }
   }
   /* o texto aparece "decodificando" (cada elemento com o seu próprio relógio) */
@@ -1349,9 +1380,104 @@
     ultimaVitima = v;
     if (v.split(':')[0] !== meuId || !aquecido) return;
     setTimeout(() => {
-      falar('Isso mesmo, ' + (meuNome || 'você') + '. Estou falando de você. Olhe para o telão.', true, true);
-      try { navigator.vibrate && navigator.vibrate([300, 80, 300, 80, 300]); } catch (e) {}
+      falar('Isso mesmo, ' + (meuNome || 'você') + '. Estou falando de você. Olhe para o telão.', true, true, 'telao');
     }, 400);
+  }
+
+  /* =====================================================================
+     CAOS NO CELULAR: chiado de TV, janelas de erro, enxame de Bugs,
+     pingos vermelhos escorrendo e vibração de batimento (nível 3 e 4).
+     Nunca em cima do jogo, das regras, do pedido ou do apagão.
+     ===================================================================== */
+  const ERROS = [
+    ['Erro 404', 'Viewport não encontrada.'],
+    ['overflow-x', 'Largura atual: 9999px. A tela não aguenta.'],
+    ['Bug.exe', 'O programa não está respondendo. (Ele não quer responder.)'],
+    ['Media query', 'Tela de tamanho ∞ detectada.'],
+    ['font-size', 'A fonte está ficando… grande… GRANDE DEMAIS.'],
+    ['imagem.jpg', 'A imagem estourou a caixa. De novo.'],
+    ['z-index: 999999', 'Eu estou por cima de tudo.'],
+    ['Conserto falhou', 'Tentar de novo? [Não] [Não]'],
+    ['display: none', 'Aplicado em: esperança.'],
+    ['Grid', 'Seu layout foi para a coluna errada.'],
+    ['@container', 'A caixa é pequena demais para você.'],
+    ['Aviso', 'Não feche esta janela. Eu já fechei a saída.']
+  ];
+  const estat = document.querySelector('.estatica');
+  const ocupadoCaos = () => calmo || document.hidden || nivelBug < 3 || !telaJogo.hidden || !regras.hidden || !pedido.hidden || apag.classList.contains('on');
+  function chiadoCel(ms) {
+    const g = estat.getContext('2d'), fim = performance.now() + ms; estat.classList.add('on');
+    (function quadro() {
+      const img = g.createImageData(estat.width, estat.height), dd = img.data;
+      for (let i = 0; i < dd.length; i += 4) { const v = Math.random() * 255 | 0; dd[i] = v; dd[i + 1] = v * .8; dd[i + 2] = v * .8; dd[i + 3] = 255; }
+      g.putImageData(img, 0, 0);
+      if (performance.now() < fim) requestAnimationFrame(quadro); else estat.classList.remove('on');
+    })();
+  }
+  function rajadaCel() {
+    if (ocupadoCaos()) return;
+    chiadoCel(nivelBug >= 4 ? 240 : 150);
+    document.querySelectorAll('.topo, .hero, .layout').forEach((el) => el.animate([
+      { transform: 'none', filter: 'none' }, { transform: 'translate(-10px,3px) skewX(5deg)', filter: 'drop-shadow(5px 0 #ff2a1f) drop-shadow(-5px 0 #52d5ff)' },
+      { transform: 'translate(8px,-4px)', filter: 'invert(1) hue-rotate(180deg)', offset: .5 }, { transform: 'none', filter: 'none' }
+    ], { duration: 320, easing: 'steps(4)' }));
+    try { navigator.vibrate && navigator.vibrate(60); } catch (e) {}
+  }
+  function janelaCel(i, base) {
+    if (ocupadoCaos()) return;
+    const [tit, txt] = ERROS[Math.floor(Math.random() * ERROS.length)];
+    const w = document.createElement('div'); w.className = 'erro-win'; w.setAttribute('aria-hidden', 'true');
+    w.innerHTML = '<header>⚠ <b></b><i>✕</i></header><p></p><footer><span>OK</span></footer>';
+    w.querySelector('b').textContent = tit; w.querySelector('p').textContent = txt;
+    const k = parseFloat(getComputedStyle(raiz).getPropertyValue('--k')) || 1;
+    const W = innerWidth / k, H = innerHeight / k, b = base || [W * (.04 + Math.random() * .2), H * (.12 + Math.random() * .45)];
+    w.style.left = Math.min(W - 200, b[0] + i * 18) + 'px'; w.style.top = Math.min(H - 160, b[1] + i * 22) + 'px';
+    document.body.appendChild(w);
+    w.animate([{ transform: 'scale(.6)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 200, easing: 'steps(4)' });
+    setTimeout(() => w.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180, easing: 'steps(3)' }).onfinish = () => w.remove(), 2400 + Math.random() * 1800 + i * 150);
+  }
+  function cascataCel(n) {
+    const k = parseFloat(getComputedStyle(raiz).getPropertyValue('--k')) || 1, base = [innerWidth / k * .05, innerHeight / k * (.12 + Math.random() * .25)];
+    for (let i = 0; i < n; i++) setTimeout(() => janelaCel(i, base), i * 150);
+  }
+  function enxameCel() {
+    if (ocupadoCaos()) return;
+    const W = innerWidth, H = innerHeight, n = 3 + Math.floor(Math.random() * 2);
+    for (let q = 0; q < n; q++) {
+      const cv = document.createElement('canvas'); cv.width = 52; cv.height = 42; cv.className = 'bug-enxame'; cv.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(cv);
+      const parar = animarBug(cv, { falha: Math.random() < .5 });
+      const x0 = W * Math.random(), x1 = W * Math.random(), desce = Math.random() < .5, y0 = desce ? -60 : H + 60, y1 = desce ? H + 60 : -60;
+      const ang = Math.atan2(y1 - y0, x1 - x0) * 180 / Math.PI + 90;
+      const a = cv.animate([{ transform: `translate(${x0}px,${y0}px) rotate(${ang}deg)` }, { transform: `translate(${x1}px,${y1}px) rotate(${ang}deg)` }],
+        { duration: 2200 + Math.random() * 1500, delay: q * 200, easing: 'linear', fill: 'backwards' });
+      a.onfinish = () => { parar(); cv.remove(); };
+    }
+    try { navigator.vibrate && navigator.vibrate([20, 30, 20, 30, 20]); } catch (e) {}
+  }
+  /* pingos vermelhos no topo (só no nível 4) */
+  (function () {
+    const g = document.querySelector('.gotas'); if (!g) return;
+    for (let i = 0; i < 11; i++) {
+      const p = document.createElement('i');
+      p.style.cssText = `left:${(i * 9.3 + Math.random() * 5).toFixed(1)}%;--w:${4 + Math.round(Math.random() * 6)}px;--h:${8 + Math.round(Math.random() * 26)}vh;--d:${(4 + Math.random() * 5).toFixed(1)}s;--a:-${(Math.random() * 6).toFixed(1)}s`;
+      g.appendChild(p);
+    }
+  })();
+  const timersCaos = {};
+  function agendarCaos(nome, faixa, fn) {
+    clearTimeout(timersCaos[nome]);
+    if (!faixa) return;
+    timersCaos[nome] = setTimeout(() => { fn(); agendarCaos(nome, faixa, fn); }, (faixa[0] + Math.random() * (faixa[1] - faixa[0])) * 1000);
+  }
+  function caosDoNivel(b) {
+    agendarCaos('rajada', { 3: [24, 38], 4: [8, 14] }[b], rajadaCel);
+    agendarCaos('janela', { 3: [35, 55], 4: [14, 22] }[b], () => (nivelBug >= 4 ? cascataCel(2 + Math.floor(Math.random() * 2)) : janelaCel(0)));
+    agendarCaos('enxame', { 4: [18, 28] }[b], enxameCel);
+    agendarCaos('coracao', { 4: [7, 11] }[b], () => { if (!ocupadoCaos()) vibrar('coracao'); });
+    /* de vez em quando o celular vibra "do nada", sem nada aparecer na tela */
+    agendarCaos('fantasma', { 2: [55, 95], 3: [35, 55], 4: [18, 30] }[b], () => { if (caca && !document.hidden) vibrar('fantasma'); });
+    if (b < 3) document.querySelectorAll('.erro-win, .bug-enxame').forEach((e) => e.remove());
   }
   function agendarSusto() {
     clearTimeout(timerSusto);

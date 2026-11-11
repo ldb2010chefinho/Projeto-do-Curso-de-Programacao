@@ -631,6 +631,10 @@ body[data-bug="4"] .bordas{--bw:34px;--bo:.85;opacity:.85;animation:bordaPisca .
 .bug-susto canvas{width:min(92vw,140vh);height:auto;aspect-ratio:52/42;image-rendering:pixelated}
 .bug-susto.on{display:grid;animation:sustoPula .75s steps(5) forwards}
 @keyframes sustoPula{0%{background:#c22b1e;transform:scale(1.4)}20%{background:#000;transform:scale(1) translate(-12px,6px)}40%{transform:translate(10px,-8px);filter:invert(1)}60%{filter:none;transform:translate(-6px,4px)}100%{opacity:0}}
+/* aviso: cópia aberta fora do GitHub Pages (ex.: dentro do app do Claude) não fala com os celulares */
+.copia-aviso{position:fixed;left:50%;top:calc(var(--top-h) + 10px);transform:translateX(-50%);z-index:80;width:min(760px,calc(100vw - 32px));
+  padding:10px 16px;border:1px solid #ff6679;border-radius:12px;background:#2a0b12;color:#ffd6dc;font-family:var(--f-mono);font-size:13px;line-height:1.4;text-align:center}
+.copia-aviso[hidden]{display:none}
 /* ---------- ÚLTIMO CAPÍTULO: PLOT TWIST (Bootstrap) ---------- */
 :root{--bs:#7952b3;--bs2:#b9a2f0}
 /* A. rebobinar: os 8 consertos do dia */
@@ -1994,6 +1998,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 
 <!-- ============ BARRA INFERIOR ============ -->
 <i class="voz-line" aria-hidden="true"></i>
+<div class="copia-aviso" id="copiaAviso" hidden>Esta cópia <b>não comanda os celulares</b>. Para apresentar, abra <b>ldb2010.github.io/lanchonete-pixel/apresentacao.html</b> no Chrome.</div>
 <i class="terror-fx" aria-hidden="true"></i>
 <i class="bug-tint" aria-hidden="true"></i>
 <canvas class="bug-cameo" id="bugCameo" width="52" height="42" aria-hidden="true"></canvas>
@@ -3002,6 +3007,14 @@ window.JOGO = (() => {
    A INVASÃO: o Bug toma o site e explica a caça ao código.
    Os celulares mostram as mesmas regras enquanto este slide estiver na tela.
    ========================================================= */
+
+/* Se a apresentação for aberta fora do GitHub Pages (dentro do app do Claude,
+   de um arquivo baixado etc.), ela não consegue avisar os celulares: mostra o aviso. */
+(function(){
+  const h = location.hostname;
+  if(h === 'ldb2010.github.io' || h === 'localhost' || h === '127.0.0.1') return;
+  const a = document.getElementById('copiaAviso'); if(a) a.hidden = false;
+})();
 window.INVASAO = (() => {
   const slide = $('.inv-slide'); if(!slide) return { sync(){} };
   const bug = $('.inv-bug', slide);

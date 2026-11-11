@@ -457,12 +457,7 @@
     .erro-win footer { display: flex; justify-content: flex-end; gap: 6px; padding: 0 10px 8px; }
     .erro-win footer span { border: 1px solid #8d4a48; padding: 1px 10px; color: #d6b3ad; }
     .bug-enxame { position: fixed; left: 0; top: 0; width: 56px; height: auto; aspect-ratio: 52 / 42; z-index: 56; pointer-events: none; image-rendering: pixelated; }
-    .gotas { position: fixed; left: 0; right: 0; top: 0; height: 0; z-index: 55; pointer-events: none; }
-    html[data-bug="4"] .gotas { height: 100%; }
-    .gotas i { position: absolute; top: 0; width: var(--w); height: 0; background: linear-gradient(#5a0608, #c22b1e 70%, #ff2a1f); border-radius: 0 0 3px 3px;
-      box-shadow: 0 0 8px rgba(194, 43, 30, .5); animation: pingo var(--d) steps(14) infinite; animation-delay: var(--a); }
-    @keyframes pingo { 0% { height: 0; opacity: 1 } 70% { height: var(--h); opacity: 1 } 100% { height: var(--h); opacity: 0 } }
-    @media (prefers-reduced-motion: reduce) { .estatica, .erro-win, .bug-enxame, .gotas { display: none !important; } }
+    @media (prefers-reduced-motion: reduce) { .estatica, .erro-win, .bug-enxame { display: none !important; } }
   </style>
 </head>
 <body>
@@ -537,7 +532,6 @@
   <div class="bug-fala" id="bugFala"><canvas width="52" height="42" aria-hidden="true"></canvas><span aria-hidden="true"></span><b class="sr" aria-live="polite"></b></div>
   <div class="dreno" aria-hidden="true"><span class="bat"><i></i><b>--%</b></span><span class="sinal">sem serviço</span></div>
   <div class="bug-tinta" aria-hidden="true"></div>
-  <div class="gotas" aria-hidden="true"></div>
   <canvas class="estatica" width="96" height="170" aria-hidden="true"></canvas>
   <!-- O JOGO DO BUG: aparece sozinho quando a apresentação chega no jogo -->
   <div class="jogo" id="jogo" hidden aria-live="polite"><div class="jc" id="jogoC"></div></div>
@@ -1382,7 +1376,7 @@
 
   /* =====================================================================
      CAOS NO CELULAR: chiado de TV, janelas de erro, enxame de Bugs,
-     pingos vermelhos escorrendo e vibração de batimento (nível 3 e 4).
+     e vibração de batimento (nível 3 e 4).
      Nunca em cima do jogo, das regras, do pedido ou do apagão.
      ===================================================================== */
   const ERROS = [
@@ -1451,15 +1445,6 @@
     }
     try { navigator.vibrate && navigator.vibrate([20, 30, 20, 30, 20]); } catch (e) {}
   }
-  /* pingos vermelhos no topo (só no nível 4) */
-  (function () {
-    const g = document.querySelector('.gotas'); if (!g) return;
-    for (let i = 0; i < 11; i++) {
-      const p = document.createElement('i');
-      p.style.cssText = `left:${(i * 9.3 + Math.random() * 5).toFixed(1)}%;--w:${4 + Math.round(Math.random() * 6)}px;--h:${8 + Math.round(Math.random() * 26)}vh;--d:${(4 + Math.random() * 5).toFixed(1)}s;--a:-${(Math.random() * 6).toFixed(1)}s`;
-      g.appendChild(p);
-    }
-  })();
   const timersCaos = {};
   function agendarCaos(nome, faixa, fn) {
     clearTimeout(timersCaos[nome]);

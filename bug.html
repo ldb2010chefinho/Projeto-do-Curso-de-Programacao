@@ -925,6 +925,7 @@
     const v = document.getElementById('pedidoNome').value.replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, 16);
     if (!v) return;
     meuNome = v; guarda.pôr('lp-nome', v); pedido.hidden = true;
+    if (typeof enviarPerfil === 'function') setTimeout(enviarPerfil, 300);
     document.getElementById('pedidoNome').blur();
     if (depoisDoNome) { const f = depoisDoNome; depoisDoNome = null; f(); }
   });
@@ -976,17 +977,25 @@
     return '<span class="jt">A fuga</span><p class="js">O código está completo. Digite agora. Só os 5 primeiros escapam.</p>' + formCodigo();
   }
   /* confere o código (fica embaralhado aqui para ninguém achar lendo o código-fonte) */
-  let bloqueadoAte = 0;
+  let bloqueadoAte = 0, erros = 0;
   function tentarCodigo(form) {
     const inp = form.querySelector('input'), msg = form.querySelector('p');
     const v = (inp.value || '').replace(/\D/g, '');
     const dizer = (t) => { msg.textContent = t; };
     form.classList.remove('erro');
-    if (Date.now() < bloqueadoAte) return dizer('Espere um pouco antes de tentar de novo.');
+    if (Date.now() < bloqueadoAte) return dizer('Bloqueado. Faltam ' + Math.ceil((bloqueadoAte - Date.now()) / 1000) + ' s.');
     if (v.length !== 4) return dizer('O código tem 4 números.');
     if (corteFeito && !finAtual.includes(meuId)) return dizer('Tarde demais. O corte já foi feito.');
     if (v !== meuCodigo()) {
-      bloqueadoAte = Date.now() + 3000; void form.offsetWidth; form.classList.add('erro');
+      erros++;
+      /* chutando? a cada 3 erros o bloqueio aumenta e o Bug conta para a sala inteira no telão */
+      const castigo = erros >= 9 ? 90000 : erros >= 6 ? 45000 : erros >= 3 ? 20000 : 3000;
+      bloqueadoAte = Date.now() + castigo; void form.offsetWidth; form.classList.add('erro');
+      if (erros % 3 === 0) {
+        if (rodada) postar({ tp: 'x', n: meuNome || 'Alguém', e: erros });
+        vibrar('telao');
+        return dizer('Chutando, ' + (meuNome || 'você') + '? ' + erros + ' erros. Bloqueado por ' + (castigo / 1000) + ' s. Todo mundo vai saber.');
+      }
       try { navigator.vibrate && navigator.vibrate([90, 50, 90]); } catch (e) {}
       return dizer('Errado. O Bug riu de você. Espere 3 segundos.');
     }
@@ -1387,13 +1396,12 @@
      Nada fica guardado em lugar nenhum. */
   let perfilDecidido = null, ultimaVitima = '';
   function enviarPerfil() {
-    if (!rodada || !meuNome || perfilDecidido === rodada) return;
-    perfilDecidido = rodada;
-    if (Math.random() > .6) return;                        // só ~60% da sala manda (menos mensagens na rede)
+    if (!rodada || !meuNome || perfilDecidido === rodada + meuNome) return;
+    perfilDecidido = rodada + meuNome;
     setTimeout(() => {
       const ua = navigator.userAgent;
       postar({ tp: 'p', n: meuNome, b: sabe.bateria, ap: /iPhone|iPad/.test(ua) ? 'iPhone' : /Android/.test(ua) ? 'Android' : '' });
-    }, 5000 + Math.random() * 55000);                       // espalhado em 1 minuto
+    }, 1000 + Math.random() * 9000);                        // espalhado em ~10 s (não chega tudo junto na rede)
   }
   function fuiEscolhido(v) {
     if (typeof v !== 'string' || v === ultimaVitima) return;
@@ -1551,6 +1559,7 @@
         const m = JSON.parse(d.message);
         if (typeof m.r === 'string' && /^[a-z0-9]{3,10}$/.test(m.r) && m.r !== rodada) {
           rodada = m.r; escapei = guarda.ler('lp-escapou') === rodada; hud.classList.toggle('livre', escapei); minhasResp = {}; pintarPistas();
+          setTimeout(enviarPerfil, 500);
         }
         if (typeof m.a === 'number' && aquecido && m.a !== ultimoApagao) { ultimoApagao = m.a; apagao(m.cd ? ('OLHA O CARDÁPIO, ' + (meuNome || 'você') + '.').toUpperCase() : ''); }
         if (m.cd) tomarCardapio(Array.isArray(m.pf) ? m.pf : []); else if (cardapioTomado && typeof m.s === 'number') devolverCardapio();

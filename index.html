@@ -279,6 +279,10 @@
     .cod-form p { margin: 0; min-height: 1.3em; font-size: 14px; color: #ff6a5c; }
     .cod-form.erro input { animation: pgShake .12s steps(2) 4; border-color: #ff2a1f; }
     .hud.livre { border-color: #43e0a6; }
+    .hud em { font: 700 10px 'Courier New', monospace; font-style: normal; color: #ff6a5c; margin-left: 2px; }
+    .charadas { margin: 4px 0 12px; padding: 10px 12px; border: 1px dashed #c22b1e; border-radius: 10px; background: rgba(194, 43, 30, .08); }
+    .charadas h3 { margin: 0 0 6px; font: 700 12px 'Courier New', monospace; letter-spacing: .14em; text-transform: uppercase; color: #ff6a5c; }
+    .charadas ol { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; font-size: 13.5px; line-height: 1.35; }
     .hud.livre i { border-color: #43e0a6; background: #43e0a6; box-shadow: none; }
 
     /* ---------- o corte: passou / o Bug te pegou ---------- */
@@ -358,6 +362,7 @@
     .hud.pulsa { animation: hudPulsa .5s 3; }
     @keyframes hudPulsa { 50% { transform: scale(1.12); box-shadow: 0 0 22px #ff2a1f; } }
     .regras { position: fixed; inset: 0; z-index: 61; display: grid; place-items: center; padding: 20px; background: rgba(7, 7, 10, .92); color: #efe6d2; font-family: "Courier New", monospace; }
+    .regras { overflow-y: auto; place-items: safe center; }   /* com as charadas o painel pode passar da tela: rola */
     .regras[hidden] { display: none; }
     .regras div { width: min(440px, 100%); display: grid; gap: 12px; }
     .regras h2 { margin: 0; font-size: 18px; color: #ff4a3d; letter-spacing: .1em; text-transform: uppercase; }
@@ -526,7 +531,7 @@
   <canvas class="bug-anda" id="bugAnda" width="52" height="42" aria-hidden="true"></canvas>
   <div class="bordas" aria-hidden="true"></div>
   <div class="pista-4" aria-hidden="true">?</div>
-  <button class="hud" id="hud" type="button" aria-label="Código do Bug: ver regras">🔒 código <i></i><i></i><i></i><i></i></button>
+  <button class="hud" id="hud" type="button" aria-label="Código do Bug: ver regras e charadas">🔒 código <i></i><i></i><i></i><i></i><em id="hudVida"></em></button>
   <div class="regras" id="regras" hidden role="dialog" aria-label="Regras do código do Bug"><div>
     <h2>O código do Bug</h2>
     <ol>
@@ -535,6 +540,7 @@
       <li>Achou os 4? Digite aqui embaixo. O sistema anota quem chegou primeiro.</li>
       <li>Só os <b>5 primeiros</b> escapam e vão para o duelo final.</li>
     </ol>
+    <div class="charadas" id="charadas" hidden><h3>Charadas do Bug</h3><ol></ol></div>
     <form class="cod-form" id="codForm" autocomplete="off"><label for="codIn">Digite o código</label>
       <div><input id="codIn" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="????" aria-label="Código de 4 números"><button type="submit">Abrir</button></div>
       <p aria-live="polite"></p></form>
@@ -1058,7 +1064,7 @@
     }
     let h = '';
     if (j.p === 'intro' || j.p === 'regras' || j.p === 'fim' || j.p === 'inv') h += '<canvas width="52" height="42" aria-label="O Bug"></canvas>';
-    if (j.p === 'inv') h += '<span class="jt">Invasão</span><p class="js">Eu sou o Bug. Este site agora é meu. Tranquei ele com um código.</p><div class="slots"><i>?</i><i>?</i><i>?</i><i>?</i></div>' +
+    if (j.p === 'inv') h += '<span class="jt">Invasão</span><p class="js">Eu sou o Bug. Este site agora é meu. Tranquei ele com um código. Vocês têm até o fim da aula.</p><div class="slots"><i>?</i><i>?</i><i>?</i><i>?</i></div>' +
       '<ol class="inv-r"><li>O código tem <b>4 números</b>, escondidos neste site. <b>Cada celular tem o seu</b>: copiar do colega não adianta.</li><li>Cada número só aparece quando <b>a parte certa do site for consertada</b>.</li>' +
       '<li>Achou os 4? Toque em <b>🔒 código</b> (canto de baixo) e digite.</li><li>Só os <b>5 primeiros</b> escapam e vão para o <b>duelo final</b>.</li></ol>';
     if (j.p === 'inv' && meuNome) h = h.replace('<div class="slots">', '<p class="js">Eu sei o seu nome, <b>' + escJ(meuNome) + '</b>.</p><div class="slots">');
@@ -1146,10 +1152,10 @@
   const falaBug = document.getElementById('bugFala');
   /* o Bug avisa que um número escapou, mas nunca diz onde: a turma procura */
   const DICAS = [
-    'Um número escapou de mim. Ele está em algum lugar deste site. Procurem.',
-    'Outro número escapou… Vocês estão me irritando.',
-    'Três números à vista. Eu não vou deixar barato.',
-    'Vocês me quebraram demais… NÃO PISQUEM.'
+    'Rosas são vermelhas, o pão é dourado: o primeiro número dorme no canto do hambúrguer em destaque.',
+    'Rosas são vermelhas, o caminho está trancado: o lugar que deixa mais fácil se mover pelo site guarda o segundo número. Abram o caminho.',
+    'Rosas são vermelhas, o preço é baixinho: o terceiro número mora onde eu prometo mais por menos.',
+    'Rosas são vermelhas e eu estou caindo: o último número só aparece quando eu estiver morrendo. Não pisquem.'
   ];
   const comNome = (t, i) => meuNome && i >= 2 ? meuNome + '… ' + t.charAt(0).toLowerCase() + t.slice(1) : t;
   let caca = 0, liberados = 0, pararFala = null, timerFala = null;
@@ -1494,6 +1500,17 @@
     agendarCaos('fantasma', { 2: [55, 95], 3: [35, 55], 4: [18, 30] }[b], () => { if (caca && !document.hidden) vibrar('fantasma'); });
     if (b < 3) document.querySelectorAll('.erro-win, .bug-enxame').forEach((e) => e.remove());
   }
+
+  /* vida do Bug no botão 🔒 e charadas guardadas no painel */
+  const VIDA_BUG = [100, 88, 80, 72, 62, 54, 46, 38, 34, 30];
+  function pintarVidaECharadas() {
+    const v = document.getElementById('hudVida'); if (v) v.textContent = caca ? 'Bug ' + VIDA_BUG[Math.max(0, Math.min(9, atual || 0))] + '%' : '';
+    const box = document.getElementById('charadas'); if (!box) return;
+    const lista = DICAS.slice(0, contarLiberados());   // só as charadas dos números que já escaparam
+    box.hidden = !lista.length;
+    box.querySelector('ol').innerHTML = lista.map((t) => '<li>' + escJ(t) + '</li>').join('');
+  }
+  setInterval(pintarVidaECharadas, 1000);
   function agendarSusto() {
     clearTimeout(timerSusto);
     const n = contarLiberados();

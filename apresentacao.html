@@ -744,6 +744,8 @@ body:is([data-clima="4"],[data-clima="5"]) .clima-fx{opacity:1;animation:tfFlick
 @media (max-height:780px){.slide{padding-block:clamp(8px,1.6vh,18px)}}
 
 /* ---------- Caça ao código (slide 38) ---------- */
+.caca-slide .big-q{font-size:clamp(1.5rem,.9rem + 2.2vw,2.8rem)}
+@media (max-height:780px){.caca-slide .qr-slot{width:clamp(90px,8vw,120px)!important}.caca-slide .stack{gap:14px!important}}
 .caca-regras{margin:0;padding-left:1.2em;display:grid;gap:8px;color:var(--muted);font-size:var(--fs-sm);max-width:52ch}
 .caca-regras b{color:var(--text)}
 .caca-cofre{display:grid;justify-items:center;align-content:center;gap:18px;padding:clamp(18px,3vw,40px);border:1px solid var(--line);border-radius:22px;background:var(--surface);text-align:center}
@@ -755,6 +757,18 @@ body:is([data-clima="4"],[data-clima="5"]) .clima-fx{opacity:1;animation:tfFlick
 .caca-txt{margin:0;font-size:var(--fs-lg)}
 .caca-sub{margin:0;color:var(--muted);font-size:var(--fs-sm)}
 @media (prefers-reduced-motion:reduce){.caca-slots .falta{animation:none}}
+
+/* vida do Bug no topo: cai a cada conserto */
+.bug-vida{position:relative;display:inline-flex;align-items:center;gap:8px;margin-right:18px;padding:4px 10px;border:1px solid #6e1a1f;border-radius:999px;background:#140608;font-family:var(--f-mono);font-size:11px;color:#f3dcd6;letter-spacing:.08em}
+.bug-vida[hidden]{display:none}
+.bug-vida b{color:#ff4a3d}
+.bug-vida i{position:relative;width:84px;height:6px;border-radius:999px;background:#2a0c0f;overflow:hidden}
+.bug-vida s{position:absolute;inset:0 auto 0 0;width:var(--v,100%);background:linear-gradient(90deg,#ff2a1f,#ff7a66);transition:width 1.2s steps(10)}
+.bug-vida u{position:absolute;right:4px;top:calc(100% + 4px);color:#43e0a6;font-weight:700;text-decoration:none;opacity:0}
+.bug-vida.dano{animation:vidaDano .6s steps(3)}
+.bug-vida.dano u{animation:vidaMenos 1.6s ease-out}
+@keyframes vidaDano{50%{transform:translateX(-4px);border-color:#ff2a1f;box-shadow:0 0 18px rgba(255,42,31,.6)}}
+@keyframes vidaMenos{0%{opacity:1;transform:none}100%{opacity:0;transform:translateY(10px)}}
 /* ---------- ÚLTIMO CAPÍTULO: PLOT TWIST (Bootstrap) ---------- */
 :root{--bs:#7952b3;--bs2:#b9a2f0}
 /* A. rebobinar: os 8 consertos do dia */
@@ -1114,6 +1128,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
   <div class="act-label" id="actLabel"><b>Abertura</b></div>
   <div class="status" aria-label="Status do conserto do site">
     <button class="live-pill" id="livePill" data-net="idle" aria-expanded="false" aria-controls="livePanel" aria-label="Celulares (só para quem apresenta)" title="Celulares"><i></i><span id="liveTxt" hidden></span></button>
+    <span class="bug-vida" id="bugVida" hidden aria-label="Vida do Bug"><b>BUG</b><i><s></s></i><em>100%</em><u></u></span>
     <span class="status-name">Lanchonete Pixel: <strong id="statusText">quebrado</strong></span>
     <div class="meter" id="meter">
       <span>Viewport</span><span>Estrutura</span><span>Detalhes</span><span>Testes</span>
@@ -1198,13 +1213,14 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 <section class="slide inv-slide" data-act="Ato 1 · A invasão" data-stage="0" data-codigo="1">
   <div class="inner jg inv">
     <canvas class="jg-bug inv-bug" width="52" height="42" aria-label="O Bug: uma aranha de pixels com olhos vermelhos que vaza para fora da tela"></canvas>
-    <p class="jg-say inv-say" id="invSay" data-text="Eu sou o Bug. Este site agora é meu. Tranquei ele com um código."></p>
+    <p class="jg-say inv-say" id="invSay" data-text="Eu sou o Bug. Este site agora é meu. Tranquei ele com um código. Vocês têm até o fim da aula."></p>
     <div class="inv-grid">
       <ol class="inv-rules">
         <li>O código tem <b>4 números</b>, <b>escondidos no site</b> do celular de vocês. <b>Cada celular tem o seu</b>: copiar do colega não adianta.</li>
         <li>Cada número só aparece quando <b>a parte certa do site for consertada</b>. Fiquem de olho.</li>
         <li>Achou os 4? Toque em <b>🔒 código</b> no celular e digite. O sistema anota quem chegou primeiro.</li>
         <li>Só os <b>5 primeiros</b> escapam e vão para o <b>duelo final</b>. O resto… fica comigo.</li>
+        <li>Cada conserto me enfraquece. Quanto mais fraco, mais desesperado eu fico.</li>
       </ol>
       <div class="inv-lock" aria-label="Código de 4 números, ainda trancado">
         <div class="inv-slots"><i>?</i><i>?</i><i>?</i><i>?</i></div>
@@ -1214,25 +1230,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
   </div>
 </section>
 
-<section class="slide" data-act="Ato 1 · O problema" data-stage="0">
-  <div class="inner act">
-    <svg class="act-glyph" viewBox="0 0 190 250" aria-hidden="true"><text x="95" y="225" text-anchor="middle">1</text></svg>
-    <div>
-      <div class="act-num">Ato 1</div>
-      <h2 class="act-title">O problema</h2>
-      <p class="act-time">0:00 – 12:00</p>
-    </div>
-    <ul class="path">
-      <li>Votação: celular ou computador?</li>
-      <li>Dados sobre acesso à web</li>
-      <li>Importância do mobile</li>
-      <li>História do Design Responsivo</li>
-      <li>Três ingredientes</li>
-      <li>Formas de adaptar um site</li>
-      <li class="key">Primeiro conserto: meta viewport</li>
-    </ul>
-  </div>
-</section>
+
 
 <!-- ================= VOTAÇÃO ================= -->
 <section class="slide" data-act="Ato 1 · O problema" data-stage="0">
@@ -1271,32 +1269,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= GOOGLE ================= -->
-<section class="slide" data-act="Ato 1 · O problema" data-stage="0">
-  <div class="inner split">
-    <div class="stack" style="gap:20px">
-      <div class="eyebrow">E tem mais</div>
-      <p class="big-q">O Google usa a versão do site <span style="color:var(--cyan)">para celular</span> na hora de indexar e classificar nas buscas.</p>
-      <p class="meta-line">Google Search Central</p>
-    </div>
-    <div style="display:grid;place-items:center">
-      <svg viewBox="0 0 360 300" width="100%" style="max-width:420px" role="img" aria-label="O buscador lê a versão de celular do site">
-        <g class="g-desk"><rect x="20" y="40" width="210" height="140" rx="12" fill="none" stroke="#223a66" stroke-width="2"/>
-        <rect x="34" y="58" width="182" height="12" rx="4" fill="#223a66"/>
-        <rect x="34" y="80" width="120" height="8" rx="4" fill="#223a66"/>
-        <rect x="34" y="96" width="150" height="8" rx="4" fill="#223a66"/>
-        <text x="125" y="205" text-anchor="middle" fill="#5d709a" font-family="JetBrains Mono,monospace" font-size="12">versão computador</text></g>
-        <rect x="250" y="20" width="90" height="176" rx="16" fill="#0f1b35" stroke="#52d5ff" stroke-width="2.5"/>
-        <rect x="262" y="42" width="66" height="10" rx="3" fill="#52d5ff"/>
-        <rect x="262" y="60" width="50" height="7" rx="3" fill="#b8cfff" opacity=".6"/>
-        <rect x="262" y="74" width="60" height="7" rx="3" fill="#b8cfff" opacity=".6"/>
-        <rect x="262" y="94" width="66" height="44" rx="5" fill="#3a72ff" opacity=".35"/>
-        <text x="295" y="215" text-anchor="middle" fill="#52d5ff" font-family="JetBrains Mono,monospace" font-size="12">versão celular</text>
-        <rect class="gscan" x="254" y="40" width="82" height="2" fill="#52d5ff"/>
-        <g class="lupa"><circle r="22" fill="rgba(82,213,255,.08)" stroke="#52d5ff" stroke-width="3"/><line x1="16" y1="16" x2="32" y2="32" stroke="#52d5ff" stroke-width="5" stroke-linecap="round"/></g>
-      </svg>
-    </div>
-  </div>
-</section>
+
 
 <!-- ================= HISTÓRIA ================= -->
 <section class="slide" data-act="Ato 1 · O problema" data-stage="0">
@@ -1348,30 +1321,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= PERGUNTA RELÂMPAGO ================= -->
-<section class="slide" data-act="Ato 1 · O problema" data-stage="0">
-  <div class="inner">
-    <div class="eyebrow"><span class="tag warn">Pergunta relâmpago</span> Levantem a mão</div>
-    <p class="big-q">Qual dá menos trabalho?</p>
-    <div class="options" id="relampago">
-      <button class="opt right">
-        <span class="n">1</span>
-        <div class="vis"><div class="mini" style="width:80px;height:60px"><i class="b"></i><i></i></div><div class="mini" style="width:30px;height:54px"><i class="b"></i><i></i></div></div>
-        <h3>Um site que se adapta</h3><span class="badge">Menos trabalho</span>
-      </button>
-      <button class="opt">
-        <span class="n">2</span>
-        <div class="vis"><span class="chip">HTML A</span><span class="chip">HTML B</span></div>
-        <h3>O servidor envia HTML diferente para cada aparelho</h3>
-      </button>
-      <button class="opt">
-        <span class="n">3</span>
-        <div class="vis"><span class="chip">site.com</span><span class="chip">m.site.com</span></div>
-        <h3>Dois sites separados, como <code>m.site.com</code></h3>
-      </button>
-    </div>
-    <p class="note" data-frag="1" data-onshow="relampago"><span><strong>O primeiro.</strong> O próprio Google recomenda o design responsivo por ser mais fácil de implementar e manter.</span></p>
-  </div>
-</section>
+
 
 <!-- ================= POR QUE MINÚSCULO ================= -->
 <section class="slide" data-act="Ato 1 · O problema" data-stage="0" data-enter="shrink">
@@ -1465,25 +1415,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= ATO 2 ================= -->
-<section class="slide" data-act="Ato 2 · A estrutura" data-stage="1">
-  <div class="inner act">
-    <svg class="act-glyph" viewBox="0 0 190 250" aria-hidden="true"><text x="95" y="225" text-anchor="middle">2</text></svg>
-    <div>
-      <div class="act-num">Ato 2</div>
-      <h2 class="act-title">A estrutura</h2>
-      <p class="act-time">12:00 – 26:00</p>
-    </div>
-    <ul class="path">
-      <li class="key">Atividade “Monte o site”</li>
-      <li>Flexbox e Grid</li>
-      <li>Demonstração de Flexbox e Grid</li>
-      <li>Media queries e breakpoints</li>
-      <li class="key">Atividade “Diga AGORA!”</li>
-      <li>Mobile-first</li>
-      <li>Mobile-first CSS × indexação mobile-first</li>
-    </ul>
-  </div>
-</section>
+
 
 <!-- ================= MONTE O SITE ================= -->
 <section class="slide" data-act="Ato 2 · A estrutura" data-stage="1">
@@ -1519,21 +1451,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= O NAVEGADOR FAZ ISSO ================= -->
-<section class="slide" data-act="Ato 2 · A estrutura" data-stage="1">
-  <div class="inner split">
-    <div class="stack" style="gap:20px">
-      <div class="eyebrow">Comparando os resultados</div>
-      <p class="big-q">Vocês acabaram de fazer à mão o que <span style="color:var(--cyan)">Flexbox</span> e <span style="color:var(--cyan)">Grid</span> fazem no navegador.</p>
-      <p class="lead">O navegador faz essa reorganização <strong>em milissegundos</strong>, para cada tamanho de tela.</p>
-      <div class="row"><button class="btn" data-morph="desk" aria-pressed="true">Computador</button><button class="btn" data-morph="cel" aria-pressed="false">Celular</button></div>
-    </div>
-    <div class="morph-stage">
-      <div class="morph desk" id="morph">
-        <div class="cab">Cabeçalho</div><div class="men">Menu</div><div class="car">Cardápio</div><div class="pro">Promoções</div><div class="rod">Rodapé</div>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <!-- ================= FLEX x GRID ================= -->
 <section class="slide" data-act="Ato 2 · A estrutura" data-stage="1">
@@ -1681,28 +1599,10 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= ATO 3 ================= -->
-<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2" data-bug="1">
-  <div class="inner act">
-    <svg class="act-glyph" viewBox="0 0 190 250" aria-hidden="true"><text x="95" y="225" text-anchor="middle">3</text></svg>
-    <div>
-      <div class="act-num">Ato 3</div>
-      <h2 class="act-title">Os detalhes</h2>
-      <p class="act-time">26:00 – 39:00</p>
-    </div>
-    <ul class="path">
-      <li>Imagens: max-width, srcset, sizes, picture</li>
-      <li>Unidades e tipografia fluida</li>
-      <li>clamp()</li>
-      <li>Container queries</li>
-      <li>Frameworks: Bootstrap e Tailwind</li>
-      <li>Como testar e acessibilidade</li>
-      <li class="key">Desafio “Caça ao código”</li>
-    </ul>
-  </div>
-</section>
+
 
 <!-- ================= MAX-WIDTH ================= -->
-<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2" data-fix="5">
+<section class="slide" data-bug="1" data-act="Ato 3 · Os detalhes" data-stage="2" data-fix="5">
   <div class="inner">
     <div class="eyebrow"><span class="tag ok">Conserto 3</span> A imagem estourando</div>
     <div data-live="img"></div>
@@ -1714,25 +1614,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= 1600 PARA 400 ================= -->
-<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2">
-  <div class="inner split">
-    <div class="stack" style="gap:20px">
-      <div class="eyebrow"><span class="tag warn">Pergunta</span></div>
-      <p class="big-q">Faz sentido o celular baixar uma foto de 1600px de largura para mostrar em 400px?</p>
-      <div data-frag="1" class="stack" style="gap:10px"><span class="q-answer">Não.</span><p class="lead">Isso <strong>gasta internet</strong> e deixa o site <strong>mais lento</strong>.</p></div>
-    </div>
-    <div class="stack" style="gap:26px;justify-items:start"><div class="sizecompare">
-      <figure><img data-img="burger" style="width:clamp(180px,26vw,380px)" alt="Foto de 1600px"><figcaption>1600px baixados</figcaption></figure>
-      <figure><img data-img="burger" style="width:clamp(60px,7vw,100px)" alt="Espaço de 400px"><figcaption>400px na tela</figcaption></figure>
-    </div>
-    <div class="pxcmp" data-frag="2" data-onshow="pxgrid">
-      <div class="px-side"><div class="px-grid" id="pxGrid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><small>1600 × 1000</small></div>
-      <div class="px-eq">=</div>
-      <div class="px-side"><div class="px-one"><i></i></div><small>400 × 250</small></div>
-      <p class="px-txt">4× mais largo, na mesma proporção, são <b>16× mais pixels</b> para baixar.</p>
-    </div></div>
-  </div>
-</section>
+
 
 <!-- ================= SRCSET ================= -->
 <section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2">
@@ -1746,6 +1628,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
   sizes="100vw"
   alt="Hambúrguer artesanal da Lanchonete Pixel"&gt;</pre>
         <p class="lead"><code>srcset</code> oferece <strong>o mesmo desenho em tamanhos diferentes</strong>, e o navegador escolhe o arquivo adequado. <code>sizes="100vw"</code> diz que a imagem ocupa a largura da tela.</p>
+        <p class="lead" style="margin-top:6px">E o <code>&lt;picture&gt;</code> vai além: troca a <strong>foto inteira</strong> conforme a tela (close no celular, foto larga no computador).</p>
       </div>
       <div class="stack" style="gap:14px">
         <div class="chosen"><div class="chosen-img"><img data-img="burger" alt="Imagem escolhida"><b id="chosenLbl">burger-400.jpg</b></div>
@@ -1759,26 +1642,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= PICTURE ================= -->
-<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2">
-  <div class="inner">
-    <div class="eyebrow"><span class="tag ok">Conserto 3</span> picture · direção de arte</div>
-    <div class="split" style="align-items:start">
-      <div class="stack" style="gap:14px">
-<pre class="code" data-lang="html">&lt;picture&gt;
-  &lt;source media="(min-width: 768px)" srcset="balcao-largo.jpg"&gt;
-  &lt;img src="burger-close.jpg" alt="Hambúrguer artesanal da Lanchonete Pixel"&gt;
-&lt;/picture&gt;</pre>
-        <p class="lead"><code>picture</code> troca a <strong>fotografia inteira</strong> conforme a tela. Isso se chama <strong>direção de arte</strong>.</p>
-        <div class="callouts"><div class="callout"><span class="chip">celular</span>close do hambúrguer</div><div class="callout"><span class="chip">tela larga</span>balcão inteiro</div></div>
-      </div>
-      <div class="live-view" style="min-height:clamp(300px,50vh,480px)">
-        <div class="bar"><span>&lt;picture&gt; de verdade</span><span class="sp"></span><output id="picOut">420px</output></div>
-        <div class="stage" id="picStage"></div>
-        <label class="range"><span>Largura</span><input type="range" id="picRange" min="320" max="1400" value="420"><output id="picOut2">420px</output></label>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <!-- ================= RÉGUA ELÁSTICA ================= -->
 <section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2">
@@ -1944,7 +1808,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 <section class="slide" data-act="Fechamento" data-stage="4" data-fix="9">
   <div class="inner" style="gap:clamp(14px,2.4vh,28px)">
     <div class="row" style="justify-content:space-between">
-      <div class="eyebrow">Fechamento · 39:00 – 41:00</div>
+      <div class="eyebrow">Fechamento</div>
       <button class="btn primary" id="flipBtn">3, 2, 1</button>
     </div>
     <div class="reveal-stage">
@@ -1994,7 +1858,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
       <p class="jg-say" id="jgSay2" data-text="Duelo final. Só quem escapou joga. Cada acerto me quebra um pouco."></p>
       <ul class="jg-rules">
         <li>Os finalistas são os 5 primeiros que digitaram o código.</li>
-        <li>7 perguntas, 15 segundos cada. Os finalistas respondem <b>no celular</b> (sem internet: 1 a 4 dedos).</li>
+        <li>5 perguntas, 15 segundos cada. Os finalistas respondem <b>no celular</b> (sem internet: 1 a 4 dedos).</li>
         <li>Cada acerto vale 1 ponto e enfraquece o Bug.</li>
         <li>Quem fizer mais pontos destrói o Bug e salva o site.</li>
       </ul>
@@ -2026,10 +1890,6 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
     <i data-frag="10" hidden></i>
     <i data-frag="11" hidden></i>
     <i data-frag="12" hidden></i>
-    <i data-frag="13" hidden></i>
-    <i data-frag="14" hidden></i>
-    <i data-frag="15" hidden></i>
-    <i data-frag="16" hidden></i>
   </div>
 </section>
 
@@ -2758,7 +2618,7 @@ function autoHooks(s){
    Tons tirados da própria paleta dos slides (--ok, azul elétrico clareado, --warn).
    Um fragmento com data-voz troca a cor no meio do slide.
    ========================================================= */
-const VOZ_POR_SLIDE = 'TTTAMMMMLLLLLLTTTTTTTLLLLLMMMMMMMMMMTTMMAMA';   // uma letra por slide (L, T, M, A = todos, - = ninguém)
+const VOZ_POR_SLIDE = 'TTTAMMLLLLLTTTTTLLLLLMMMMMMMTTMMAMA';   // uma letra por slide (L, T, M, A = todos, - = ninguém)
 const VOZ_COR = { L:'#43e0a6', T:'#5b8cff', M:'#ffd25c' };
 const VOZ_TODOS = 'linear-gradient(90deg,#43e0a6,#5b8cff,#ffd25c)';
 function vozEm(n, fi){
@@ -2781,6 +2641,7 @@ function pintarVoz(){
   if(window.BUGNIVEL) window.BUGNIVEL.sync();
   if(window.CLIMA) window.CLIMA.sync();
   if(window.VOLTA) window.VOLTA.sync();
+  if(window.VIDA) setTimeout(() => window.VIDA.sync(), 60);
 }
 
 function next(){ const s=slides[cur]; if(s._fi < s._frags.length){ showFrag(s, s._fi); s._fi++; } else if(cur < slides.length-1) go(cur+1, 1); pintarVoz(); }
@@ -3084,7 +2945,7 @@ window.FUGA = (() => {
 })();
 
 window.JOGO = (() => {
-  const PROVAS = [{"e": "viewport", "q": "Sem a meta viewport, o navegador do celular finge ter uma tela de uns…", "o": ["320px", "980px", "1920px", "100%"], "c": 1, "why": "Por isso o site aparecia minúsculo: a página era desenhada em ~980px e encolhida."}, {"e": "layout", "q": "Para montar um cardápio em linhas E colunas ao mesmo tempo, o mais indicado é…", "o": ["`float`", "`position: absolute`", "Flexbox", "Grid"], "c": 3, "why": "Grid trabalha em duas dimensões (linhas e colunas). Flexbox é melhor para uma dimensão só."}, {"e": "breakpoint", "q": "Mobile-first: você começa pela tela menor e vai adicionando estilos com…", "o": ["`min-width`", "`max-width`", "`!important`", "`display: none`"], "c": 0, "why": "Media queries com min-width acrescentam regras conforme a tela cresce."}, {"e": "imagem", "q": "Qual regra impede uma imagem de estourar a largura da tela?", "o": ["`width: 1600px`", "`overflow: hidden`", "`max-width: 100%`", "`position: fixed`"], "c": 2, "why": "Com max-width: 100%, a imagem nunca fica mais larga que a caixa onde está."}, {"e": "srcset", "q": "Qual atributo oferece a MESMA foto em vários tamanhos para o navegador escolher?", "o": ["`alt`", "`srcset`", "`loading`", "`class`"], "c": 1, "why": "Com srcset, o navegador baixa o arquivo do tamanho certo e economiza internet."}, {"e": "clamp", "q": "Em `clamp(1.5rem, 5vw, 3rem)`, o que é o `3rem`?", "o": ["O tamanho mínimo", "O valor ideal", "A altura da linha", "O tamanho máximo"], "c": 3, "why": "clamp(mínimo, ideal, máximo): o texto cresce com a tela, mas nunca passa de 3rem."}, {"e": "container", "q": "Uma container query pergunta o tamanho de quê?", "o": ["Da tela inteira", "Da caixa onde o elemento está", "Da fonte do navegador", "Do celular"], "c": 1, "why": "Media query olha a tela; container query olha a caixa. O mesmo card se adapta onde for colocado."}];
+  const PROVAS = [{"e": "viewport", "q": "Sem a meta viewport, o navegador do celular finge ter uma tela de uns…", "o": ["320px", "980px", "1920px", "100%"], "c": 1, "why": "Por isso o site aparecia minúsculo: a página era desenhada em ~980px e encolhida."}, {"e": "breakpoint", "q": "Mobile-first: você começa pela tela menor e vai adicionando estilos com…", "o": ["`min-width`", "`max-width`", "`!important`", "`display: none`"], "c": 0, "why": "Media queries com min-width acrescentam regras conforme a tela cresce."}, {"e": "imagem", "q": "Qual regra impede uma imagem de estourar a largura da tela?", "o": ["`width: 1600px`", "`overflow: hidden`", "`max-width: 100%`", "`position: fixed`"], "c": 2, "why": "Com max-width: 100%, a imagem nunca fica mais larga que a caixa onde está."}, {"e": "clamp", "q": "Em `clamp(1.5rem, 5vw, 3rem)`, o que é o `3rem`?", "o": ["O tamanho mínimo", "O valor ideal", "A altura da linha", "O tamanho máximo"], "c": 3, "why": "clamp(mínimo, ideal, máximo): o texto cresce com a tela, mas nunca passa de 3rem."}, {"e": "container", "q": "Uma container query pergunta o tamanho de quê?", "o": ["Da tela inteira", "Da caixa onde o elemento está", "Da fonte do navegador", "Do celular"], "c": 1, "why": "Media query olha a tela; container query olha a caixa. O mesmo card se adapta onde for colocado."}];
   const GRUPOS = [{"n": "Finalista 1", "c": "#ff5a4f"}, {"n": "Finalista 2", "c": "#ffbf52"}, {"n": "Finalista 3", "c": "#43e0a6"}, {"n": "Finalista 4", "c": "#52d5ff"}, {"n": "Finalista 5", "c": "#b9a2f0"}];
   const CODIGO = "3816";
   const TEMPO = 15;
@@ -3569,6 +3430,26 @@ window.CAOS = (() => {
     if(!c) $$('.erro-win, .bug-enxame').forEach(e => e.remove());
   }
   return { setClima, rajada, cascata, enxame, mudouSlide };
+})();
+
+/* =========================================================
+   VIDA DO BUG: depois da invasão, uma barra no topo mostra o Bug
+   perdendo vida a cada conserto (ele fica mais caótico porque está morrendo).
+   No jogo a barra some (o jogo tem a própria) e no Rebobinando ela acaba.
+   ========================================================= */
+window.VIDA = (() => {
+  const VIDA = [100, 88, 80, 72, 62, 54, 46, 38, 34, 30];
+  const el = $('#bugVida'); if(!el) return { sync(){} };
+  let ultima = null;
+  function sync(){
+    const s = slides[cur], ativo = +(document.body.dataset.clima || 0) > 0 && !s.classList.contains('jogo-slide') && !s.classList.contains('inv-slide');
+    el.hidden = !ativo; if(!ativo) return;
+    const etapa = Math.max(0, Math.min(9, LIVE.get() ?? 0)), v = VIDA[etapa];
+    el.style.setProperty('--v', v + '%'); el.querySelector('em').textContent = v + '%';
+    if(ultima !== null && v < ultima){ el.querySelector('u').textContent = '−' + (ultima - v) + '%'; el.classList.remove('dano'); void el.offsetWidth; el.classList.add('dano'); }
+    ultima = v;
+  }
+  return { sync };
 })();
 
 /* =========================================================

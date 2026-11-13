@@ -591,11 +591,17 @@ body[data-bug="3"] .bug-tint{animation:dgTint 5s ease-in-out infinite}
 /* ---------- A INVASÃO ---------- */
 .inv{gap:clamp(10px,2vh,20px)}
 .inv-bug{width:clamp(140px,21vh,250px)!important}
-.inv-say{max-width:44ch;min-height:2.7em;font-size:clamp(1.1rem,.7rem + 1.3vw,1.9rem)}
-.inv-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:clamp(16px,3vw,40px);align-items:center;width:min(1080px,100%);text-align:left}
-.inv-rules{margin:0;padding-left:1.4em;display:grid;gap:10px;font-size:clamp(1rem,.75rem + .8vw,1.45rem);line-height:1.35}
-.inv-rules b{color:#ff6a5c;font-weight:400}
-.inv-rules li::marker{color:#c22b1e;font-family:var(--f-mono)}
+/* o Bug fala em frases curtas: a atual em destaque, as anteriores apagadas */
+.inv-say{display:grid;place-items:center;width:min(980px,100%);min-height:calc(2 * 1.35em);font-size:clamp(1.25rem,.7rem + 1.6vw,2.3rem);text-wrap:balance;line-height:1.3;text-align:center}
+.inv-say p{margin:0;font-family:"Special Elite","Courier New",monospace;color:#efe6d2;opacity:.38;transition:opacity .5s}
+.inv-say p.atual{opacity:1;color:#ffd9d2;text-shadow:0 0 18px rgba(255,42,31,.45)}
+.inv-say .cur{display:inline-block;width:.55em;height:1em;margin-left:2px;vertical-align:-.12em;background:#ff4a3d;animation:invCur .8s steps(1) infinite}
+@keyframes invCur{50%{opacity:0}}
+.inv-grid{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:clamp(14px,2.4vw,32px);opacity:0;transform:translateY(8px);transition:opacity .7s,transform .7s}
+.inv-slide.pronto .inv-grid{opacity:1;transform:none}
+.inv-chips{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-family:var(--f-mono);font-size:clamp(.85rem,.7rem + .45vw,1.15rem);color:#d9cfc9;text-align:left}
+.inv-chips li{padding:7px 14px;border:1px solid #4c0d08;border-radius:999px;background:#120809}
+.inv-chips b{color:#ff6a5c;font-weight:400}
 .inv-lock{display:grid;gap:10px;justify-items:center;padding:20px;border:1px solid #4c0d08;border-radius:14px;background:#0f0a0c}
 .inv-slots{display:flex;gap:10px}
 .inv-slots i{width:clamp(42px,4.4vw,64px);height:clamp(54px,5.6vw,80px);display:grid;place-items:center;border:2px solid #c22b1e;border-radius:8px;
@@ -1213,19 +1219,17 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 <section class="slide inv-slide" data-act="Ato 1 · A invasão" data-stage="0" data-codigo="1">
   <div class="inner jg inv">
     <canvas class="jg-bug inv-bug" width="52" height="42" aria-label="O Bug: uma aranha de pixels com olhos vermelhos que vaza para fora da tela"></canvas>
-    <p class="jg-say inv-say" id="invSay" data-text="Eu sou o Bug. Este site agora é meu. Tranquei ele com um código. Vocês têm até o fim da aula."></p>
+    <div class="inv-say" id="invSay" data-falas="Ah… plateia. Eu adoro plateia.|Eu sou o Bug. Este site agora é meu, e tranquei cada celular com 4 números.|Consertem o que está quebrado e eles aparecem. Ainda deixo pistas, em versos. Sou generoso.|Cada conserto me arranca um pedaço. Os 5 primeiros me enfrentam. O resto… fica comigo.|Vocês têm até o fim da aula. Eu tenho todo o tempo do mundo." aria-live="polite"></div>
     <div class="inv-grid">
-      <ol class="inv-rules">
-        <li>O código tem <b>4 números</b>, <b>escondidos no site</b> do celular de vocês. <b>Cada celular tem o seu</b>: copiar do colega não adianta.</li>
-        <li>Cada número só aparece quando <b>a parte certa do site for consertada</b>. Fiquem de olho.</li>
-        <li>Achou os 4? Toque em <b>🔒 código</b> no celular e digite. O sistema anota quem chegou primeiro.</li>
-        <li>Só os <b>5 primeiros</b> escapam e vão para o <b>duelo final</b>. O resto… fica comigo.</li>
-        <li>Cada conserto me enfraquece. Quanto mais fraco, mais desesperado eu fico.</li>
-      </ol>
       <div class="inv-lock" aria-label="Código de 4 números, ainda trancado">
         <div class="inv-slots"><i>?</i><i>?</i><i>?</i><i>?</i></div>
         <span>código do Bug</span>
       </div>
+      <ul class="inv-chips">
+        <li><b>4 números</b> · cada celular tem os seus</li>
+        <li>aparecem quando o site é <b>consertado</b></li>
+        <li><b>5 primeiros</b> → batalha final</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -1414,41 +1418,6 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
   </div>
 </section>
 
-<!-- ================= ATO 2 ================= -->
-
-
-<!-- ================= MONTE O SITE ================= -->
-<section class="slide" data-act="Ato 2 · A estrutura" data-stage="1">
-  <div class="inner">
-    <div class="eyebrow"><span class="tag">Atividade</span> Monte o site · 6 grupos</div>
-    <div class="split">
-      <div class="stack" style="gap:18px">
-        <div class="rounds" role="tablist" aria-label="Rodadas">
-          <button class="btn" data-round="1" aria-pressed="true">Rodada 1</button>
-          <button class="btn" data-round="2" aria-pressed="false">Rodada 2</button>
-        </div>
-        <p class="round-text" id="roundText">“Montem o site na tela do computador.”</p>
-        <div class="row" style="gap:14px">
-          <span class="stopwatch" id="sw">00:00</span>
-          <button class="btn" id="swBtn">Iniciar</button>
-          <button class="btn" id="swReset">Zerar</button>
-        </div>
-      </div>
-      <div class="stack" style="gap:16px">
-        <div class="muted" style="font-family:var(--f-mono);font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:.12em">Cada grupo recebe</div>
-        <div class="frames-pair"><div class="paper-frame pc">computador</div><div class="paper-frame cel">celular</div></div>
-        <div class="pieces"><span class="piece">Cabeçalho</span><span class="piece">Menu</span><span class="piece">Cardápio</span><span class="piece">Promoções</span><span class="piece">Rodapé</span></div>
-        <div class="row"><span class="muted" style="font-size:var(--fs-xs)">Arraste as peças até as molduras.</span><button class="btn" id="piecesReset">Devolver peças</button></div>
-      </div>
-    </div>
-    <dl class="activity">
-      <div><dt>Façam</dt><dd>Montem o site com as peças: primeiro no computador, depois no celular.</dd></div>
-      <div><dt>Quando</dt><dd>Rodada 1, depois rodada 2. Mesmas peças, nada de cortar.</dd></div>
-      <div><dt>Observem</dt><dd>O que mudou de lugar entre as duas telas.</dd></div>
-      <div><dt>Descobrem</dt><dd>O que Flexbox e Grid fazem no navegador.</dd></div>
-    </dl>
-  </div>
-</section>
 
 <!-- ================= O NAVEGADOR FAZ ISSO ================= -->
 
@@ -1503,40 +1472,6 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
   </div>
 </section>
 
-<!-- ================= DIGA AGORA ================= -->
-<section class="slide" data-act="Ato 2 · A estrutura" data-stage="1">
-  <div class="inner" style="gap:clamp(12px,2vh,22px)">
-    <div class="split" style="grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);align-items:stretch">
-      <div class="stack" style="gap:14px;align-content:start">
-        <div class="eyebrow"><span class="tag warn">Atividade</span> Diga AGORA!</div>
-        <div class="row" style="gap:16px;flex-wrap:nowrap"><span class="agora-card">AGORA!</span><p class="lead" style="font-size:var(--fs-sm)">Levantem o cartão <strong>no momento em que o layout mudar</strong>: o menu vira botão, a barra lateral desce.</p></div>
-        <div class="agora-controls">
-          <button class="btn primary" id="agoraPlay">Encolher janela</button>
-          <button class="btn" id="agoraReset">Recomeçar</button>
-        </div>
-        <div class="row" style="gap:18px;align-items:flex-end">
-          <div><div class="tally-label">Largura da janela</div><div class="bp-readout hidden" id="agoraW">??? px</div></div>
-          <button class="btn" id="agoraReveal">Revelar</button>
-        </div>
-        <div id="agoraAns" hidden class="stack" style="gap:6px">
-          <span class="bp-reveal">breakpoint</span>
-          <div class="row"><button class="btn" data-bpw="767">767px</button><button class="btn" data-bpw="768">768px</button></div>
-          <p class="muted" style="font-size:var(--fs-xs)">No modo dispositivo do DevTools a largura exata aparece no topo.</p>
-        </div>
-      </div>
-      <div class="agora-view">
-        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="file">lanchonete-pixel</span></div>
-        <div class="stage" id="agoraStage"></div>
-      </div>
-    </div>
-    <dl class="activity">
-      <div><dt>Façam</dt><dd>Levantem o cartão “AGORA!”.</dd></div>
-      <div><dt>Quando</dt><dd>No instante em que o layout mudar enquanto a janela encolhe.</dd></div>
-      <div><dt>Observem</dt><dd>O menu e a barra lateral.</dd></div>
-      <div><dt>Descobrem</dt><dd>O breakpoint.</dd></div>
-    </dl>
-  </div>
-</section>
 
 <!-- ================= MEDIA QUERY ================= -->
 <section class="slide" data-act="Ato 2 · A estrutura" data-stage="1" data-fix="4">
@@ -1855,10 +1790,10 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
       <p class="jg-fuga-info" id="jgFugaInfo"></p>
     </div>
     <div class="jg-pane" data-p="regras">
-      <p class="jg-say" id="jgSay2" data-text="Duelo final. Só quem escapou joga. Cada acerto me quebra um pouco."></p>
+      <p class="jg-say" id="jgSay2" data-text="Batalha final. Só quem escapou joga. Cada acerto me quebra um pouco."></p>
       <ul class="jg-rules">
         <li>Os finalistas são os 5 primeiros que digitaram o código.</li>
-        <li>5 perguntas, 15 segundos cada. Os finalistas respondem <b>no celular</b> (sem internet: 1 a 4 dedos).</li>
+        <li>5 perguntas, 15 segundos cada. <b>Acertou rápido = mais pontos.</b> Os finalistas respondem <b>no celular</b> (sem internet: 1 a 4 dedos).</li>
         <li>Cada acerto vale 1 ponto e enfraquece o Bug.</li>
         <li>Quem fizer mais pontos destrói o Bug e salva o site.</li>
       </ul>
@@ -2270,10 +2205,12 @@ function vpShow(fixed){
 /* monte o site: rodadas + cronômetro */
 const ROUNDS = { 1:'“Montem o site na tela do computador.”', 2:'“Agora a mesma coisa na tela do celular. Mesmas peças, nada de cortar.”' };
 $$('[data-round]').forEach(b => b.onclick = () => { $$('[data-round]').forEach(x=>x.setAttribute('aria-pressed', x===b)); $('#roundText').textContent = ROUNDS[b.dataset.round]; });
+if($('#swBtn')){   // a atividade "Monte o site" saiu da apresentação; o código fica guardado
 let swT=null, swS=0; const swOut=$('#sw');
 const swPaint=()=>swOut.textContent=String(Math.floor(swS/60)).padStart(2,'0')+':'+String(swS%60).padStart(2,'0');
 $('#swBtn').onclick = e => { if(swT){clearInterval(swT);swT=null;e.target.textContent='Continuar';} else {swT=setInterval(()=>{swS++;swPaint();},1000);e.target.textContent='Pausar';} };
 $('#swReset').onclick = () => { swS=0; swPaint(); };
+}
 
 /* peças se reorganizando (animação FLIP) */
 $$('[data-morph]').forEach(b => b.onclick = () => {
@@ -2430,7 +2367,7 @@ HOOKS.shrink = () => {
     p.addEventListener('pointerup', up); p.addEventListener('pointercancel', up);
     p._reset = () => { const from = p.style.translate || '0 0'; ox = oy = 0; p.style.translate = ''; if(!REDUCED) p.animate([{translate:from},{translate:'0 0'}],{duration:500,easing:'cubic-bezier(.2,.7,.2,1)'}); };
   });
-  $('#piecesReset').onclick = () => pieces.forEach(p => p._reset());
+  if($('#piecesReset')) $('#piecesReset').onclick = () => pieces.forEach(p => p._reset());
 })();
 
 /* Flex e Grid manipuláveis */
@@ -2618,7 +2555,7 @@ function autoHooks(s){
    Tons tirados da própria paleta dos slides (--ok, azul elétrico clareado, --warn).
    Um fragmento com data-voz troca a cor no meio do slide.
    ========================================================= */
-const VOZ_POR_SLIDE = 'TTTAMMLLLLLTTTTTLLLLLMMMMMMMTTMMAMA';   // uma letra por slide (L, T, M, A = todos, - = ninguém)
+const VOZ_POR_SLIDE = 'TTTAMMLLLLLTTTTLLLLMMMMMMMTTMMAMA';   // uma letra por slide (L, T, M, A = todos, - = ninguém)
 const VOZ_COR = { L:'#43e0a6', T:'#5b8cff', M:'#ffd25c' };
 const VOZ_TODOS = 'linear-gradient(90deg,#43e0a6,#5b8cff,#ffd25c)';
 function vozEm(n, fi){
@@ -2950,7 +2887,7 @@ window.JOGO = (() => {
   const CODIGO = "3816";
   const TEMPO = 15;
     const slide = $('.jogo-slide'); if(!slide) return { sync(){} };
-  const pontos = GRUPOS.map(() => 0), marcados = PROVAS.map(() => new Set());
+  const pontos = GRUPOS.map(() => 0), acertos = GRUPOS.map(() => 0), marcados = PROVAS.map(() => new Set());
   let passoAtual = -1, relogio = null, ac = null, someT = null;
   const estadoBug = { dano: 0, some: 0 };
   $$('.jg-bug', slide).forEach(b => animarBug(b, () => slide.classList.contains('is-active') ? estadoBug : null));
@@ -2992,22 +2929,25 @@ window.JOGO = (() => {
     let venc = lista().map((g, k) => ({ g, k })).filter(x => pontos[x.k] === max);
     if(venc.length > 1 && venc.some(x => x.g.id)){                 // empate: o mais rápido leva
       const menor = Math.min(...venc.map(x => rapidez[x.k])); const r = venc.filter(x => rapidez[x.k] === menor);
-      if(r.length === 1) return { nome: r[0].g.n, cor: r[0].g.c, pts: max, empate: false, rapido: true };
+      if(r.length === 1) return { nome: r[0].g.n, cor: r[0].g.c, pts: max, ac: acertos[r[0].k], empate: false, rapido: true };
       venc = r;
     }
-    return { nome: venc.map(x => x.g.n).join(' e '), cor: venc[0].g.c, pts: max, empate: venc.length > 1 };
+    return { nome: venc.map(x => x.g.n).join(' e '), cor: venc[0].g.c, pts: max, ac: acertos[venc[0].k], empate: venc.length > 1 };
   }
 
   /* --- a fuga e o duelo pelo celular --- */
-  /* PONTUAÇÃO PELO CELULAR
-     - na hora de revelar, quem acertou ganha o ponto sozinho
-     - a internet atrasa: resposta que chega até 4 s depois da revelação ainda vale
-     - empate: ganha quem respondeu certo mais rápido (soma dos tempos) */
+  /* PONTUAÇÃO PELO CELULAR (estilo Kahoot)
+     - acertou: 500 pontos + até 500 de bônus por rapidez
+       (respondeu na hora = 1000; no último segundo = ~500)
+     - a internet atrasa: resposta que chega até 4 s depois da revelação ainda vale 500
+     - empate (raro): ganha quem respondeu certo mais rápido (soma dos tempos) */
+  const TEMPO_PERGUNTA = 15000;
+  const valorDoAcerto = ms => 500 + Math.round(500 * Math.max(0, 1 - ms / TEMPO_PERGUNTA));
   const pontuados = new Set(), reveladoEm = {}, inicioPergunta = {}, rapidez = GRUPOS.map(() => 0);
   function darPonto(qi, k, g){
     if(marcados[qi].has(k)) return;
-    marcados[qi].add(k); pontos[k]++;
-    const t = FUGA.tempos(qi)[g.id]; rapidez[k] += t && inicioPergunta[qi] ? Math.max(0, t - inicioPergunta[qi]) : 15000;
+    const t = FUGA.tempos(qi)[g.id], ms = t && inicioPergunta[qi] ? Math.max(0, t - inicioPergunta[qi]) : TEMPO_PERGUNTA;
+    marcados[qi].add(k); acertos[k]++; pontos[k] += valorDoAcerto(ms); rapidez[k] += ms;
   }
   function pontuarCelulares(qi){
     if(pontuados.has(qi) || !window.FUGA) return; pontuados.add(qi); reveladoEm[qi] = Date.now();
@@ -3077,7 +3017,7 @@ window.JOGO = (() => {
       painel('fim'); digitar($('#jgSay3')); cadeados(PROVAS.length); placar(-1); vida(1); desintegrar();
       const f = finalista();
       $('#jgWin').style.setProperty('--c', f ? f.cor : '#e9e2d0');
-      $('#jgWin').innerHTML = (f ? `<small>${f.empate ? 'Empate' : f.rapido ? 'Destruiu o Bug (empatou nos acertos, mas foi mais rápido)' : 'Destruiu o Bug'}</small>${esc2(f.nome)}<small>${f.pts} de ${PROVAS.length} acertos</small>` : '<small>O Bug foi destruído pela turma toda</small>') + `<small style="margin-top:14px">cada celular tinha o seu próprio código</small>`;
+      $('#jgWin').innerHTML = (f ? `<small>${f.empate ? 'Empate' : f.rapido ? 'Destruiu o Bug (empatou, mas foi mais rápido)' : 'Destruiu o Bug'}</small>${esc2(f.nome)}<small>${f.pts} pontos · ${f.ac} de ${PROVAS.length} acertos</small>` : '<small>O Bug foi destruído pela turma toda</small>') + `<small style="margin-top:14px">cada celular tinha o seu próprio código</small>`;
       LIVE.setJogo(comFuga({ p:'fim', g: f ? f.nome : '', c: f ? f.cor : '', e: f ? f.empate : false }));
       return;
     }
@@ -3105,7 +3045,7 @@ window.JOGO = (() => {
     const passo = slide._fi; if(passo < 2 || (passo - 2) % 2 !== 1 || passo >= 2 + PROVAS.length * 2) return;
     const qi = Math.floor((passo - 2) / 2);
     if(k >= lista().length || lista()[k].id) return;   // com celulares, a pontuação é automática
-    if(marcados[qi].has(k)){ marcados[qi].delete(k); pontos[k]--; } else { marcados[qi].add(k); pontos[k]++; }
+    if(marcados[qi].has(k)){ marcados[qi].delete(k); pontos[k] -= 1000; acertos[k]--; } else { marcados[qi].add(k); pontos[k] += 1000; acertos[k]++; }   // sem internet: 1000 por acerto
     placar(qi);
   }
   $('#jgBoard').addEventListener('click', e => { const b = e.target.closest('[data-g]'); if(b) marcar(+b.dataset.g); });
@@ -3144,9 +3084,23 @@ window.INVASAO = (() => {
       document.body.classList.add('terror');
       LIVE.setJogo({ p: 'inv' });
       if(!estava){
-        const say = $('#invSay'), txt = say.dataset.text; let i = 0; clearInterval(say._t);
-        if(REDUCED) say.textContent = txt;
-        else { say.innerHTML = '<span class="cur"></span>'; say._t = setInterval(() => { i++; say.innerHTML = txt.slice(0, i) + '<span class="cur"></span>'; if(i >= txt.length) clearInterval(say._t); }, 40); }
+        /* o Bug fala sozinho, frase por frase, com calma (e deboche); as regras aparecem no fim */
+        const say = $('#invSay'), falas = say.dataset.falas.split('|');
+        clearTimeout(say._t); slide.classList.remove('pronto'); say.innerHTML = '';
+        if(REDUCED){ say.innerHTML = '<p class="atual"></p>'; say.firstChild.textContent = falas[falas.length - 1]; slide.classList.add('pronto'); }
+        else {
+          let f = 0, i = 0, p = null;
+          const passo = () => {
+            if(slides[cur] !== slide) return;
+            if(!p){ say.innerHTML = ''; p = document.createElement('p'); p.className = 'atual'; say.appendChild(p); i = 0; }
+            i++; p.textContent = falas[f].slice(0, i); p.insertAdjacentHTML('beforeend', '<span class="cur"></span>');
+            if(i < falas[f].length) { say._t = setTimeout(passo, /[.,…?]/.test(falas[f][i - 1]) ? 260 : 34); return; }
+            f++; p.querySelector('.cur')?.remove(); p = null;
+            if(f < falas.length) say._t = setTimeout(passo, 900);
+            else { say.querySelector('p:last-child').insertAdjacentHTML('beforeend', '<span class="cur"></span>'); slide.classList.add('pronto'); }
+          };
+          say._t = setTimeout(passo, 700);
+        }
         if(!REDUCED){
           const f = $('#jgFlash'); f.classList.remove('go'); void f.offsetWidth; f.classList.add('go');
           const m = document.querySelector('main'); m.classList.remove('jg-shake'); void m.offsetWidth; m.classList.add('jg-shake');

@@ -390,6 +390,8 @@
     .bug-anda { width: 78px; aspect-ratio: 52 / 42; }
     .jogo .inv-r { margin: 0; padding-left: 20px; display: grid; gap: 8px; text-align: left; font-size: 15px; line-height: 1.35; }
     .jogo .inv-r b { color: #ff6a5c; }
+    .jogo ul.inv-r { list-style: '› '; }
+    .jogo .inv-pz { margin: 0; font: italic 14px 'Courier New', monospace; color: #c9a9a2; }
     .jogo .slots { display: flex; gap: 8px; }
     .jogo .slots i { width: 38px; height: 48px; display: grid; place-items: center; border: 2px solid #c22b1e; border-radius: 7px; font: 700 24px "Courier New", monospace; font-style: normal; color: #c22b1e; }
     .jogo .slots.ok i { border-color: #43e0a6; color: #43e0a6; }
@@ -538,7 +540,7 @@
       <li>O código tem <b>4 números</b>, escondidos neste site. <b>Cada celular tem o seu</b>: o do colega não serve para você.</li>
       <li>Cada número só aparece quando a parte certa do site é consertada. Os quadradinhos vermelhos aqui embaixo mostram quantos já foram liberados.</li>
       <li>Achou os 4? Digite aqui embaixo. O sistema anota quem chegou primeiro.</li>
-      <li>Só os <b>5 primeiros</b> escapam e vão para o duelo final.</li>
+      <li>Só os <b>5 primeiros</b> escapam e vão para a batalha final.</li>
     </ol>
     <div class="charadas" id="charadas" hidden><h3>Charadas do Bug</h3><ol></ol></div>
     <form class="cod-form" id="codForm" autocomplete="off"><label for="codIn">Digite o código</label>
@@ -1064,12 +1066,12 @@
     }
     let h = '';
     if (j.p === 'intro' || j.p === 'regras' || j.p === 'fim' || j.p === 'inv') h += '<canvas width="52" height="42" aria-label="O Bug"></canvas>';
-    if (j.p === 'inv') h += '<span class="jt">Invasão</span><p class="js">Eu sou o Bug. Este site agora é meu. Tranquei ele com um código. Vocês têm até o fim da aula.</p><div class="slots"><i>?</i><i>?</i><i>?</i><i>?</i></div>' +
-      '<ol class="inv-r"><li>O código tem <b>4 números</b>, escondidos neste site. <b>Cada celular tem o seu</b>: copiar do colega não adianta.</li><li>Cada número só aparece quando <b>a parte certa do site for consertada</b>.</li>' +
-      '<li>Achou os 4? Toque em <b>🔒 código</b> (canto de baixo) e digite.</li><li>Só os <b>5 primeiros</b> escapam e vão para o <b>duelo final</b>.</li></ol>';
-    if (j.p === 'inv' && meuNome) h = h.replace('<div class="slots">', '<p class="js">Eu sei o seu nome, <b>' + escJ(meuNome) + '</b>.</p><div class="slots">');
+    if (j.p === 'inv') h += '<span class="jt">Invasão</span><p class="js">Este site agora é meu. Tranquei o seu celular com 4 números.</p><div class="slots"><i>?</i><i>?</i><i>?</i><i>?</i></div>' +
+      '<ul class="inv-r"><li>Consertem o site: os números aparecem.</li><li>Achou os 4? <b>🔒 código</b>, lá embaixo.</li><li><b>5 primeiros</b> me enfrentam. O resto fica comigo.</li></ul>' +
+      '<p class="inv-pz">Até o fim da aula. Sem pressa… pra mim.</p>';
+    if (j.p === 'inv' && meuNome) h = h.replace('<p class="js">', '<p class="js">Olá, <b>' + escJ(meuNome) + '</b>. Bonito nome. ');
     if (j.p === 'intro') h += telaFuga(j);
-    if (j.p === 'regras') h += '<span class="jt">Duelo final</span><p class="js">Só quem escapou joga. O resto da sala torce. Cada acerto me quebra um pouco.</p>';
+    if (j.p === 'regras') h += '<span class="jt">Batalha final</span><p class="js">Só quem escapou joga. O resto da sala torce. Cada acerto me quebra um pouco… e quem acerta rápido me quebra mais.</p>';
     if (j.p === 'regras' || j.p === 'q' || j.p === 'fim') h = etiquetaPapel(j) + h;
     if (j.p === 'q') {
       h += '<span class="jt">Erro ' + (j.i + 1) + ' de ' + j.n + (j.e ? ' · ' + escJ(j.e) : '') + '</span>';
@@ -1152,10 +1154,10 @@
   const falaBug = document.getElementById('bugFala');
   /* o Bug avisa que um número escapou, mas nunca diz onde: a turma procura */
   const DICAS = [
-    'Rosas são vermelhas, o pão é dourado: o primeiro número dorme no canto do hambúrguer em destaque.',
-    'Rosas são vermelhas, o caminho está trancado: o lugar que deixa mais fácil se mover pelo site guarda o segundo número. Abram o caminho.',
-    'Rosas são vermelhas, o preço é baixinho: o terceiro número mora onde eu prometo mais por menos.',
-    'Rosas são vermelhas e eu estou caindo: o último número só aparece quando eu estiver morrendo. Não pisquem.'
+    'Rosas são vermelhas, o pão é dourado: o primeiro número cochila no canto do hambúrguer em destaque. Fácil demais… até pra vocês.',
+    'Rosas são vermelhas, o caminho está trancado: o lugar que deixa mais fácil se mover pelo site guarda o segundo número. Abram… se acharem a porta.',
+    'Rosas são vermelhas, o preço é baixinho: o terceiro número mora onde eu prometo mais por menos. Eu adoro uma promoção.',
+    'Rosas são vermelhas e eu estou caindo: o último número só aparece quando eu estiver morrendo. Não pisquem… vão perder meu melhor momento.'
   ];
   const comNome = (t, i) => meuNome && i >= 2 ? meuNome + '… ' + t.charAt(0).toLowerCase() + t.slice(1) : t;
   let caca = 0, liberados = 0, pararFala = null, timerFala = null;

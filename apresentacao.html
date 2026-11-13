@@ -925,6 +925,44 @@ body:is([data-clima="4"],[data-clima="5"]) .clima-fx{opacity:1;animation:tfFlick
 .b2-susto svg{width:min(78vh,92vw);height:auto}
 @media (prefers-reduced-motion:reduce){.b2-tx.on,.b2-tp.on,.b2-evo.on,.b2-evo.on *{animation:none!important}.b2-tx.on{opacity:1;transform:none}}
 
+
+/* ===== v22: aparições mais vivas ===== */
+.b2-tx .b2-tx-ruido{position:absolute;inset:0;z-index:3;background:repeating-linear-gradient(0deg,#ffffff22 0 1px,transparent 1px 2px),repeating-linear-gradient(90deg,#ff2a1f22 0 2px,transparent 2px 5px),#0a0d14;opacity:0}
+.b2-tx.on .b2-tx-ruido{animation:b2txRuido .9s steps(6) forwards}
+@keyframes b2txRuido{0%{opacity:1;background-position:0 0,0 0}40%{opacity:.9;background-position:0 7px,3px 0}100%{opacity:0;background-position:0 14px,6px 0}}
+.b2-tx .b2-tx-linha{position:absolute;left:0;right:0;top:-10%;height:12%;z-index:2;background:linear-gradient(180deg,transparent,rgba(82,213,255,.18),transparent);animation:b2txVarre 2.6s linear infinite}
+@keyframes b2txVarre{to{transform:translateY(950%)}}
+.b2-tx svg{animation:none}
+.b2-tx.on svg{animation:b2txEntra .9s steps(5) forwards}
+@keyframes b2txEntra{0%,30%{opacity:0;transform:translateX(-8px)}50%{opacity:1;transform:translateX(6px)}70%{transform:translateX(-3px)}100%{opacity:1;transform:none}}
+/* onda da voz: cada barrinha cresce com o volume */
+.b2-tx-onda{position:absolute;left:10px;right:10px;bottom:9px;height:18px;z-index:2;display:flex;align-items:center;gap:3px}
+.b2-tx-onda i{flex:1;height:calc(3px + var(--b2boca,0) * 15px * var(--k,1));border-radius:2px;background:#ff3b2e;box-shadow:0 0 6px rgba(255,42,31,.7);transition:height .06s}
+.b2-tx-onda i:nth-child(1){--k:.35}.b2-tx-onda i:nth-child(2){--k:.7}.b2-tx-onda i:nth-child(3){--k:1}.b2-tx-onda i:nth-child(4){--k:.55}.b2-tx-onda i:nth-child(5){--k:.9}
+.b2-tx-onda i:nth-child(6){--k:.6}.b2-tx-onda i:nth-child(7){--k:1}.b2-tx-onda i:nth-child(8){--k:.45}.b2-tx-onda i:nth-child(9){--k:.3}
+.b2-tx-sinal{position:absolute;right:9px;top:7px;z-index:2;display:flex;align-items:flex-end;gap:2px;height:10px}
+.b2-tx-sinal i{width:3px;background:#52d5ff;opacity:.8;animation:b2sinal 1.4s steps(1) infinite}
+.b2-tx-sinal i:nth-child(1){height:3px}.b2-tx-sinal i:nth-child(2){height:5px;animation-delay:.2s}.b2-tx-sinal i:nth-child(3){height:7px;animation-delay:.5s}.b2-tx-sinal i:nth-child(4){height:10px;animation-delay:.9s}
+@keyframes b2sinal{50%{opacity:.2}}
+.bug-fala::after{content:"";position:absolute;right:-9px;bottom:18px;width:16px;height:16px;background:inherit;border-right:1px solid #c22b1e;border-top:1px solid #c22b1e;transform:rotate(45deg)}
+/* teletransporte: raio de luz e cacos de pixel */
+.b2-tp-raio{position:absolute;left:50%;top:-10%;width:4px;height:120%;margin-left:-2px;border-radius:2px;background:#fff;box-shadow:0 0 14px #52d5ff,0 0 30px #ff2a1f;opacity:0}
+.b2-tp.on .b2-tp-raio{animation:b2tpRaio 3.4s ease-out forwards}
+@keyframes b2tpRaio{0%,1%{opacity:0}3%{opacity:1}9%{opacity:0}91%{opacity:0}93%{opacity:1}100%{opacity:0}}
+.b2-tp-cacos{position:absolute;left:50%;top:50%;width:6px;height:6px;background:#ff2a1f;opacity:0;
+  box-shadow:-30px -40px #52d5ff,26px -22px #ff2a1f,-18px 30px #ff2a1f,34px 26px #52d5ff,-40px 4px #fff,10px -50px #ff2a1f}
+.b2-tp.on .b2-tp-cacos{animation:b2tpCacos 3.4s ease-out forwards}
+@keyframes b2tpCacos{0%,2%{opacity:0;transform:scale(.2)}4%{opacity:1;transform:scale(.6)}12%{opacity:0;transform:scale(1.6)}91%{opacity:0;transform:scale(.2)}93%{opacity:1;transform:scale(.6)}100%{opacity:0;transform:scale(1.8)}}
+/* toque de "sistema invadido": cantos de mira na tela depois da invasão (não atrapalha o slide) */
+.b2-hud{position:fixed;inset:calc(var(--top-h) + 10px) 12px calc(var(--bot-h) + 10px) 12px;z-index:4;pointer-events:none;opacity:0;transition:opacity 1.2s}
+body[data-clima]:not([data-clima="0"]) .b2-hud{opacity:.55}
+.b2-hud i{position:absolute;width:26px;height:26px;border:0 solid rgba(82,213,255,.55)}
+.b2-hud i:nth-child(1){left:0;top:0;border-left-width:2px;border-top-width:2px}
+.b2-hud i:nth-child(2){right:0;top:0;border-right-width:2px;border-top-width:2px}
+.b2-hud i:nth-child(3){left:0;bottom:0;border-left-width:2px;border-bottom-width:2px}
+.b2-hud i:nth-child(4){right:0;bottom:0;border-right-width:2px;border-bottom-width:2px;border-color:rgba(255,42,31,.6)}
+body[data-clima="4"] .b2-hud i,body[data-clima="5"] .b2-hud i{border-color:rgba(255,42,31,.6)}
+@media (prefers-reduced-motion:reduce){.b2-tx-linha,.b2-tx-sinal i{animation:none}}
 /* ---------- ÚLTIMO CAPÍTULO: PLOT TWIST (Bootstrap) ---------- */
 :root{--bs:#7952b3;--bs2:#b9a2f0}
 /* A. rebobinar: os 8 consertos do dia */
@@ -2343,8 +2381,9 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
     
   <clipPath id="b2RasgoClip"><polygon points="200,8 226,40 214,70 244,104 226,140 252,176 222,210 236,252 164,252 178,210 148,176 174,140 156,104 186,70 174,40"></polygon></clipPath>
 </defs></svg>
-<div class="b2-tx" id="b2Tx" aria-hidden="true"><span class="b2-tx-rot"><i></i>TRANSMISSÃO</span><svg viewBox="0 0 400 460"><use id="b2TxUse" href="#b2forma1"></use></svg></div>
-<div class="b2-tp" id="b2Tp" aria-hidden="true"><svg viewBox="0 0 400 460"><use id="b2TpUse" href="#b2forma1"></use></svg></div>
+<div class="b2-tx" id="b2Tx" aria-hidden="true"><span class="b2-tx-rot"><i></i>TRANSMISSÃO</span><svg viewBox="0 0 400 460"><use id="b2TxUse" href="#b2forma1"></use></svg><span class="b2-tx-onda"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="b2-tx-sinal"><i></i><i></i><i></i><i></i></span><span class="b2-tx-ruido"></span><span class="b2-tx-linha"></span></div>
+<div class="b2-tp" id="b2Tp" aria-hidden="true"><svg viewBox="0 0 400 460"><use id="b2TpUse" href="#b2forma1"></use></svg><span class="b2-tp-raio"></span><span class="b2-tp-cacos"></span></div>
+<div class="b2-hud" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div class="b2-evo" id="b2Evo" aria-hidden="true">
   <svg viewBox="0 0 400 460"><g class="b2-evo-tremor"><g class="b2-evo-a"><use id="b2EvoA" href="#b2forma1"></use></g><g class="b2-evo-b"><use id="b2EvoB" href="#b2forma2"></use></g></g></svg>
   <div class="b2-evo-flash"></div><b id="b2EvoTexto"></b>
@@ -3488,6 +3527,7 @@ window.JOGO = (() => {
     $('#jgOpts').innerHTML = pv.o.map((o, k) => `<div class="jg-opt${k === pv.c ? ' ok' : ''}"><span class="k">${'ABCD'[k]}</span><span>${comCodigo(o)}</span></div>`).join('');
     $('#jgWhy').textContent = pv.why;
     if(!revelado && avancando) inicioPergunta[qi] = Date.now();
+    if(!revelado && avancando && window.VOZ_ROBO) VOZ_ROBO.falar('q' + (qi + 1));   // o Bug lê só a pergunta (sem alternativas nem resposta)
     if(revelado) pontuarCelulares(qi);
     cadeados(qi + (revelado ? 1 : 0)); placar(revelado ? qi : -1, revelado ? undefined : qi);
     const tn = $('#jgTnum'), tf = $('#jgTfg'), tm = $('#jgTimer');
@@ -3589,20 +3629,30 @@ window.BUGNIVEL = (() => {
   if(cameo) animarBug(cameo, () => cameo.classList.contains('on') ? { falha: false } : null);
   let anterior = -1, atraso = null;
   /* falas que têm áudio gravado: o Bug fala de verdade */
-  const VOZ_DO_TEXTO = [['Um número fugiu', 'ch1'], ['Outro escapou', 'ch4'], ['Três. ', 'ch7'], ['Meu último suspiro', 'ultimo']];
+  const VOZ_DO_TEXTO = [['Um número fugiu', 'ch1'], ['Outro escapou', 'ch4'], ['Três. ', 'ch7'], ['Meu último suspiro', 'ultimo'],
+    ['Gostaram do meu enigma', 'cam1'], ['Dois números soltos', 'cam2'], ['Três números. Estou', 'cam3'],
+    ['Ai. Isso doeu', 'dor1'], ['Mais um conserto', 'dor2'], ['Vocês arrumam', 'dor3'], ['Um pedaço a menos', 'dor4'], ['Estão aprendendo', 'dor5']];
   function aparecer(texto){
     if(!cameo) return;
     const v = VOZ_DO_TEXTO.find(([ini]) => (texto || '').startsWith(ini));
-    if(v && window.VOZ_ROBO) VOZ_ROBO.falar(v[1]);
-    const dur = Math.min(11, Math.max(5.6, (texto || '').length * .06));
+    const msVoz = v && window.VOZ_ROBO ? VOZ_ROBO.falar(v[1]) : 0;
+    const dur = Math.max(Math.min(11, Math.max(5.6, (texto || '').length * .06)), msVoz / 1000 + 1.2);
     cameo.style.animationDuration = dur + .4 + 's'; if(fala) fala.style.animationDuration = dur + 's';
     if(window.B2) B2.transmitir(dur * 1000 + 300);
     else if(!REDUCED){ cameo.classList.remove('on'); void cameo.offsetWidth; cameo.classList.add('on'); }
     if(fala && texto){
       const c = +(document.body.dataset.clima || 0);
-      fala.textContent = texto; fala.classList.toggle('grave', c >= 3);
+      fala.classList.toggle('grave', c >= 3);
       fala.classList.remove('on'); void fala.offsetWidth; fala.classList.add('on');
-      if(c >= 3 && window.FALHA && fala.firstChild) FALHA.decodificar(fala.firstChild, 900);
+      clearInterval(fala._dig);
+      if(c >= 3 && window.FALHA){ fala.textContent = texto; if(fala.firstChild) FALHA.decodificar(fala.firstChild, 900); }
+      else if(REDUCED) fala.textContent = texto;
+      else {
+        /* digita no ritmo da fala (com voz, acompanha o áudio) */
+        const total = msVoz ? msVoz * .85 : Math.min(2600, texto.length * 38);
+        const passo = Math.max(18, total / texto.length); let i = 0; fala.textContent = '';
+        setTimeout(() => { fala._dig = setInterval(() => { i++; fala.textContent = texto.slice(0, i); if(i >= texto.length) clearInterval(fala._dig); }, passo); }, 420);
+      }
     }
   }
   const susto = $('#bugSusto');

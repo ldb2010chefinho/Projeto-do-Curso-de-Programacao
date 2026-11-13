@@ -20,7 +20,14 @@ window.VOZ_ROBO = (() => {
     jogo1: '212b293b-d4ea-4370-a057-49ec4b267cc8', jogo2: '90f8d03d-86df-424c-81ce-66dc30d2aa01',
     derrota: '09d91df8-ac77-4397-882f-416237b35ce0', volta: '57918a65-2475-419e-9413-1a7053c63c0e',
     evo2: '98f6cf36-d5d7-4332-b59b-161482fae412', evo3: 'f59b4e8f-8087-495e-b23d-8771af33ea4a',
-    evo4: 'cc21bb88-8981-4f4e-ab51-634840f2e539'
+    evo4: 'cc21bb88-8981-4f4e-ab51-634840f2e539',
+    cam1: 'd3270e96-0141-4d62-b905-d251508423f1', cam2: '70c9151e-a53f-4c47-8e55-3e89ff6b9dc0',
+    cam3: '497bb593-85e7-41e3-a292-3bf4e5f397cf',
+    dor1: '8ab4dfce-62fb-4b37-a5c9-6b89800d234e', dor2: '5a85befc-56bc-4d58-b020-fc87fc169bf4',
+    dor3: '9a00dd96-aece-4928-b0ac-dce70563902d', dor4: 'bb59e9b2-161e-4a84-a6a9-10f9cc76b060',
+    dor5: 'fa7d36d7-1ddf-4a26-a096-a823125cbffe',
+    q1: '69b3c667-ff37-4708-a147-e441e33a31ab', q2: 'ef7c05c2-b23f-4ac6-9243-a6d8c6747d22', q3: '67d4585f-af35-425d-9f87-935d2966348b',
+    q4: '934792ec-515f-4354-9873-1024be899672', q5: 'd0dc81a6-7aef-4531-8e2c-fee0ecc059e2'
   };
   let ctx = null, buffers = {}, atual = null, fimEm = 0, intensidade = 0.85, ouvintes = [];
   let ligado = true;

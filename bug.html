@@ -487,6 +487,127 @@
     .jogo .jc.inv .inv-r { font-size: 13.5px; gap: 5px; }
     .jogo .jc.inv .slots i { width: 32px; height: 40px; font-size: 20px; }
     @media (min-height: 760px) { .jogo .jc.inv canvas { width: 130px; } .jogo .jc.inv .js { font-size: 20px; } .jogo .jc.inv .inv-r { font-size: 15px; } }
+/* ===== Bug novo: materiais e animações (do design) ===== */
+/* ---------- metal facetado: luz vindo da esquerda ---------- */
+/* cada placa tem um degradê próprio (mais clara em cima), dando volume */
+.b2-f1{fill:url(#b2gF1)}.b2-f2{fill:url(#b2gF2)}.b2-f3{fill:url(#b2gF3)}.b2-f4{fill:url(#b2gF4)}.b2-f5{fill:url(#b2gF5)}.b2-f6{fill:url(#b2gF6)}
+.b2-fc{stroke:#0b0e13;stroke-width:1.3;stroke-linejoin:round}
+.b2-chanfro{fill:none;stroke:#ffffff;stroke-width:1.1;opacity:.5;stroke-linecap:round;stroke-linejoin:round}
+.b2-chanfro-fraco{fill:none;stroke:#ffffff;stroke-width:.8;opacity:.22;stroke-linecap:round}
+.b2-oclusao{fill:none;stroke:#000;stroke-width:2.4;opacity:.35;stroke-linecap:round;stroke-linejoin:round}
+.b2-respiro{fill:none;stroke:#0b0e13;stroke-width:2;stroke-linecap:round}
+.b2-respiro-luz{fill:none;stroke:#ffffff;stroke-width:.8;opacity:.25;stroke-linecap:round}
+.b2-fenda-luz{fill:none;stroke:#ff3b2e;stroke-width:1.8;stroke-linecap:round;filter:url(#b2gBrilho);opacity:.9}
+.b2-costura-c{fill:none;stroke:#52d5ff;stroke-width:1;opacity:.35;filter:url(#b2gBrilho)}
+.b2-rebite{fill:url(#b2gRebite);stroke:#0b0e13;stroke-width:.8}
+.b2-orbita-luz{fill:url(#b2gOrbita)}
+.b2-brilho-aresta{fill:none;stroke:#ffffff;stroke-width:1;opacity:.45;stroke-linecap:round}
+.b2-luz-c{fill:none;stroke:#52d5ff;stroke-width:2.2;opacity:.55;stroke-linejoin:round;filter:url(#b2gBrilho)}
+.b2-luz-v{fill:none;stroke:#ff3b2e;stroke-width:1.8;opacity:.4;stroke-linejoin:round;filter:url(#b2gBrilho)}
+.b2-vao{fill:#040508}
+.b2-olho{fill:url(#b2gOlho);filter:url(#b2gBrilho)}
+.b2-olho-miolo{fill:#ffe1db;opacity:.9}
+.b2-halo{fill:#ff2a1f;opacity:.45;filter:url(#b2gBlur)}
+.b2-palpebra{fill:#2b303a;stroke:#0d1015;stroke-width:1}
+.b2-boca-luz{fill:none;stroke:#ff3b2e;stroke-width:3.5;stroke-linecap:round;filter:url(#b2gBrilho)}
+.b2-trilha{fill:none;stroke:#ff2a1f;stroke-width:1.5;opacity:.85;filter:url(#b2gBrilho)}
+.b2-cabo{fill:none;stroke:#1e222a;stroke-width:5;stroke-linecap:round}
+.b2-cabo-v{fill:none;stroke:#6a1212;stroke-width:3;stroke-linecap:round}
+.b2-fio{fill:none;stroke:#52d5ff;stroke-width:1.2;opacity:.55;stroke-linejoin:round;filter:url(#b2gBrilho)}
+.b2-fio-contorno{fill:none;stroke:#52d5ff;stroke-width:1.8;stroke-dasharray:16 5 3 5;opacity:.8;filter:url(#b2gBrilho)}
+.b2-mira{fill:none;stroke:#52d5ff;stroke-width:2;opacity:.5}
+.b2-px{fill:#ff3b2e;filter:url(#b2gBrilho)}
+.b2-bv{fill:#ff2a1f;opacity:.8}.b2-bc{fill:#52d5ff;opacity:.65}.b2-bb{fill:#fff;opacity:.45}
+.b2-cod{fill:#ff6a5c;font:600 10px 'JetBrains Mono',monospace;opacity:.75}
+.b2-borda{fill:none;stroke:#07090c;stroke-width:3;stroke-linejoin:round}
+.b2-borda-luz{fill:none;stroke:#ff3b2e;stroke-width:1.2;stroke-linejoin:round;filter:url(#b2gBrilho)}
+.b2-caco{fill:#ff2a1f;filter:url(#b2gBrilho)}.b2-caco-c{fill:#52d5ff}
+.b2-nucleo{fill:url(#b2gNucleo);filter:url(#b2gBrilho)}
+.b2-sombra-chao{fill:#000;opacity:.55;filter:url(#b2gBlur)}
+
+/* ---------- animação ---------- */
+/* respirar: sobe e desce, e a cabeça inclina de leve */
+.b2-respira{animation:b2respira 5s ease-in-out infinite}
+@keyframes b2respira{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.b2-cabeca{transform-origin:200px 330px;animation:b2inclina 7s ease-in-out infinite}
+@keyframes b2inclina{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(1.2deg)}}
+/* piscar: as pálpebras descem e sobem */
+.b2-palpebra{transform-box:fill-box;transform-origin:50% 0;transform:scaleY(0);animation:b2pisca 5.5s infinite}
+@keyframes b2pisca{0%,91%,100%{transform:scaleY(0)}92.5%{transform:scaleY(1)}94%{transform:scaleY(0)}}
+/* falar: a mandíbula desce e sobe, a luz da boca acende junto */
+.b2-mandibula{animation:b2fala 3.6s ease-in-out infinite}
+@keyframes b2fala{0%,52%,100%{transform:translateY(0)}7%{transform:translateY(8px)}13%{transform:translateY(2px)}20%{transform:translateY(9px)}27%{transform:translateY(1px)}34%{transform:translateY(7px)}42%{transform:translateY(0)}}
+.b2-boca-luz{animation:b2falaLuz 3.6s ease-in-out infinite}
+@keyframes b2falaLuz{0%,52%,100%{opacity:.75;stroke-width:3.5}7%,20%,34%{opacity:1;stroke-width:6}13%,27%{opacity:.85;stroke-width:4}}
+.b2-sorriso{animation:b2falaSorriso 3.6s ease-in-out infinite}
+@keyframes b2falaSorriso{0%,52%,100%{transform:translateY(0)}7%{transform:translateY(6px)}13%{transform:translateY(1px)}20%{transform:translateY(7px)}27%{transform:translateY(1px)}34%{transform:translateY(5px)}42%{transform:translateY(0)}}
+/* olhos pulsam um pouco */
+.b2-halo{animation:b2pulsaHalo 2.4s ease-in-out infinite}
+@keyframes b2pulsaHalo{0%,100%{opacity:.35}50%{opacity:.6}}
+/* falha: uma rajada rápida a cada 5 s */
+.b2-rajada{animation:b2rajada 5s steps(1) infinite}
+@keyframes b2rajada{0%,90%,100%{transform:none}91%{transform:translate(-7px,0)}92%{transform:translate(6px,1px)}93%{transform:translate(-2px,0)}94%{transform:none}}
+.b2-copia-v,.b2-copia-c{opacity:0;mix-blend-mode:screen;animation:b2copia 5s steps(1) infinite}
+.b2-copia-v{filter:url(#b2gSoV);transform:translateX(6px)}.b2-copia-c{filter:url(#b2gSoC);transform:translateX(-6px)}
+@keyframes b2copia{0%,90%,100%{opacity:0}91%,93%{opacity:.75}}
+/* holograma: chiado se mexendo e uma linha de varredura descendo */
+.b2-barras{animation:b2barras 1.2s steps(1) infinite}
+@keyframes b2barras{0%{transform:none}25%{transform:translate(-18px,2px)}50%{transform:translate(12px,-2px)}75%{transform:translate(-6px,4px)}}
+.b2-varredura{animation:b2varre 2.8s linear infinite}
+@keyframes b2varre{0%{transform:translateY(-40px);opacity:0}10%{opacity:.6}90%{opacity:.6}100%{transform:translateY(300px);opacity:0}}
+.b2-holo-pisca{animation:b2holoPisca 3.4s steps(1) infinite}
+@keyframes b2holoPisca{0%,100%{opacity:1}41%{opacity:.55}43%{opacity:1}77%{opacity:.4}79%{opacity:1}}
+/* montagem: peças voando até o lugar */
+.b2-chega{animation:b2chega 2.8s cubic-bezier(.3,.7,.3,1) infinite}
+.b2-chega.b2-d2{animation-delay:.9s}.b2-chega.b2-d3{animation-delay:1.8s}
+@keyframes b2chega{0%{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}20%{opacity:1}70%{transform:translate(0,0) rotate(0);opacity:1}82%,100%{transform:translate(0,0);opacity:0}}
+.b2-encaixe{animation:b2encaixe 2.8s ease-out infinite}
+@keyframes b2encaixe{0%,60%,100%{opacity:1}68%{opacity:.4}74%{opacity:1}}
+/* colapso: placas soltas flutuando, cacos e núcleo pulsando */
+.b2-solta-1{animation:b2solta1 4s ease-in-out infinite}
+.b2-solta-2{animation:b2solta2 4.6s ease-in-out infinite}
+@keyframes b2solta1{0%,100%{transform:translate(16px,-12px) rotate(9deg)}50%{transform:translate(22px,-18px) rotate(12deg)}}
+@keyframes b2solta2{0%,100%{transform:translate(-12px,10px) rotate(-7deg)}50%{transform:translate(-17px,15px) rotate(-10deg)}}
+.b2-cacos{animation:b2cacos 3s ease-in-out infinite}
+@keyframes b2cacos{0%,100%{transform:none;opacity:.9}50%{transform:translate(7px,-9px);opacity:.4}}
+.b2-pulsa{transform-box:fill-box;transform-origin:center;animation:b2pulsa 1.6s ease-in-out infinite}
+@keyframes b2pulsa{0%,100%{transform:scale(1)}50%{transform:scale(1.22)}}
+
+
+
+/* ===== o Bug novo no celular ===== */
+.b2-mandibula{animation:none!important;transform:translateY(calc(var(--b2boca,0) * 9px))}
+.b2-boca-luz{animation:none!important;stroke-width:calc(3.5px + var(--b2boca,0) * 3.5px)}
+.b2-sorriso{animation:none!important;transform:translateY(calc(var(--b2boca,0) * 6px))}
+.bug-fala > canvas, .susto > canvas, .apagao > canvas, .bug-anda, .jogo .jc > canvas, .jhp canvas { display: none !important; }
+/* fala: uma mini janela de transmissão com o rosto dele */
+.b2-mini { flex: none; position: relative; width: 58px; height: 66px; border: 1.5px solid rgba(82,213,255,.7); border-radius: 6px; background: #080b11; overflow: hidden; align-self: flex-end; }
+.b2-mini svg { position: absolute; left: -16%; top: 0; width: 132%; height: auto; }
+.b2-mini::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(0,0,0,.35) 0 1px, transparent 1px 3px); }
+.bug-fala.on .b2-mini { animation: b2miniLiga .5s cubic-bezier(.22,1,.36,1); }
+@keyframes b2miniLiga { 0% { transform: scale(1,.02) } 40% { transform: scale(1.05,.02) } 100% { transform: none } }
+/* susto e apagão com a forma final */
+.b2-susto { position: absolute; inset: 0; display: grid; place-items: center; }
+.b2-susto svg { width: 92vw; height: auto; }
+.b2-ap { position: absolute; inset: 0; display: grid; place-items: center; }
+.b2-ap svg { position: absolute; left: 50%; top: 46%; width: 150vw; max-width: 900px; height: auto; transform: translate(-50%, -50%); }
+.b2-ap-rasgo { opacity: 0; }
+.apagao.on .b2-ap-rasgo { transform-box: fill-box; transform-origin: center; animation: b2apRasgo 3.8s cubic-bezier(.2,.9,.25,1) forwards; }
+@keyframes b2apRasgo { 0%,62% { transform: scaleX(0); opacity: 0 } 63% { transform: scaleX(.08); opacity: 1 } 69% { transform: scaleX(1.12) } 73%,94% { transform: scaleX(1); opacity: 1 } 100% { transform: scaleX(0); opacity: 1 } }
+.b2-ap-fenda { opacity: 0; stroke-dasharray: 300; stroke-dashoffset: 300; }
+.apagao.on .b2-ap-fenda { animation: b2apFenda 3.8s ease-out forwards; }
+@keyframes b2apFenda { 0%,50% { opacity: 0; stroke-dashoffset: 300 } 53% { opacity: 1 } 62% { stroke-dashoffset: 0; opacity: 1 } 66%,100% { opacity: 0; stroke-dashoffset: 0 } }
+.b2-ap-borda { animation: b2rasgoBorda .9s ease-in-out infinite; }
+@keyframes b2rasgoBorda { 0%,100% { opacity: 1 } 50% { opacity: .55 } }
+/* telas do jogo e da invasão */
+.b2-jg { display: block; width: 120px; height: auto; margin: 0 auto 6px; filter: drop-shadow(0 0 18px rgba(255,42,31,.35)); }
+.jhp .b2-jhp { width: 30px; height: auto; flex: none; }
+/* teletransporte (no lugar do bichinho andando) */
+.b2-tp { position: fixed; left: 0; top: 0; z-index: 30; width: 72px; aspect-ratio: 400/460; pointer-events: none; opacity: 0; }
+.b2-tp svg { width: 100%; height: 100%; }
+.b2-tp.on { animation: b2tp 3s cubic-bezier(.65,0,.35,1) forwards; }
+@keyframes b2tp { 0% { opacity: 0; transform: scale(0,1.35) } 4% { opacity: 1; transform: scale(.03,1.35); filter: brightness(3) } 11% { transform: scale(1.12,.92); filter: none } 16%,80% { opacity: 1; transform: none } 87% { transform: scale(.7,1.25) } 93% { opacity: 1; transform: scale(.03,1.35); filter: brightness(3) } 100% { opacity: 0; transform: scale(0,1.35) } }
+@media (prefers-reduced-motion: reduce) { .b2-tp.on, .bug-fala.on .b2-mini { animation: none; } }
   </style>
 </head>
 <body>
@@ -552,15 +673,314 @@
       <p aria-live="polite"></p></form>
     <button type="button" id="regrasOk">Voltar à caça</button>
   </div></div>
-  <div class="susto" id="susto" aria-hidden="true"><canvas width="52" height="42"></canvas><b class="susto-txt"></b></div>
+  <div class="susto" id="susto" aria-hidden="true"><canvas width="52" height="42"></canvas><div class="b2-susto"><svg viewBox="0 0 400 460"><use href="#b2forma4"></use></svg></div><b class="susto-txt"></b></div>
   <div class="reinicio" id="reinicio" aria-hidden="true"><b>🍔 Lanchonete Pixel</b><i></i><span>restaurando o site…</span></div>
-  <div class="apagao" id="apagao" aria-hidden="true"><canvas width="26" height="21"></canvas><b class="apag-txt"></b></div>
+  <div class="apagao" id="apagao" aria-hidden="true"><canvas width="26" height="21"></canvas><div class="b2-ap"><svg viewBox="0 0 400 260">
+    <polyline class="b2-ap-fenda" points="200,8 206,40 196,70 210,104 196,140 212,176 194,210 202,252" style="fill:none;stroke:#fff;stroke-width:3;stroke-linejoin:round;filter:url(#b2gBrilho)"></polyline>
+    <g class="b2-ap-rasgo">
+      <polygon points="200,8 226,40 214,70 244,104 226,140 252,176 222,210 236,252 164,252 178,210 148,176 174,140 156,104 186,70 174,40" style="fill:#030305"></polygon>
+      <g style="clip-path:url(#b2RasgoClip)">
+        <rect x="140" y="0" width="120" height="260" style="fill:url(#b2gRuido);opacity:.45"></rect>
+        <ellipse cx="200" cy="140" rx="60" ry="90" style="fill:#ff2a1f;opacity:.18;filter:url(#b2gBlur)"></ellipse>
+        <g transform="translate(110 30) scale(.45)"><use href="#b2forma4"></use></g>
+      </g>
+      <g class="b2-ap-borda">
+        <polygon points="200,8 226,40 214,70 244,104 226,140 252,176 222,210 236,252 164,252 178,210 148,176 174,140 156,104 186,70 174,40" style="fill:none;stroke:#ff2a1f;stroke-width:5;stroke-linejoin:round;opacity:.6;filter:url(#b2gBlur)"></polygon>
+        <polygon points="200,8 226,40 214,70 244,104 226,140 252,176 222,210 236,252 164,252 178,210 148,176 174,140 156,104 186,70 174,40" style="fill:none;stroke:#ff6a5c;stroke-width:2;stroke-linejoin:round"></polygon>
+      </g>
+    </g></svg></div><b class="apag-txt"></b></div>
   <div class="pedido" id="pedido" hidden role="dialog" aria-label="Fazer pedido"><form id="pedidoForm" autocomplete="off">
     <span class="pd-logo">🍔 Lanchonete Pixel</span><h2 id="pedidoTit">Pra quem é o pedido?</h2>
     <p id="pedidoTxt">A gente chama o seu nome quando ficar pronto.</p>
     <input id="pedidoNome" maxlength="16" placeholder="Seu nome" aria-label="Seu nome" required>
     <button type="submit">Fazer pedido</button></form></div>
-  <div class="bug-fala" id="bugFala"><canvas width="52" height="42" aria-hidden="true"></canvas><span aria-hidden="true"></span><b class="sr" aria-live="polite"></b></div>
+  <!-- ===== o Bug novo: desenhos (ficam escondidos e são usados pelas aparições) ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+      <linearGradient id="b2gOlho" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" style="stop-color: #ffd6cf"></stop>
+        <stop offset=".4" style="stop-color: #ff3b2e"></stop>
+        <stop offset="1" style="stop-color: #b0100a"></stop>
+      </linearGradient>
+      <radialGradient id="b2gNucleo" cx=".5" cy=".5" r=".5">
+        <stop offset="0" style="stop-color: #fff1ec"></stop>
+        <stop offset=".35" style="stop-color: #ff5a4a"></stop>
+        <stop offset="1" style="stop-color: #6a0804"></stop>
+      </radialGradient>
+      <pattern id="b2gRuido" width="24" height="24" patternUnits="userSpaceOnUse">
+        <rect x="0" y="0" width="24" height="24" style="fill: #07080d"></rect>
+        <rect x="2" y="3" width="4" height="4" style="fill: #ff2a1f; fill-opacity: .55"></rect>
+        <rect x="14" y="1" width="6" height="2" style="fill: #52d5ff; fill-opacity: .45"></rect>
+        <rect x="9" y="12" width="4" height="4" style="fill: #ffffff; fill-opacity: .22"></rect>
+        <rect x="18" y="16" width="4" height="4" style="fill: #ff2a1f; fill-opacity: .35"></rect>
+        <rect x="1" y="19" width="8" height="2" style="fill: #52d5ff; fill-opacity: .3"></rect>
+      </pattern>
+      <linearGradient id="b2gF1" x1="0" y1="0" x2=".35" y2="1"><stop offset="0" style="stop-color: #eef1f5"></stop><stop offset="1" style="stop-color: #b9c0cc"></stop></linearGradient>
+      <linearGradient id="b2gF2" x1="0" y1="0" x2=".35" y2="1"><stop offset="0" style="stop-color: #c6ccd6"></stop><stop offset="1" style="stop-color: #8c94a2"></stop></linearGradient>
+      <linearGradient id="b2gF3" x1="0" y1="0" x2=".35" y2="1"><stop offset="0" style="stop-color: #9aa2b0"></stop><stop offset="1" style="stop-color: #626a79"></stop></linearGradient>
+      <linearGradient id="b2gF4" x1="0" y1="0" x2=".35" y2="1"><stop offset="0" style="stop-color: #6e7584"></stop><stop offset="1" style="stop-color: #424855"></stop></linearGradient>
+      <linearGradient id="b2gF5" x1="0" y1="0" x2=".35" y2="1"><stop offset="0" style="stop-color: #4a505c"></stop><stop offset="1" style="stop-color: #272b33"></stop></linearGradient>
+      <linearGradient id="b2gF6" x1="0" y1="0" x2=".35" y2="1"><stop offset="0" style="stop-color: #2e333c"></stop><stop offset="1" style="stop-color: #14171c"></stop></linearGradient>
+      <radialGradient id="b2gRebite" cx=".35" cy=".3" r=".7"><stop offset="0" style="stop-color: #e8ebf0"></stop><stop offset="1" style="stop-color: #4a505c"></stop></radialGradient>
+      <radialGradient id="b2gOrbita" cx=".5" cy=".55" r=".55"><stop offset="0" style="stop-color: #5a0a06"></stop><stop offset=".6" style="stop-color: #1a0403"></stop><stop offset="1" style="stop-color: #040508"></stop></radialGradient>
+      <pattern id="b2gLinhas" width="6" height="6" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="6" height="2" style="fill: #000000; fill-opacity: .5"></rect></pattern>
+      <filter id="b2gBrilho" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur stdDeviation="2.4" result="b"></feGaussianBlur>
+        <feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+      </filter>
+      <filter id="b2gBlur" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="9"></feGaussianBlur></filter>
+      <filter id="b2gSoV"><feColorMatrix type="matrix" values="1 0 0 0 .25  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"></feColorMatrix></filter>
+      <filter id="b2gSoC"><feColorMatrix type="matrix" values="0 0 0 0 0  0 1 0 0 .2  0 0 1 0 .3  0 0 0 1 0"></feColorMatrix></filter>
+      <clipPath id="b2gJanela"><rect x="111" y="31" width="178" height="198" rx="5"></rect></clipPath>
+      <clipPath id="b2gRasgo"><polygon points="200,8 226,40 214,70 244,104 226,140 252,176 222,210 236,252 164,252 178,210 148,176 174,140 156,104 186,70 174,40"></polygon></clipPath>
+      <clipPath id="b2gCabeca"><polygon points="200,58 158,70 122,96 104,140 100,200 112,250 140,290 170,314 200,322 230,314 260,290 288,250 300,200 296,140 278,96 242,70"></polygon></clipPath>
+
+      <!-- ===== FALHA: o que existe por baixo do metal ===== -->
+      <g id="b2falha">
+        <polygon class="b2-vao" points="200,58 158,70 122,96 104,140 100,200 112,250 140,290 170,314 200,322 230,314 260,290 288,250 300,200 296,140 278,96 242,70"></polygon>
+        <g style="clip-path: url(#b2gCabeca)">
+          <rect x="90" y="50" width="220" height="280" style="fill: url(#b2gRuido)"></rect>
+          <g class="b2-barras">
+            <rect class="b2-bv" x="70" y="100" width="170" height="5"></rect>
+            <rect class="b2-bc" x="170" y="128" width="150" height="3"></rect>
+            <rect class="b2-bv" x="200" y="236" width="120" height="8"></rect>
+            <rect class="b2-bc" x="90" y="254" width="120" height="4"></rect>
+            <rect class="b2-bb" x="150" y="292" width="130" height="3"></rect>
+          </g>
+          <text class="b2-cod" x="120" y="120">ERR 0x00</text>
+          <text class="b2-cod" x="220" y="230">404</text>
+          <text class="b2-cod" x="128" y="246">NULL</text>
+          <rect x="90" y="50" width="220" height="280" style="fill: url(#b2gLinhas)"></rect>
+        </g>
+      </g>
+
+      <!-- ===== FACETAS DO ROSTO (cada placa é uma peça) ===== -->
+      <polygon id="b2pA" class="b2-f1 b2-fc" points="200,58 158,70 172,124 200,138"></polygon>
+      <polygon id="b2pB" class="b2-f2 b2-fc" points="158,70 122,96 118,152 172,124"></polygon>
+      <polygon id="b2pC" class="b2-f4 b2-fc" points="122,96 104,140 118,152"></polygon>
+      <polygon id="b2pE" class="b2-f4 b2-fc" points="104,140 100,200 124,208 118,152"></polygon>
+      <polygon id="b2pH" class="b2-f3 b2-fc" points="100,200 124,208 188,214 164,236 112,250"></polygon>
+      <polygon id="b2pI" class="b2-f4 b2-fc" points="112,250 164,236 150,266 140,290"></polygon>
+      <polygon id="b2pJ" class="b2-f2 b2-fc" points="164,236 188,214 200,232 200,274 176,272 150,266"></polygon>
+      <polygon id="b2pG" class="b2-f1 b2-fc" points="192,168 200,156 200,232 188,214"></polygon>
+      <polygon id="b2pD" class="b2-f5 b2-fc" points="116,150 172,122 200,136 194,170"></polygon>
+
+      <polygon id="b2qA" class="b2-f2 b2-fc" points="200,58 242,70 228,124 200,138"></polygon>
+      <polygon id="b2qB" class="b2-f3 b2-fc" points="242,70 278,96 282,152 228,124"></polygon>
+      <polygon id="b2qC" class="b2-f5 b2-fc" points="278,96 296,140 282,152"></polygon>
+      <polygon id="b2qE" class="b2-f5 b2-fc" points="296,140 300,200 276,208 282,152"></polygon>
+      <polygon id="b2qH" class="b2-f4 b2-fc" points="300,200 276,208 212,214 236,236 288,250"></polygon>
+      <polygon id="b2qI" class="b2-f5 b2-fc" points="288,250 236,236 250,266 260,290"></polygon>
+      <polygon id="b2qJ" class="b2-f3 b2-fc" points="236,236 212,214 200,232 200,274 224,272 250,266"></polygon>
+      <polygon id="b2qG" class="b2-f2 b2-fc" points="208,168 200,156 200,232 212,214"></polygon>
+      <polygon id="b2qD" class="b2-f6 b2-fc" points="284,150 228,122 200,136 206,170"></polygon>
+
+      <!-- órbitas, olhos e pálpebras -->
+      <g id="b2olhos">
+        <polygon class="b2-orbita-luz" points="118,152 192,168 188,214 124,208"></polygon>
+        <polygon class="b2-orbita-luz" points="282,152 208,168 212,214 276,208"></polygon>
+        <path class="b2-oclusao" d="M118 152 L192 168 M282 152 L208 168"></path>
+        <ellipse class="b2-halo" cx="156" cy="190" rx="34" ry="13"></ellipse>
+        <ellipse class="b2-halo" cx="244" cy="190" rx="34" ry="13"></ellipse>
+        <polygon class="b2-olho" points="126,178 186,192 184,203 128,190"></polygon>
+        <polygon class="b2-olho" points="274,178 214,192 216,203 272,190"></polygon>
+        <polygon class="b2-olho-miolo" points="138,183 178,193 177,196 139,187"></polygon>
+        <polygon class="b2-olho-miolo" points="262,183 222,193 223,196 261,187"></polygon>
+        <polygon class="b2-palpebra" points="120,170 192,184 190,206 122,194"></polygon>
+        <polygon class="b2-palpebra" points="280,170 208,184 210,206 278,194"></polygon>
+      </g>
+      <!-- boca: um vão com luz, sorriso torto -->
+      <g id="b2boca">
+        <polygon class="b2-vao" points="150,266 176,272 200,274 224,272 250,266 226,290 200,296 174,290"></polygon>
+        <path class="b2-boca-luz" d="M158 272 C182 286 214 286 246 266"></path>
+      </g>
+      <!-- mandíbula (desce quando ele fala) -->
+      <g id="b2mand">
+        <g class="b2-mandibula">
+          <polygon class="b2-f5 b2-fc" points="140,290 150,266 176,284 174,296 170,314"></polygon>
+          <polygon class="b2-f3 b2-fc" points="176,284 200,288 200,300 174,296"></polygon>
+          <polygon class="b2-f4 b2-fc" points="174,296 200,300 200,322 170,314"></polygon>
+          <polygon class="b2-f6 b2-fc" points="260,290 250,266 224,284 226,296 230,314"></polygon>
+          <polygon class="b2-f4 b2-fc" points="224,284 200,288 200,300 226,296"></polygon>
+          <polygon class="b2-f5 b2-fc" points="226,296 200,300 200,322 230,314"></polygon>
+        </g>
+      </g>
+      <!-- acabamento: chanfros, respiros, fendas de luz, rebites -->
+      <g id="b2detalhes">
+        <!-- chanfros: a borda de cima de cada placa pega luz -->
+        <path class="b2-chanfro" d="M200 60 L160 71 M158 72 L124 96 M200 140 L174 126 M120 154 L172 126 M102 202 L124 209 L186 215 M166 237 L188 216 M190 170 L200 158"></path>
+        <path class="b2-chanfro-fraco" d="M200 60 L240 71 M242 72 L276 96 M200 140 L226 126 M280 154 L228 126 M298 202 L276 209 L214 215 M234 237 L212 216"></path>
+        <!-- sombra nas junções de baixo -->
+        <path class="b2-oclusao" d="M118 152 L104 140 M124 208 L100 200 M112 250 L164 236 M140 290 L150 266 M282 152 L296 140 M276 208 L300 200 M288 250 L236 236 M260 290 L250 266"></path>
+        <!-- costura de luz no meio da testa -->
+        <path class="b2-costura-c" d="M200 64 L200 134"></path>
+        <!-- respiros nas têmporas -->
+        <path class="b2-respiro" d="M108 160 L116 158 M106 172 L116 170 M106 184 L117 182 M292 160 L284 158 M294 172 L284 170 M294 184 L283 182"></path>
+        <path class="b2-respiro-luz" d="M108 162 L116 160 M106 174 L116 172 M106 186 L117 184"></path>
+        <!-- fendas de luz nas bochechas -->
+        <path class="b2-fenda-luz" d="M128 224 L152 220 M272 224 L248 220"></path>
+        <!-- rebites nas junções -->
+        <circle class="b2-rebite" cx="172" cy="124" r="2.6"></circle><circle class="b2-rebite" cx="228" cy="124" r="2.6"></circle>
+        <circle class="b2-rebite" cx="122" cy="96" r="2.4"></circle><circle class="b2-rebite" cx="278" cy="96" r="2.4"></circle>
+        <circle class="b2-rebite" cx="112" cy="250" r="2.4"></circle><circle class="b2-rebite" cx="288" cy="250" r="2.4"></circle>
+        <circle class="b2-rebite" cx="164" cy="236" r="2.2"></circle><circle class="b2-rebite" cx="236" cy="236" r="2.2"></circle>
+      </g>
+      <!-- arestas iluminadas e luz de contorno -->
+      <g id="b2arestas">
+        <path class="b2-brilho-aresta" d="M158 70 L172 124 L200 138 M122 96 L118 152 M164 236 L188 214 M200 156 L200 232"></path>
+        <path class="b2-luz-c" d="M242 70 L278 96 L296 140 L300 200 L288 250 L260 290 L230 314"></path>
+        <path class="b2-luz-v" d="M158 70 L122 96 L104 140 L100 200 L112 250 L140 290 L170 314"></path>
+      </g>
+      <!-- malha de holograma (as mesmas arestas, só em linha) -->
+      <g id="b2malha">
+        <polygon class="b2-fio-contorno" points="200,58 158,70 122,96 104,140 100,200 112,250 140,290 170,314 200,322 230,314 260,290 288,250 300,200 296,140 278,96 242,70"></polygon>
+        <path class="b2-fio" d="M158 70 L172 124 L200 138 L228 124 L242 70 M122 96 L118 152 L172 124 M278 96 L282 152 L228 124 M104 140 L118 152 M296 140 L282 152 M118 152 L124 208 L188 214 M282 152 L276 208 L212 214 M100 200 L124 208 M300 200 L276 208 M188 214 L164 236 L112 250 M212 214 L236 236 L288 250 M164 236 L150 266 L140 290 M236 236 L250 266 L260 290 M164 236 L200 232 L236 236 M150 266 L200 274 L250 266 M174 296 L200 300 L226 296 M200 58 L200 138 M200 232 L200 322"></path>
+      </g>
+
+      <!-- pescoço, ombros, crista e núcleo -->
+      <g id="b2corpo">
+        <ellipse class="b2-sombra-chao" cx="200" cy="452" rx="130" ry="14"></ellipse>
+        <polygon class="b2-f5 b2-fc" points="178,318 222,318 218,350 182,350"></polygon>
+        <polygon class="b2-f4 b2-fc" points="170,352 230,352 236,384 164,384"></polygon>
+        <path class="b2-cabo" d="M172 330 C152 358 144 392 126 424 M228 330 C248 358 256 392 274 424"></path>
+        <path class="b2-cabo-v" d="M184 352 C178 384 174 412 170 440"></path>
+        <polygon class="b2-f2 b2-fc" points="96,404 140,370 172,382 160,386"></polygon>
+        <polygon class="b2-f3 b2-fc" points="70,460 96,404 160,386 166,424 122,460"></polygon>
+        <polygon class="b2-f3 b2-fc" points="304,404 260,370 228,382 240,386"></polygon>
+        <polygon class="b2-f5 b2-fc" points="330,460 304,404 240,386 234,424 278,460"></polygon>
+        <polygon class="b2-f4 b2-fc" points="160,386 240,386 234,424 166,424"></polygon>
+        <path class="b2-trilha" d="M92 428 L112 404 L146 398 M308 428 L288 404 L254 398"></path>
+        <path class="b2-luz-c" d="M304 404 L330 460"></path>
+      </g>
+      <g id="b2crista1">
+        <polygon class="b2-f1 b2-fc" points="188,66 200,22 200,60"></polygon>
+        <polygon class="b2-f3 b2-fc" points="200,22 212,66 200,60"></polygon>
+        <path class="b2-trilha" d="M200 56 L200 32"></path>
+      </g>
+      <g id="b2crista2">
+        <polygon class="b2-f2 b2-fc" points="166,76 172,40 186,70"></polygon>
+        <polygon class="b2-f4 b2-fc" points="234,76 228,40 214,70"></polygon>
+        <polygon class="b2-f1 b2-fc" points="186,68 200,6 200,62"></polygon>
+        <polygon class="b2-f3 b2-fc" points="200,6 214,68 200,62"></polygon>
+        <path class="b2-trilha" d="M200 58 L200 18"></path>
+      </g>
+      <g id="b2nucleo">
+        <circle class="b2-halo" cx="200" cy="404" r="26"></circle>
+        <circle class="b2-f6 b2-fc" cx="200" cy="404" r="16"></circle>
+        <circle class="b2-nucleo b2-pulsa" cx="200" cy="404" r="10"></circle>
+      </g>
+
+      <!-- o rosto completo -->
+      <g id="b2rosto-todo">
+        <use href="#b2pA"></use><use href="#b2pB"></use><use href="#b2pC"></use><use href="#b2pE"></use><use href="#b2pH"></use><use href="#b2pI"></use><use href="#b2pJ"></use><use href="#b2pG"></use><use href="#b2pD"></use>
+        <use href="#b2qA"></use><use href="#b2qB"></use><use href="#b2qC"></use><use href="#b2qE"></use><use href="#b2qH"></use><use href="#b2qI"></use><use href="#b2qJ"></use><use href="#b2qG"></use><use href="#b2qD"></use>
+      </g>
+
+      <!-- ===== AS 4 FORMAS ===== -->
+      <!-- 1 · O SINAL: só holograma -->
+      <g id="b2forma1">
+        <g transform="translate(200 210) scale(.86) translate(-200 -210)">
+          <g class="b2-respira"><g class="b2-cabeca">
+            <g class="b2-holo-pisca">
+              <g style="clip-path: url(#b2gCabeca)">
+                <rect x="90" y="50" width="220" height="280" style="fill: url(#b2gRuido); opacity: .9"></rect>
+                <g class="b2-barras">
+                  <rect class="b2-bv" x="70" y="104" width="170" height="4"></rect>
+                  <rect class="b2-bc" x="170" y="140" width="150" height="3"></rect>
+                  <rect class="b2-bb" x="90" y="244" width="120" height="3"></rect>
+                </g>
+                <rect x="90" y="50" width="220" height="280" style="fill: url(#b2gLinhas)"></rect>
+                <rect class="b2-varredura" x="90" y="60" width="220" height="10" style="fill: #52d5ff; opacity: .5"></rect>
+              </g>
+              <use href="#b2malha"></use>
+            </g>
+            <use href="#b2olhos"></use>
+            <g class="b2-sorriso">
+              <rect class="b2-px" x="154" y="270" width="7" height="7"></rect><rect class="b2-px" x="162" y="275" width="7" height="7"></rect><rect class="b2-px" x="170" y="279" width="7" height="7"></rect><rect class="b2-px" x="178" y="281" width="7" height="7"></rect><rect class="b2-px" x="186" y="282" width="7" height="7"></rect><rect class="b2-px" x="194" y="282" width="7" height="7"></rect><rect class="b2-px" x="202" y="281" width="7" height="7"></rect><rect class="b2-px" x="210" y="280" width="7" height="7"></rect><rect class="b2-px" x="218" y="278" width="7" height="7"></rect><rect class="b2-px" x="226" y="275" width="7" height="7"></rect><rect class="b2-px" x="234" y="271" width="7" height="7"></rect><rect class="b2-px" x="242" y="265" width="7" height="7"></rect>
+            </g>
+            <path class="b2-mira" d="M86 54 L86 72 M86 54 L104 54 M314 54 L314 72 M314 54 L296 54 M86 334 L86 316 M86 334 L104 334 M314 334 L314 316 M314 334 L296 334"></path>
+          </g></g>
+        </g>
+      </g>
+
+      <!-- 2 · A MONTAGEM: placas encaixando na falha -->
+      <g id="b2forma2">
+        <g transform="translate(200 226) scale(.88) translate(-200 -226)">
+          <g class="b2-respira">
+            <g style="opacity: .45"><use href="#b2corpo"></use></g>
+            <g class="b2-cabeca">
+              <use href="#b2falha"></use>
+              <use href="#b2malha"></use>
+              <use href="#b2olhos"></use>
+              <use href="#b2boca"></use>
+              <use href="#b2pA"></use><use href="#b2qA"></use><use href="#b2pD"></use><use href="#b2qD"></use><use href="#b2pG"></use><use href="#b2qG"></use><use href="#b2pJ"></use><use href="#b2qJ"></use>
+              <g class="b2-encaixe"><use href="#b2pB"></use><use href="#b2qH"></use></g>
+              <use href="#b2mand"></use>
+              <polygon class="b2-f2 b2-fc b2-chega" style="--dx: -90px; --dy: 40px; --r: -40deg" points="100,200 124,208 188,214 164,236 112,250"></polygon>
+              <polygon class="b2-f3 b2-chega b2-fc b2-d2" style="--dx: 80px; --dy: -60px; --r: 35deg" points="242,70 278,96 282,152 228,124"></polygon>
+              <polygon class="b2-f4 b2-chega b2-fc b2-d3" style="--dx: -70px; --dy: -70px; --r: 50deg" points="122,96 104,140 118,152"></polygon>
+            </g>
+          </g>
+        </g>
+      </g>
+
+      <!-- 3 · O CORPO: completo, no auge (uma rachadura começa) -->
+      <g id="b2forma3">
+        <g transform="translate(200 230) scale(.92) translate(-200 -230)">
+          <g class="b2-respira">
+            <use href="#b2corpo"></use>
+            <g class="b2-cabeca">
+              <use href="#b2crista1"></use>
+              <use href="#b2falha"></use>
+              <use href="#b2boca"></use>
+              <use href="#b2pA"></use><use href="#b2pB"></use><use href="#b2pC"></use><use href="#b2pE"></use><use href="#b2pH"></use><use href="#b2pI"></use><use href="#b2pJ"></use><use href="#b2pG"></use><use href="#b2pD"></use>
+              <use href="#b2qA"></use><use href="#b2qB"></use><use href="#b2qC"></use><use href="#b2qE"></use><use href="#b2qH"></use><use href="#b2qJ"></use><use href="#b2qG"></use><use href="#b2qD"></use>
+              <polygon class="b2-borda" points="288,250 236,236 250,266 260,290"></polygon>
+              <path class="b2-borda-luz" d="M236 236 L250 266 M288 250 L260 290"></path>
+              <use href="#b2detalhes"></use>
+              <use href="#b2olhos"></use>
+              <use href="#b2mand"></use>
+              <use href="#b2arestas"></use>
+            </g>
+          </g>
+        </g>
+      </g>
+
+      <!-- 4 · O COLAPSO: placas se soltando, a falha toma conta -->
+      <g id="b2forma4">
+        <g transform="translate(200 230) scale(.96) translate(-200 -230)">
+          <g class="b2-respira">
+            <use href="#b2corpo"></use>
+            <use href="#b2nucleo"></use>
+            <g class="b2-cabeca">
+              <use href="#b2crista2"></use>
+              <use href="#b2falha"></use>
+              <use href="#b2boca"></use>
+              <use href="#b2pA"></use><use href="#b2pB"></use><use href="#b2pE"></use><use href="#b2pH"></use><use href="#b2pJ"></use><use href="#b2pG"></use><use href="#b2pD"></use>
+              <use href="#b2qA"></use><use href="#b2qJ"></use><use href="#b2qG"></use><use href="#b2qD"></use><use href="#b2qE"></use>
+              <polygon class="b2-borda" points="242,70 278,96 282,152 228,124"></polygon>
+              <polygon class="b2-borda" points="300,200 276,208 212,214 236,236 288,250"></polygon>
+              <polygon class="b2-borda" points="112,250 164,236 150,266 140,290"></polygon>
+              <path class="b2-borda-luz" d="M228 124 L282 152 M212 214 L236 236 L288 250 M164 236 L150 266"></path>
+              <use href="#b2detalhes"></use>
+              <use href="#b2olhos"></use>
+              <use href="#b2mand"></use>
+              <use href="#b2arestas"></use>
+              <!-- placas que se soltaram e flutuam -->
+              <g class="b2-solta-1"><use href="#b2qB"></use></g>
+              <g class="b2-solta-2"><use href="#b2pI"></use></g>
+              <g class="b2-cacos">
+                <rect class="b2-caco" x="306" y="214" width="8" height="8"></rect><rect class="b2-caco-c" x="318" y="244" width="5" height="5"></rect>
+                <rect class="b2-caco" x="300" y="120" width="6" height="6"></rect><rect class="b2-caco-c" x="86" y="282" width="5" height="5"></rect>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    
+  <clipPath id="b2RasgoClip"><polygon points="200,8 226,40 214,70 244,104 226,140 252,176 222,210 236,252 164,252 178,210 148,176 174,140 156,104 186,70 174,40"></polygon></clipPath>
+</defs></svg>
+  <div class="b2-tp" id="b2Tp" aria-hidden="true"><svg viewBox="0 0 400 460"><use id="b2TpUse" href="#b2forma1"></use></svg></div>
+  <div class="bug-fala" id="bugFala"><div class="b2-mini" aria-hidden="true"><svg viewBox="0 0 400 460"><use id="b2FalaUse" href="#b2forma1"></use></svg></div><canvas width="52" height="42" aria-hidden="true"></canvas><span aria-hidden="true"></span><b class="sr" aria-live="polite"></b></div>
   <div class="dreno" aria-hidden="true"><span class="bat"><i></i><b>--%</b></span><span class="sinal">sem serviço</span></div>
   <div class="bug-tinta" aria-hidden="true"></div>
   <canvas class="estatica" width="96" height="170" aria-hidden="true"></canvas>
@@ -1069,7 +1489,7 @@
       return;
     }
     let h = '';
-    if (j.p === 'intro' || j.p === 'regras' || j.p === 'fim' || j.p === 'inv') h += '<canvas width="52" height="42" aria-label="O Bug"></canvas>';
+    if (j.p === 'intro' || j.p === 'regras' || j.p === 'fim' || j.p === 'inv') h += '<canvas width="52" height="42" aria-hidden="true"></canvas><svg class="b2-jg" viewBox="0 0 400 460" role="img" aria-label="O Bug"><use href="#b2forma' + (j.p === 'inv' ? 1 : b2forma()) + '"></use></svg>';
     if (j.p === 'inv') h += '<span class="jt">Invasão</span><p class="js">Este site agora é meu. Tranquei o seu celular com 4 números.</p><div class="slots"><i>?</i><i>?</i><i>?</i><i>?</i></div>' +
       '<ul class="inv-r"><li>Consertem o site: os números aparecem.</li><li>Achou os 4? <b>🔒 código</b>, lá embaixo.</li><li><b>5 primeiros</b> me enfrentam. O resto fica comigo.</li></ul>' +
       '<p class="inv-pz">Até o fim da aula. Sem pressa… pra mim.</p>';
@@ -1079,7 +1499,7 @@
     if (j.p === 'regras' || j.p === 'q' || j.p === 'fim') h = etiquetaPapel(j) + h;
     if (j.p === 'q') {
       h += '<span class="jt">Erro ' + (j.i + 1) + ' de ' + j.n + (j.e ? ' · ' + escJ(j.e) : '') + '</span>';
-      h += '<div class="jhp"><canvas width="44" height="36" aria-hidden="true"></canvas><span>Integridade</span><b><i style="width:' + Math.round((1 - (+j.d || 0)) * 100) + '%"></i></b></div>';
+      h += '<div class="jhp"><canvas width="44" height="36" aria-hidden="true"></canvas><svg class="b2-jhp" viewBox="60 40 280 300" aria-hidden="true"><use href="#b2forma4"></use></svg><span>Integridade</span><b><i style="width:' + Math.round((1 - (+j.d || 0)) * 100) + '%"></i></b></div>';
       if (!j.r) h += '<span class="jr" id="jogoR">15</span>';
       const souFin = papel(j) === 'fin', minha = minhasResp[j.i];
       h += '<p class="jq">' + codJ(j.q) + '</p><div class="jo">' +
@@ -1123,8 +1543,28 @@
      ===================================================================== */
   const bugAnda = document.getElementById('bugAnda');
   let nivelBug = 0, timerAnda = null, pararAnda = null;
+
+  /* ===== o Bug novo no celular ===== */
+  function b2forma() { return nivelBug >= 3 ? 4 : atual >= 7 ? 3 : atual >= 2 ? 2 : 1; }
+  function b2boca() {
+    const fb = document.getElementById('bugFala'), falando = fb && fb.classList.contains('on');
+    let v = 0; if (falando) { const t = performance.now() / 1000; v = Math.max(0, Math.sin(t * 13) * .5 + Math.sin(t * 7.3) * .35) * .9; }
+    document.documentElement.style.setProperty('--b2boca', v.toFixed(3));
+    requestAnimationFrame(b2boca);
+  }
+  setTimeout(b2boca, 0);
+  function b2teleporte() {
+    const tp = document.getElementById('b2Tp'); if (!tp) return;
+    const W = innerWidth, H = innerHeight, w = 72, h = w * 460 / 400;
+    const pontos = [[12, 70], [W - w - 12, 70], [12, H - h - 90], [W - w - 12, H - h - 90]];
+    const [x, y] = pontos[Math.floor(Math.random() * pontos.length)];
+    document.getElementById('b2TpUse').setAttribute('href', '#b2forma' + b2forma());
+    tp.style.left = x + 'px'; tp.style.top = y + 'px';
+    tp.classList.remove('on'); void tp.offsetWidth; tp.classList.add('on');
+  }
   function passearBug() {
     if (calmo || !nivelBug || !bugAnda) return;
+    b2teleporte(); try { navigator.vibrate && navigator.vibrate(30); } catch (e) {} return;   // robô não anda: se teletransporta
     if (!pararAnda) pararAnda = animarBug(bugAnda, () => (bugAnda.classList.contains('vai') ? { dano: 0 } : null));
     bugAnda.classList.remove('vai'); void bugAnda.offsetWidth; bugAnda.classList.add('vai');
     try { navigator.vibrate && navigator.vibrate(30); } catch (e) {}
@@ -1208,6 +1648,7 @@
     if (prioridade) travaFala = Date.now() + 7600;
     if (!prioridade && (!telaJogo.hidden || !pedido.hidden)) return;   // nunca tampar o jogo/quiz nem o pedido
     falaBug.querySelector('.sr').textContent = texto;
+    const b2u = document.getElementById('b2FalaUse'); if (b2u) b2u.setAttribute('href', '#b2forma' + b2forma());
     falaBug.classList.toggle('grave', !!grave);
     escreverFalhando(falaBug.querySelector('span'), texto, grave ? Math.max(nivelBug, 3) : nivelBug);
     if (!pararFala) pararFala = animarBug(falaBug.querySelector('canvas'), () => (falaBug.classList.contains('on') ? {} : null));

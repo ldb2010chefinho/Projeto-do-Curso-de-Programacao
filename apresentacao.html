@@ -613,7 +613,7 @@ body[data-bug="3"] .bug-tint{animation:dgTint 5s ease-in-out infinite}
 @media (max-width:760px){.inv-grid{grid-template-columns:1fr}}
 
 /* fala do Bug nas aparições */
-.bug-fala{position:fixed;right:clamp(84px,9vw,128px);bottom:calc(var(--bot-h) + 70px);z-index:27;max-width:min(360px,60vw);padding:12px 16px;border:1px solid #c22b1e;border-radius:12px 12px 2px 12px;
+.bug-fala{position:fixed;right:clamp(84px,9vw,128px);bottom:calc(var(--bot-h) + 70px);z-index:27;max-width:min(420px,60vw);padding:12px 16px;border:1px solid #c22b1e;border-radius:12px 12px 2px 12px;
   background:#0d0709;color:#efe6d2;font-family:"Special Elite","Courier New",monospace;font-size:clamp(.95rem,.8rem + .4vw,1.2rem);line-height:1.3;
   opacity:0;transform:translateY(8px);pointer-events:none;box-shadow:0 10px 40px rgba(194,43,30,.35)}
 .bug-fala.on{animation:falaIn 5.6s ease forwards}
@@ -1398,7 +1398,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= AINDA QUEBRADO ================= -->
-<section class="slide" data-act="Ato 1 → Ato 2" data-stage="1" data-cameo="Um número já escapou de mim. Procurem." data-cameo-nome="{nome}… um número já escapou de mim. Você já achou?">
+<section class="slide" data-act="Ato 1 → Ato 2" data-stage="1" data-cameo="Leram a minha poesia? Eu escrevi pensando em vocês." data-cameo-nome="{nome}… leu a minha poesia? Ou quer que eu desenhe?">
   <div class="inner split">
     <div class="stack" style="gap:20px">
       <div class="eyebrow"><span class="tag warn">Funcionou. Mas…</span></div>
@@ -1516,7 +1516,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= DETALHES QUEBRADOS ================= -->
-<section class="slide" data-act="Ato 2 → Ato 3" data-stage="2" data-cameo="Outro número escapou… vocês estão me irritando." data-cameo-nome="Outro número escapou… {nome}, você está me irritando.">
+<section class="slide" data-act="Ato 2 → Ato 3" data-stage="2" data-cameo="Dois números soltos… e vocês ainda acham que estão ganhando. Adorável." data-cameo-nome="{nome}, dois números soltos e você ainda procurando? Adorável.">
   <div class="inner split">
     <div class="stack" style="gap:20px">
       <div class="eyebrow"><span class="tag warn">Funcionou. Mas…</span></div>
@@ -1661,7 +1661,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= FRAMEWORKS ================= -->
-<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2" data-cameo="Três números à vista. Eu não vou deixar barato." data-cameo-nome="Três números à vista. Eu estou de olho em você, {nome}.">
+<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2" data-cameo="Três números. Estou ficando… cansado. Não se acostumem." data-cameo-nome="Três números. Estou cansado, {nome}… mas de você eu não tiro o olho.">
   <div class="inner">
     <div class="eyebrow"><span class="tag warn">Levantem a mão</span> Frameworks CSS</div>
     <p class="big-q" style="font-size:var(--fs-md);max-width:none">Quem já ouviu falar de Bootstrap? E de Tailwind?</p>
@@ -1760,7 +1760,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
 </section>
 
 <!-- ================= UM SITE ================= -->
-<section class="slide" data-act="Fechamento" data-stage="4" data-bug="4" data-bug-delay="2600" data-cameo="Vocês me quebraram demais… NÃO PISQUEM.">
+<section class="slide" data-act="Fechamento" data-stage="4" data-bug="4" data-bug-delay="2600" data-cameo="Rosas são vermelhas e eu estou caindo… o último número só aparece agora, enquanto eu morro. NÃO PISQUEM.">
   <div class="inner finale">
     <div class="morph-dev" aria-hidden="true"><div class="md-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
     <h2>Um site. <span class="accent">Todas as telas.</span></h2>
@@ -3131,6 +3131,8 @@ window.BUGNIVEL = (() => {
   let anterior = -1, atraso = null;
   function aparecer(texto){
     if(!cameo) return;
+    const dur = Math.min(11, Math.max(5.6, (texto || '').length * .06));
+    cameo.style.animationDuration = dur + .4 + 's'; if(fala) fala.style.animationDuration = dur + 's';
     if(!REDUCED){ cameo.classList.remove('on'); void cameo.offsetWidth; cameo.classList.add('on'); }
     if(fala && texto){
       const c = +(document.body.dataset.clima || 0);
@@ -3394,15 +3396,43 @@ window.CAOS = (() => {
 window.VIDA = (() => {
   const VIDA = [100, 88, 80, 72, 62, 54, 46, 38, 34, 30];
   const el = $('#bugVida'); if(!el) return { sync(){} };
-  let ultima = null;
+  let ultima = null, ultimaEtapa = null, timerFala = null;
+  /* quando um número escapa (etapas 1, 4 e 7), o Bug recita a charada no telão;
+     nos outros consertos, ele só reclama da dor (com deboche) */
+  const CHARADAS = {
+    1: 'Um número fugiu de mim… Rosas são vermelhas, o pão é dourado: ele cochila no canto do hambúrguer em destaque.',
+    4: 'Mais um escapou. Rosas são vermelhas, o caminho está trancado: procurem no lugar que deixa mais fácil se mover pelo site.',
+    7: 'Três. Rosas são vermelhas, o preço é baixinho: o terceiro mora onde eu prometo mais por menos.'
+  };
+  const DOR = [
+    'Ai. Isso doeu… quase.',
+    'Mais um conserto. Que gracinha.',
+    'Vocês arrumam, eu desarrumo. É o nosso joguinho.',
+    'Um pedaço a menos de mim. Eu tenho muitos.',
+    'Estão aprendendo rápido. Não gostei.'
+  ];
+  let dor = 0;
+  function reagir(de, para){
+    const solto = [1, 4, 7].find(n => de < n && n <= para);
+    if(!solto && slides[cur].dataset.cameo !== undefined) return;   // o slide já tem a aparição dele
+    const texto = solto ? CHARADAS[solto] : DOR[dor++ % DOR.length];
+    clearTimeout(timerFala);
+    timerFala = setTimeout(() => {
+      const s = slides[cur]; if(s.classList.contains('jogo-slide') || s.classList.contains('inv-slide')) return;
+      if(window.BUGNIVEL) BUGNIVEL.aparecer(texto);
+    }, 1800);
+  }
   function sync(){
     const s = slides[cur], ativo = +(document.body.dataset.clima || 0) > 0 && !s.classList.contains('jogo-slide') && !s.classList.contains('inv-slide');
     el.hidden = !ativo; if(!ativo) return;
     const etapa = Math.max(0, Math.min(9, LIVE.get() ?? 0)), v = VIDA[etapa];
+    if(ultimaEtapa !== null && etapa > ultimaEtapa) reagir(ultimaEtapa, etapa);
+    ultimaEtapa = etapa;
     el.style.setProperty('--v', v + '%'); el.querySelector('em').textContent = v + '%';
     if(ultima !== null && v < ultima){ el.querySelector('u').textContent = '−' + (ultima - v) + '%'; el.classList.remove('dano'); void el.offsetWidth; el.classList.add('dano'); }
     ultima = v;
   }
+  setInterval(sync, 600);   // os consertos também acontecem dentro do slide (botão Rodar)
   return { sync };
 })();
 

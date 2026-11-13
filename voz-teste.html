@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teste da voz do Bug</title>
+<style>
+  /* página só para testar a voz do Bug antes da apresentação */
+  body { margin: 0; background: #07090f; color: #e6ebf2; font-family: system-ui, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 60px; display: grid; gap: 20px; }
+  h1 { margin: 0; font-size: 32px; }
+  p { margin: 0; color: #a6b1c3; line-height: 1.5; }
+  .painel { display: grid; gap: 10px; padding: 16px; border: 1px solid #1e2c4f; border-radius: 14px; background: #0c1220; }
+  label { font-weight: 600; display: flex; justify-content: space-between; }
+  input[type=range] { width: 100%; accent-color: #ff3b2e; }
+  .grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+  button { min-height: 48px; padding: 10px 14px; border: 1px solid #3a1416; border-radius: 12px; background: #140a0d; color: #ffd9d2; font: inherit; text-align: left; cursor: pointer; }
+  button:hover { border-color: #ff3b2e; }
+  .medidor { height: 10px; border-radius: 999px; background: #1a1f2b; overflow: hidden; }
+  .medidor i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ff2a1f, #ffb4aa); transition: width .05s; }
+  .status { font-family: monospace; color: #6f7c92; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Voz do Bug: teste</h1>
+  <p>Clique numa fala para ouvir. Mexa no "Robô" para deixar mais ou menos robótico; o valor escolhido aqui é o que vai na apresentação.</p>
+  <div class="painel">
+    <label for="robo">Robô <span id="valor">85%</span></label>
+    <input id="robo" type="range" min="0" max="100" value="85">
+    <div class="medidor" aria-hidden="true"><i id="nivel"></i></div>
+    <span class="status" id="status">carregando os áudios…</span>
+  </div>
+  <div class="grade" id="falas"></div>
+</main>
+<script src="voz-robo.js"></script>
+<script>
+  /* textos de cada áudio, para os botões */
+  const TEXTOS = {
+    inv1: 'Ah… plateia. Eu adoro plateia.', inv2: 'Eu sou o Bug. Este site agora é meu…', inv3: 'Consertem o que está quebrado…',
+    inv4: 'Cada conserto me arranca um pedaço…', inv5: 'Vocês têm até o fim da aula…', ch1: 'Um número fugiu de mim… (charada 1)',
+    ch4: 'Outro escapou… (charada 2)', ch7: 'Três… (charada 3)', ultimo: 'Meu último suspiro… (charada 4)',
+    apagao: 'Olhem o cardápio… no celular.', susto: 'Eu sei quem vocês são!', jogo1: 'O código está completo…',
+    jogo2: 'Batalha final…', derrota: 'Não… meu código… responsivo…', volta: '…isso não acabou. Eu vou voltar.',
+    evo2: 'Montando… peça por peça.', evo3: 'Agora… eu tenho corpo.', evo4: 'Eu não vou cair… sozinho.'
+  };
+  const grade = document.getElementById('falas');
+  VOZ_ROBO.chaves.forEach(k => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = TEXTOS[k] || k;
+    b.addEventListener('click', () => VOZ_ROBO.falar(k)); grade.appendChild(b);
+  });
+  const robo = document.getElementById('robo'), valor = document.getElementById('valor');
+  robo.addEventListener('input', () => { VOZ_ROBO.setIntensidade(robo.value / 100); valor.textContent = robo.value + '%'; });
+  VOZ_ROBO.aoNivel(n => { document.getElementById('nivel').style.width = (n * 100) + '%'; });
+  const st = document.getElementById('status');
+  const t = setInterval(() => { const n = VOZ_ROBO.pronto(); st.textContent = n + ' de ' + VOZ_ROBO.chaves.length + ' áudios prontos'; if(n === VOZ_ROBO.chaves.length) clearInterval(t); }, 500);
+</script>
+</body>
+</html>

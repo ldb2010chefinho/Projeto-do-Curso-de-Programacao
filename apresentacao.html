@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Design Responsivo ao Vivo</title>
+<script src="voz-robo.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Schibsted+Grotesk:wght@400..700&family=JetBrains+Mono:wght@400..600&display=swap">
@@ -2912,6 +2913,8 @@ window.JOGO = (() => {
   }
   function digitar(el){
     const txt = el.dataset.text; let i = 0; clearInterval(el._t);
+    const vozDe = { jgSay1: 'jogo1', jgSay2: 'jogo2', jgSay3: 'derrota' }[el.id];
+    if(vozDe && window.VOZ_ROBO) VOZ_ROBO.falar(vozDe);
     if(REDUCED){ el.textContent = txt; return; }
     el.innerHTML = '<span class="cur"></span>';
     el._t = setInterval(() => { i++; el.innerHTML = esc2(txt.slice(0, i)) + '<span class="cur"></span>'; if(i >= txt.length) clearInterval(el._t); }, 36);
@@ -3092,11 +3095,11 @@ window.INVASAO = (() => {
           let f = 0, i = 0, p = null;
           const passo = () => {
             if(slides[cur] !== slide) return;
-            if(!p){ say.innerHTML = ''; p = document.createElement('p'); p.className = 'atual'; say.appendChild(p); i = 0; }
+            if(!p){ say.innerHTML = ''; if(window.VOZ_ROBO) VOZ_ROBO.falar('inv' + (f + 1)); p = document.createElement('p'); p.className = 'atual'; say.appendChild(p); i = 0; }
             i++; p.textContent = falas[f].slice(0, i); p.insertAdjacentHTML('beforeend', '<span class="cur"></span>');
             if(i < falas[f].length) { say._t = setTimeout(passo, /[.,…?]/.test(falas[f][i - 1]) ? 260 : 34); return; }
             f++; p.querySelector('.cur')?.remove(); p = null;
-            if(f < falas.length) say._t = setTimeout(passo, 900);
+            if(f < falas.length) say._t = setTimeout(passo, Math.max(900, (window.VOZ_ROBO ? VOZ_ROBO.restante() : 0) + 350));   // espera a voz terminar
             else { say.querySelector('p:last-child').insertAdjacentHTML('beforeend', '<span class="cur"></span>'); slide.classList.add('pronto'); }
           };
           say._t = setTimeout(passo, 700);
@@ -3129,8 +3132,12 @@ window.BUGNIVEL = (() => {
   const cameo = $('#bugCameo');
   if(cameo) animarBug(cameo, () => cameo.classList.contains('on') ? { falha: false } : null);
   let anterior = -1, atraso = null;
+  /* falas que têm áudio gravado: o Bug fala de verdade */
+  const VOZ_DO_TEXTO = [['Um número fugiu', 'ch1'], ['Outro escapou', 'ch4'], ['Três. ', 'ch7'], ['Meu último suspiro', 'ultimo']];
   function aparecer(texto){
     if(!cameo) return;
+    const v = VOZ_DO_TEXTO.find(([ini]) => (texto || '').startsWith(ini));
+    if(v && window.VOZ_ROBO) VOZ_ROBO.falar(v[1]);
     const dur = Math.min(11, Math.max(5.6, (texto || '').length * .06));
     cameo.style.animationDuration = dur + .4 + 's'; if(fala) fala.style.animationDuration = dur + 's';
     if(!REDUCED){ cameo.classList.remove('on'); void cameo.offsetWidth; cameo.classList.add('on'); }
@@ -3146,6 +3153,7 @@ window.BUGNIVEL = (() => {
   function assustar(){
     if(REDUCED || !susto) return;
     if(window.CLIMA) CLIMA.rugido(0);
+    if(window.VOZ_ROBO) setTimeout(() => VOZ_ROBO.falar('susto'), 250);
     susto.classList.remove('on'); void susto.offsetWidth; susto.classList.add('on');
     setTimeout(() => susto.classList.remove('on'), 1300);
   }
@@ -3485,6 +3493,7 @@ window.CLIMA = (() => {
     ap.classList.remove('on'); void ap.offsetWidth; ap.classList.add('on');
     t0 = performance.now(); requestAnimationFrame(loopCara);
     rugido(2.62);                              // o som é agendado no relógio do áudio: sai junto com o pulo da cara
+    if(window.VOZ_ROBO) setTimeout(() => VOZ_ROBO.falar('apagao'), 2750);
     setTimeout(() => { ap.classList.remove('on'); ocupado = false; }, 3900);
   }
 
@@ -3599,6 +3608,7 @@ window.VOLTA = (() => {
       timers.forEach(clearTimeout); fala.textContent = '';
       const txt = '…isso não acabou. Eu vou voltar.';
       timers.push(setTimeout(() => {
+        if(window.VOZ_ROBO) VOZ_ROBO.falar('volta');
         let i = 0; const t = setInterval(() => { i++; fala.textContent = txt.slice(0, i); if(i >= txt.length) clearInterval(t); }, REDUCED ? 0 : 55);
         timers.push(t);
       }, 3200));

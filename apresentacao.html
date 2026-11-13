@@ -1313,6 +1313,59 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
   .bg-net,.scan{display:none}
 }
 </style>
+
+<style id="v23">
+/* ===== v23: o Bug fala por um "cartão de transmissão" único (janela + legenda juntas) ===== */
+.b2-tx,.bug-fala{display:none!important}
+/* véu: a apresentação escurece um pouco enquanto ele fala, para ficar claro que é uma interrupção */
+.b2-veu{position:fixed;inset:0;z-index:26;pointer-events:none;opacity:0;transition:opacity .5s ease;
+  background:radial-gradient(ellipse 70% 60% at 82% 88%,rgba(60,6,8,.35),transparent 70%),rgba(3,5,10,.58)}
+.b2-veu::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
+body.b2-falando .b2-veu{opacity:1}
+.b2-live{position:fixed;right:clamp(14px,2vw,32px);bottom:calc(var(--bot-h) + 18px);z-index:28;width:min(620px,46vw);
+  display:grid;grid-template-columns:clamp(140px,12.5vw,196px) minmax(0,1fr);border:1.5px solid rgba(82,213,255,.7);border-radius:10px;
+  background:linear-gradient(180deg,#0a0e16,#06080d);overflow:hidden;pointer-events:none;opacity:0;transform:scale(0,.01);transform-origin:85% 100%;
+  box-shadow:0 0 0 1px rgba(0,0,0,.6),0 24px 70px rgba(0,0,0,.7),0 0 40px rgba(82,213,255,.14)}
+.b2-live.on{animation:b2txLiga .55s cubic-bezier(.22,1,.36,1) forwards}
+.b2-live.on.sai{animation:b2txDesliga .45s ease-in forwards}
+.b2-live.grave{border-color:rgba(255,59,46,.85);box-shadow:0 0 0 1px rgba(0,0,0,.6),0 24px 70px rgba(0,0,0,.7),0 0 46px rgba(255,42,31,.28)}
+.b2-live-vid{position:relative;aspect-ratio:180/210;background:radial-gradient(ellipse at 50% 30%,#121a28,#070a10 70%);border-right:1px solid rgba(82,213,255,.22);overflow:hidden}
+.b2-live.grave .b2-live-vid{border-right-color:rgba(255,59,46,.3)}
+.b2-live-vid svg{position:absolute;left:-14%;top:5%;width:128%;height:auto}
+.b2-live.on .b2-live-vid svg{animation:b2txEntra .9s steps(5) forwards}
+.b2-live-vid::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.34) 0 1px,transparent 1px 3px);pointer-events:none}
+.b2-live-ruido{position:absolute;inset:0;z-index:3;opacity:0;background:repeating-linear-gradient(0deg,#ffffff22 0 1px,transparent 1px 2px),repeating-linear-gradient(90deg,#ff2a1f22 0 2px,transparent 2px 5px),#0a0d14}
+.b2-live.on .b2-live-ruido{animation:b2txRuido .9s steps(6) forwards}
+.b2-live-linha{position:absolute;left:0;right:0;top:-10%;height:12%;z-index:2;background:linear-gradient(180deg,transparent,rgba(82,213,255,.16),transparent);animation:b2txVarre 2.6s linear infinite}
+/* cantos de mira, como no design */
+.b2-live-mira{position:absolute;inset:8px;z-index:2;pointer-events:none;
+  background:linear-gradient(#52d5ff,#52d5ff) 0 0/12px 1.5px,linear-gradient(#52d5ff,#52d5ff) 0 0/1.5px 12px,
+  linear-gradient(#52d5ff,#52d5ff) 100% 0/12px 1.5px,linear-gradient(#52d5ff,#52d5ff) 100% 0/1.5px 12px,
+  linear-gradient(#52d5ff,#52d5ff) 0 100%/12px 1.5px,linear-gradient(#52d5ff,#52d5ff) 0 100%/1.5px 12px,
+  linear-gradient(#52d5ff,#52d5ff) 100% 100%/12px 1.5px,linear-gradient(#52d5ff,#52d5ff) 100% 100%/1.5px 12px;background-repeat:no-repeat;opacity:.75}
+.b2-live.grave .b2-live-mira{filter:hue-rotate(160deg) saturate(2.4)}
+.b2-live-txt{display:flex;flex-direction:column;gap:10px;padding:14px 18px 14px;min-width:0}
+.b2-live-top{display:flex;align-items:center;justify-content:space-between;gap:10px;font:600 10px var(--f-mono);letter-spacing:.16em;color:#ff9a8f;text-transform:uppercase}
+.b2-live-top span i{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:50%;background:#ff2a1f;vertical-align:0;animation:b2rec 1s steps(1) infinite}
+.b2-live-top em{font-style:normal;color:#52d5ff;letter-spacing:.1em}
+.b2-live-fala{flex:1;margin:0;font-family:"Special Elite","Courier New",monospace;font-size:clamp(1rem,.78rem + .55vw,1.32rem);line-height:1.38;color:#efe6d2;min-height:4.1em;text-wrap:pretty}
+.b2-live.grave .b2-live-fala{color:#ffd9d2;text-shadow:-1px 0 rgba(255,42,31,.7),1px 0 rgba(82,213,255,.5)}
+.b2-live-fala::after{content:"";display:inline-block;width:.5em;height:1em;margin-left:3px;vertical-align:-.12em;background:#ff3b2e;animation:b2rec .8s steps(1) infinite}
+.b2-live .b2-tx-onda{position:static;height:16px;padding:0;display:flex;gap:3px;align-items:center}
+.b2-live .b2-tx-onda i{flex:1}
+@media (prefers-reduced-motion:reduce){.b2-live.on,.b2-live.on *{animation:none!important}.b2-live.on{opacity:1;transform:none}.b2-live.on.sai{opacity:0}}
+/* o Bug novo também no Jogo (no lugar do bichinho de pixels) */
+.jogo-slide canvas.jg-bug{display:none!important}
+.jg-b2{display:block;width:clamp(150px,24vh,270px);height:auto;margin:0 auto;filter:drop-shadow(0 0 30px rgba(255,42,31,.35))}
+.jg[data-p="intro"] .jg-pane[data-p="intro"] .jg-b2{width:clamp(110px,16vh,180px)}
+.jg-hp .jg-b2{width:30px;margin:0;filter:none}
+.jg-b2 > g{transform-origin:200px 230px;transform:translateX(calc(var(--jgdano,0) * 0px))}
+.jogo-slide.is-active .jg-b2{animation:jgTreme calc(3.2s - var(--jgdano,0) * 2.4s) steps(2) infinite}
+@keyframes jgTreme{0%,86%,100%{transform:none;filter:drop-shadow(0 0 30px rgba(255,42,31,.35))}88%{transform:translateX(-4px) skewX(4deg);filter:drop-shadow(-3px 0 0 rgba(82,213,255,.6)) drop-shadow(3px 0 0 rgba(255,42,31,.6))}92%{transform:translateX(3px)}}
+.jogo-slide.jg-some .jg-pane[data-p="fim"] .jg-b2{animation:jgSome 2.8s steps(14) forwards}
+@keyframes jgSome{0%{opacity:1;clip-path:inset(0 0 0 0);transform:none}20%{transform:translateX(-8px) skewX(8deg)}40%{opacity:.85;clip-path:inset(12% 0 20% 0);transform:translateX(6px)}60%{opacity:.6;clip-path:inset(30% 0 34% 0)}80%{opacity:.3;clip-path:inset(46% 0 48% 0);filter:brightness(2.2)}100%{opacity:0;clip-path:inset(50% 0 50% 0)}}
+@media (prefers-reduced-motion:reduce){.jogo-slide .jg-b2{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -1973,7 +2026,7 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
   <div class="inner jg" id="jg">
     <div class="jg-top"><span class="jg-tag">O Jogo do Bug</span><span class="jg-locks" id="jgLocks"></span></div>
     <div class="jg-pane" data-p="intro">
-      <canvas class="jg-bug" width="22" height="18" aria-label="O Bug: um inseto de pixels que vaza para fora da tela"></canvas>
+      <canvas class="jg-bug" width="22" height="18" aria-hidden="true"></canvas><svg class="jg-b2" viewBox="0 0 400 460" role="img" aria-label="O Bug, um robô de placas de metal com falhas digitais"><g><use href="#b2forma4"></use></g></svg>
       <p class="jg-say" id="jgSay1" data-text="O código está completo. Digitem no celular. Só os 5 primeiros escapam. AGORA."></p>
       <ol class="jg-fuga" id="jgFuga"></ol>
       <p class="jg-fuga-info" id="jgFugaInfo"></p>
@@ -1991,13 +2044,13 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
       <div class="jg-qhead"><span class="jg-num" id="jgNum"></span>
         <div class="jg-timer" id="jgTimer"><svg viewBox="0 0 86 86" aria-hidden="true"><circle cx="43" cy="43" r="38" fill="none" stroke="#2a2630" stroke-width="6"/><circle id="jgTfg" cx="43" cy="43" r="38" fill="none" stroke="#c22b1e" stroke-width="6" stroke-dasharray="238.8" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear"/></svg><b id="jgTnum">15</b></div>
       </div>
-      <div class="jg-hp" aria-label="Integridade do Bug"><canvas class="jg-bug jg-mini" width="22" height="18" aria-hidden="true"></canvas><span>Integridade do Bug</span><b><i id="jgHp"></i></b></div>
+      <div class="jg-hp" aria-label="Integridade do Bug"><canvas class="jg-bug jg-mini" width="22" height="18" aria-hidden="true"></canvas><svg class="jg-b2" viewBox="0 0 400 460" aria-hidden="true"><g><use href="#b2forma4"></use></g></svg><span>Integridade do Bug</span><b><i id="jgHp"></i></b></div>
       <h2 class="jg-text" id="jgText"></h2>
       <div class="jg-opts" id="jgOpts"></div>
       <p class="jg-why" id="jgWhy"></p>
     </div>
     <div class="jg-pane" data-p="fim">
-      <canvas class="jg-bug" width="22" height="18" aria-hidden="true"></canvas>
+      <canvas class="jg-bug" width="22" height="18" aria-hidden="true"></canvas><svg class="jg-b2" viewBox="0 0 400 460" aria-hidden="true"><g><use href="#b2forma4"></use></g></svg>
       <p class="jg-say" id="jgSay3" data-text="Não… meu código… está ficando… responsivo…"></p>
       <p class="jg-win" id="jgWin"></p>
     </div>
@@ -2382,6 +2435,8 @@ body.sem-celulares .net-alert{opacity:1;translate:-50% 0}
   <clipPath id="b2RasgoClip"><polygon points="200,8 226,40 214,70 244,104 226,140 252,176 222,210 236,252 164,252 178,210 148,176 174,140 156,104 186,70 174,40"></polygon></clipPath>
 </defs></svg>
 <div class="b2-tx" id="b2Tx" aria-hidden="true"><span class="b2-tx-rot"><i></i>TRANSMISSÃO</span><svg viewBox="0 0 400 460"><use id="b2TxUse" href="#b2forma1"></use></svg><span class="b2-tx-onda"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="b2-tx-sinal"><i></i><i></i><i></i><i></i></span><span class="b2-tx-ruido"></span><span class="b2-tx-linha"></span></div>
+<div class="b2-veu" aria-hidden="true"></div>
+<div class="b2-live" id="b2Live"><div class="b2-live-vid" aria-hidden="true"><svg viewBox="0 0 400 460"><use id="b2LiveUse" href="#b2forma1"></use></svg><span class="b2-live-linha"></span><span class="b2-live-ruido"></span><i class="b2-live-mira"></i></div><div class="b2-live-txt"><div class="b2-live-top" aria-hidden="true"><span><i></i>Transmissão · Bug</span><em id="b2LiveTempo">00:00</em></div><p class="b2-live-fala" id="b2LiveFala" aria-live="polite"></p><span class="b2-tx-onda" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div></div>
 <div class="b2-tp" id="b2Tp" aria-hidden="true"><svg viewBox="0 0 400 460"><use id="b2TpUse" href="#b2forma1"></use></svg><span class="b2-tp-raio"></span><span class="b2-tp-cacos"></span></div>
 <div class="b2-hud" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div class="b2-evo" id="b2Evo" aria-hidden="true">
@@ -3387,9 +3442,10 @@ window.JOGO = (() => {
   let passoAtual = -1, relogio = null, ac = null, someT = null;
   const estadoBug = { dano: 0, some: 0 };
   $$('.jg-bug', slide).forEach(b => animarBug(b, () => slide.classList.contains('is-active') ? estadoBug : null));
-  function vida(dano){ estadoBug.dano = dano; const h = $('#jgHp'); if(h) h.style.width = Math.round((1 - dano) * 100) + '%'; }
+  function vida(dano){ estadoBug.dano = dano; slide.style.setProperty('--jgdano', dano.toFixed(2)); const h = $('#jgHp'); if(h) h.style.width = Math.round((1 - dano) * 100) + '%'; }
   function desintegrar(){
     cancelAnimationFrame(someT); estadoBug.some = 0; const t0 = performance.now();
+    slide.classList.remove('jg-some'); void slide.offsetWidth; slide.classList.add('jg-some');
     const passo = agora => { estadoBug.some = Math.min(1, (agora - t0) / 2600); if(estadoBug.some < 1) someT = requestAnimationFrame(passo); };
     if(REDUCED) estadoBug.some = 1; else someT = requestAnimationFrame(passo);
   }
@@ -3505,12 +3561,12 @@ window.JOGO = (() => {
     const ultimo = 2 + PROVAS.length * 2;
     pararRelogio();
     if(passo === 0){
-      painel('intro'); digitar($('#jgSay1')); cadeados(0); placar(-1); vida(0); estadoBug.some = 0; pintarFuga();
+      painel('intro'); digitar($('#jgSay1')); cadeados(0); placar(-1); vida(0); estadoBug.some = 0; slide.classList.remove('jg-some'); pintarFuga();
       if(avancando){ som('grave'); const f = $('#jgFlash'); f.classList.remove('go'); void f.offsetWidth; f.classList.add('go');
         const m = document.querySelector('main'); m.classList.remove('jg-shake'); void m.offsetWidth; m.classList.add('jg-shake'); }
       LIVE.setJogo(comFuga({ p:'intro' })); return;
     }
-    if(passo === 1){ if(window.FUGA) FUGA.cortar(); painel('regras'); digitar($('#jgSay2')); cadeados(0); placar(-1); vida(0); estadoBug.some = 0; LIVE.setJogo(comFuga({ p:'regras' })); return; }
+    if(passo === 1){ if(window.FUGA) FUGA.cortar(); painel('regras'); digitar($('#jgSay2')); cadeados(0); placar(-1); vida(0); estadoBug.some = 0; slide.classList.remove('jg-some'); LIVE.setJogo(comFuga({ p:'regras' })); return; }
     if(passo >= ultimo){
       painel('fim'); digitar($('#jgSay3')); cadeados(PROVAS.length); placar(-1); vida(1); desintegrar();
       const f = finalista();
@@ -3522,7 +3578,7 @@ window.JOGO = (() => {
     const qi = Math.floor((passo - 2) / 2), revelado = (passo - 2) % 2 === 1, pv = PROVAS[qi];
     painel('q'); const q = $('#jgQ'); q.classList.toggle('rev', revelado);
     $('#jgNum').textContent = `Erro ${qi + 1} de ${PROVAS.length} · ${pv.e}`;
-    vida((qi + (revelado ? 1 : 0)) / PROVAS.length); estadoBug.some = 0;
+    vida((qi + (revelado ? 1 : 0)) / PROVAS.length); estadoBug.some = 0; slide.classList.remove('jg-some');
     $('#jgText').innerHTML = comCodigo(pv.q);
     $('#jgOpts').innerHTML = pv.o.map((o, k) => `<div class="jg-opt${k === pv.c ? ' ok' : ''}"><span class="k">${'ABCD'[k]}</span><span>${comCodigo(o)}</span></div>`).join('');
     $('#jgWhy').textContent = pv.why;
@@ -3618,13 +3674,20 @@ window.INVASAO = (() => {
    data-bug="N": a partir daquele slide, tudo "buga" no nível N (0 a 4),
    nos slides e nos celulares. data-bug-delay: espera antes de piorar.
    ========================================================= */
+/* UM BUG DE CADA VEZ: fala, evolução, apagão e susto nunca se atropelam
+   (antes uma fala cortava a outra no meio e o Bug aparecia duas vezes ao mesmo tempo) */
+window.BUGVEZ = {
+  ate: 0,
+  ocupar(ms){ this.ate = Math.max(this.ate, performance.now() + ms); },
+  livre(){ return Math.max(this.ate, performance.now() + (window.VOZ_ROBO ? VOZ_ROBO.restante() : 0)); }
+};
 window.BUGNIVEL = (() => {
   const niveis = [], codigo = []; let n = 0, k = 0;
   slides.forEach((s, i) => {
     if(s.dataset.bug !== undefined) n = +s.dataset.bug; niveis[i] = n;
     if(s.dataset.codigo !== undefined) k = +s.dataset.codigo; codigo[i] = k;
   });
-  const fala = $('#bugFala');
+  const fala = $('#b2LiveFala') || $('#bugFala');
   const cameo = $('#bugCameo');
   if(cameo) animarBug(cameo, () => cameo.classList.contains('on') ? { falha: false } : null);
   let anterior = -1, atraso = null;
@@ -3632,35 +3695,57 @@ window.BUGNIVEL = (() => {
   const VOZ_DO_TEXTO = [['Um número fugiu', 'ch1'], ['Outro escapou', 'ch4'], ['Três. ', 'ch7'], ['Meu último suspiro', 'ultimo'],
     ['Gostaram do meu enigma', 'cam1'], ['Dois números soltos', 'cam2'], ['Três números. Estou', 'cam3'],
     ['Ai. Isso doeu', 'dor1'], ['Mais um conserto', 'dor2'], ['Vocês arrumam', 'dor3'], ['Um pedaço a menos', 'dor4'], ['Estão aprendendo', 'dor5']];
-  function aparecer(texto){
-    if(!cameo) return;
-    const v = VOZ_DO_TEXTO.find(([ini]) => (texto || '').startsWith(ini));
-    const msVoz = v && window.VOZ_ROBO ? VOZ_ROBO.falar(v[1]) : 0;
-    const dur = Math.max(Math.min(11, Math.max(5.6, (texto || '').length * .06)), msVoz / 1000 + 1.2);
-    cameo.style.animationDuration = dur + .4 + 's'; if(fala) fala.style.animationDuration = dur + 's';
-    if(window.B2) B2.transmitir(dur * 1000 + 300);
-    else if(!REDUCED){ cameo.classList.remove('on'); void cameo.offsetWidth; cameo.classList.add('on'); }
-    if(fala && texto){
-      const c = +(document.body.dataset.clima || 0);
-      fala.classList.toggle('grave', c >= 3);
-      fala.classList.remove('on'); void fala.offsetWidth; fala.classList.add('on');
-      clearInterval(fala._dig);
-      if(c >= 3 && window.FALHA){ fala.textContent = texto; if(fala.firstChild) FALHA.decodificar(fala.firstChild, 900); }
-      else if(REDUCED) fala.textContent = texto;
-      else {
-        /* digita no ritmo da fala (com voz, acompanha o áudio) */
-        const total = msVoz ? msVoz * .85 : Math.min(2600, texto.length * 38);
-        const passo = Math.max(18, total / texto.length); let i = 0; fala.textContent = '';
-        setTimeout(() => { fala._dig = setInterval(() => { i++; fala.textContent = texto.slice(0, i); if(i >= texto.length) clearInterval(fala._dig); }, passo); }, 420);
-      }
+  /* leve = reclamação curta: se ele já estiver falando, é descartada.
+     As charadas (fixo) e os recados importantes entram numa fila e esperam a vez:
+     nenhuma fala corta outra. Recado que esperou demais (30 s) perde a graça e sai da fila;
+     charada nunca sai, porque é a dica do jogo. */
+  const fila = []; let filaT = null;
+  function andarFila(){
+    clearTimeout(filaT); if(!fila.length) return;
+    filaT = setTimeout(() => {
+      if(BUGVEZ.livre() - performance.now() > 60) return andarFila();
+      const item = fila.shift();
+      if(item.fixo || performance.now() - item.quando < 30000) aparecer(item.texto, false, item.fixo);
+      andarFila();
+    }, Math.max(80, BUGVEZ.livre() - performance.now() + 450));
+  }
+  function aparecer(texto, leve, fixo){
+    if(!texto) return;
+    const agora = performance.now(), livre = BUGVEZ.livre();
+    if(livre > agora + 60){
+      if(leve || texto === aparecer.ultimo) return;     // já está falando isso: não repete
+      if(!fila.some(f => f.texto === texto)){ const item = { texto, fixo, quando: agora }; if(fixo) fila.unshift(item); else fila.push(item); }
+      andarFila(); return;
     }
+    const s = slides[cur];
+    if(s.classList.contains('jogo-slide') || s.classList.contains('inv-slide')) return;
+    const v = VOZ_DO_TEXTO.find(([ini]) => texto.startsWith(ini));
+    const msVoz = v && window.VOZ_ROBO ? VOZ_ROBO.falar(v[1]) : 0;
+    const dur = Math.max(Math.min(11, Math.max(4.6, texto.length * .055)), msVoz / 1000 + 1.4);
+    BUGVEZ.ocupar(dur * 1000 + 700);
+    aparecer.ultimo = texto;
+    const c = +(document.body.dataset.clima || 0);
+    if(window.B2) B2.transmitir(dur * 1000, c >= 3);
+    if(!fala) return;
+    clearInterval(fala._dig); clearTimeout(fala._ini);
+    if(REDUCED){ fala.textContent = texto; return; }
+    /* digita no ritmo da voz (sem voz, num ritmo de leitura) */
+    const total = msVoz ? msVoz * .88 : Math.min(2800, texto.length * 40);
+    const passo = Math.max(18, total / texto.length); let i = 0; fala.textContent = '';
+    fala._ini = setTimeout(() => {
+      fala._dig = setInterval(() => {
+        i++; fala.textContent = texto.slice(0, i);
+        if(i >= texto.length) clearInterval(fala._dig);
+      }, passo);
+    }, 520);
   }
   const susto = $('#bugSusto');
   if(susto) animarBug($('canvas', susto), () => susto.classList.contains('on') ? { falha: true } : null);
   function assustar(){
-    if(REDUCED || !susto) return;
+    if(REDUCED || !susto || slides[cur].classList.contains('jogo-slide')) return;
+    BUGVEZ.ocupar(1800);
     if(window.CLIMA) CLIMA.rugido(0);
-    if(window.VOZ_ROBO) setTimeout(() => VOZ_ROBO.falar('susto'), 250);
+    if(window.VOZ_ROBO) setTimeout(() => { if(!slides[cur].classList.contains('jogo-slide')) VOZ_ROBO.falar('susto'); }, 250);
     susto.classList.remove('on'); void susto.offsetWidth; susto.classList.add('on');
     setTimeout(() => susto.classList.remove('on'), 1300);
   }
@@ -3921,14 +4006,27 @@ window.B2 = (() => {
   })();
   /* forma do Bug pelo ponto da apresentação: sinal, montagem, corpo, colapso */
   const forma = () => cur < 12 ? 1 : cur < 19 ? 2 : cur < 26 ? 3 : 4;
-  function transmitir(ms){
-    txUse.setAttribute('href', '#b2forma' + forma());
-    clearTimeout(txTimer); tx.classList.remove('on', 'sai'); void tx.offsetWidth; tx.classList.add('on');
-    falandoAte = performance.now() + ms - 700;
-    txTimer = setTimeout(() => { tx.classList.add('sai'); setTimeout(() => tx.classList.remove('on', 'sai'), 470); }, ms);
+  const live = $('#b2Live'), liveUse = $('#b2LiveUse'), tempo = $('#b2LiveTempo');
+  let relogio = null, fimTimer = null;
+  function transmitir(ms, grave){
+    tp.classList.remove('on');                       // nunca dois Bugs na tela ao mesmo tempo
+    const el = live || tx;
+    (live ? liveUse : txUse).setAttribute('href', '#b2forma' + forma());
+    el.classList.toggle('grave', !!grave);
+    clearTimeout(txTimer); clearTimeout(fimTimer); el.classList.remove('on', 'sai'); void el.offsetWidth; el.classList.add('on');
+    document.body.classList.add('b2-falando');
+    falandoAte = performance.now() + ms - 500;
+    const t0 = performance.now(); clearInterval(relogio);
+    if(tempo){ tempo.textContent = 'AO VIVO 00:00'; relogio = setInterval(() => { tempo.textContent = 'AO VIVO 00:' + String(Math.floor((performance.now() - t0) / 1000)).padStart(2, '0'); }, 250); }
+    txTimer = setTimeout(() => {
+      el.classList.add('sai'); document.body.classList.remove('b2-falando'); clearInterval(relogio);
+      fimTimer = setTimeout(() => el.classList.remove('on', 'sai'), 470);
+    }, ms);
   }
   /* no lugar de andar pela tela: some num canto e aparece em outro */
   function teleporte(){
+    if(REDUCED || document.body.classList.contains('b2-falando') || performance.now() < BUGVEZ.ate || evo.classList.contains('on') || $('#apagao.on')) return;
+    const sl = slides[cur]; if(sl.classList.contains('jogo-slide') || sl.classList.contains('inv-slide')) return;
     const W = innerWidth, H = innerHeight, w = tp.offsetWidth || 110, h = w * 460 / 400;
     const top = parseFloat(getComputedStyle(raiz).getPropertyValue('--top-h')) || 56;
     const bot = parseFloat(getComputedStyle(raiz).getPropertyValue('--bot-h')) || 56;
@@ -3944,6 +4042,7 @@ window.B2 = (() => {
     $('#b2EvoA').setAttribute('href', '#b2forma' + (n - 1));
     $('#b2EvoB').setAttribute('href', '#b2forma' + n);
     $('#b2EvoTexto').textContent = FRASES[n] || '';
+    tp.classList.remove('on'); BUGVEZ.ocupar(4700 + 3600);
     evo.classList.remove('on'); void evo.offsetWidth; evo.classList.add('on');
     if(window.CLIMA && CLIMA.rugido) try { CLIMA.rugido(0); } catch(e){}
     setTimeout(() => { if(window.VOZ_ROBO) VOZ_ROBO.falar('evo' + n); }, 2350);
@@ -3953,7 +4052,12 @@ window.B2 = (() => {
   function aoMudar(){
     const indo = cur > ultimo; ultimo = cur;
     const n = { 12: 2, 19: 3 }[cur];
-    if(indo && n && !evoluiu[n]){ evoluiu[n] = true; const alvo = cur; setTimeout(() => { if(cur === alvo) evolucao(n); }, 600); }
+    if(indo && n && !evoluiu[n]){
+      evoluiu[n] = true;
+      /* se ele estiver no meio de uma fala, a evolução espera a fala acabar */
+      const tentar = () => { const f = BUGVEZ.livre() - performance.now(); if(f > 60) return setTimeout(tentar, f + 400); if(!slides[cur].classList.contains('jogo-slide')) evolucao(n); };
+      setTimeout(tentar, 600);
+    }
   }
   return { transmitir, teleporte, evolucao, aoMudar, forma };
 })();
@@ -3989,7 +4093,7 @@ window.VIDA = (() => {
     clearTimeout(timerFala);
     timerFala = setTimeout(() => {
       const s = slides[cur]; if(s.classList.contains('jogo-slide') || s.classList.contains('inv-slide')) return;
-      if(window.BUGNIVEL) BUGNIVEL.aparecer(texto);
+      if(window.BUGNIVEL) BUGNIVEL.aparecer(texto, !solto, !!solto);
     }, 1800);
   }
   function sync(){
@@ -4049,8 +4153,12 @@ window.CLIMA = (() => {
       g.gain.setValueAtTime(.25, t); g.gain.exponentialRampToValueAtTime(.0001, t + 1.3); o.start(t); o.stop(t + 1.3);
     } catch(e){}
   }
+  let esperouApagao = false;
   function apagao(){
     if(REDUCED || !ap || ocupado) return;
+    const falta = window.BUGVEZ ? BUGVEZ.livre() - performance.now() : 0;
+    if(falta > 60 && !esperouApagao){ esperouApagao = true; setTimeout(apagao, Math.min(falta + 300, 9000)); return; }
+    esperouApagao = false; if(window.BUGVEZ) BUGVEZ.ocupar(4300);
     ocupado = true; LIVE.setCardapio(true); LIVE.apagao();   // o recado "olhem o cardápio" vai junto com o apagão
     ap.classList.remove('on'); void ap.offsetWidth; ap.classList.add('on');
     t0 = performance.now(); requestAnimationFrame(loopCara);
@@ -4109,23 +4217,23 @@ window.CLIMA = (() => {
   function telao(){
     if(!window.FUGA || ocupado || document.hidden || clima < 2) return;
     const s = slides[cur]; if(s.classList.contains('inv-slide') || s.classList.contains('jogo-slide')) return;
-    if($('#bugFala').classList.contains('on')) return;
+    if(document.body.classList.contains('b2-falando') || BUGVEZ.livre() > performance.now() + 60) return;
     const p = FUGA.sortearPerfil(); if(!p) return;
-    BUGNIVEL.aparecer(falaDoTelao(p));
+    BUGNIVEL.aparecer(falaDoTelao(p), true);
     LIVE.vitima(p.id);
   }
   let primeiraTelao = true;
   function agendarTelao(){
     clearTimeout(timerTelao);
     if(clima < 2) return;
-    if(primeiraTelao){ primeiraTelao = false; timerTelao = setTimeout(() => { telao(); agendarTelao(); }, (25 + Math.random() * 15) * 1000); return; }
-    const faixa = [null, null, [75, 110], [55, 80], [35, 55], [30, 45]][clima];
+    if(primeiraTelao){ primeiraTelao = false; timerTelao = setTimeout(() => { telao(); agendarTelao(); }, (45 + Math.random() * 20) * 1000); return; }
+    const faixa = [null, null, [110, 160], [90, 130], [70, 100], [60, 85]][clima];
     timerTelao = setTimeout(() => { telao(); agendarTelao(); }, (faixa[0] + Math.random() * (faixa[1] - faixa[0])) * 1000);
   }
   function agendar(){
     clearTimeout(timerPasseio);
     if(!clima) return;
-    const faixa = [null, [70, 100], [45, 70], [28, 40], [16, 26], [9, 15]][clima];
+    const faixa = [null, [90, 130], [70, 100], [50, 75], [36, 55], [28, 42]][clima];
     timerPasseio = setTimeout(() => { passear(); agendar(); }, (faixa[0] + Math.random() * (faixa[1] - faixa[0])) * 1000);
   }
   function sync(){

@@ -608,6 +608,48 @@
 .b2-tp.on { animation: b2tp 3s cubic-bezier(.65,0,.35,1) forwards; }
 @keyframes b2tp { 0% { opacity: 0; transform: scale(0,1.35) } 4% { opacity: 1; transform: scale(.03,1.35); filter: brightness(3) } 11% { transform: scale(1.12,.92); filter: none } 16%,80% { opacity: 1; transform: none } 87% { transform: scale(.7,1.25) } 93% { opacity: 1; transform: scale(.03,1.35); filter: brightness(3) } 100% { opacity: 0; transform: scale(0,1.35) } }
 @media (prefers-reduced-motion: reduce) { .b2-tp.on, .bug-fala.on .b2-mini { animation: none; } }
+/* ===== v23: a fala do Bug vira uma "transmissão" no meio da tela, como no design ===== */
+.b2-veu { position: fixed; inset: 0; z-index: 59; pointer-events: none; opacity: 0; transition: opacity .4s ease;
+  background: radial-gradient(ellipse at 50% 45%, rgba(60,6,8,.3), transparent 65%), rgba(4,5,9,.62); }
+.b2-veu::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 1px, transparent 1px 3px); }
+body:has(#bugFala.on) .b2-veu { opacity: 1; }
+.bug-fala { top: 50% !important; bottom: auto !important; translate: -50% -50% !important; width: min(calc(86vw / var(--k, 1)), 360px) !important;
+  flex-direction: column; align-items: stretch !important; gap: 10px !important; padding: 10px 10px 12px !important;
+  border: 1.5px solid rgba(82,213,255,.7) !important; border-radius: 14px !important; background: linear-gradient(180deg, #0a0e16, #06080d) !important;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.6), 0 24px 60px rgba(0,0,0,.7), 0 0 34px rgba(82,213,255,.16) !important;
+  opacity: 0; scale: 1 .02; pointer-events: none; transition: opacity .2s ease, scale .5s cubic-bezier(.22,1,.36,1) !important; }
+.bug-fala.on { opacity: 1; scale: 1; }
+.bug-fala.grave { border-color: rgba(255,59,46,.85) !important; box-shadow: 0 0 0 1px rgba(0,0,0,.6), 0 24px 60px rgba(0,0,0,.7), 0 0 40px rgba(255,42,31,.3) !important; }
+.bug-fala .b2-mini { width: 100%; height: auto; aspect-ratio: 16 / 11; align-self: stretch; border: 1px solid rgba(82,213,255,.3); border-radius: 9px;
+  background: radial-gradient(ellipse at 50% 30%, #121a28, #070a10 70%); }
+.bug-fala.grave .b2-mini { border-color: rgba(255,59,46,.35); }
+.bug-fala .b2-mini svg { left: 20%; top: 9%; width: 60%; }
+.bug-fala.on .b2-mini svg { animation: b2mEntra .9s steps(5) both; }
+@keyframes b2mEntra { 0%,30% { opacity: 0; transform: translateX(-8px) } 50% { opacity: 1; transform: translateX(6px) } 70% { transform: translateX(-3px) } 100% { opacity: 1; transform: none } }
+.bug-fala.on .b2-mini { animation: none; }
+.b2-m-rot { position: absolute; left: 10px; top: 8px; z-index: 2; font: 700 9px "Courier New", monospace; letter-spacing: .16em; color: #ff9a8f; }
+.b2-m-rot i { display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: #ff2a1f; vertical-align: 0; animation: b2mRec 1s steps(1) infinite; }
+@keyframes b2mRec { 50% { opacity: .2 } }
+.b2-m-tempo { position: absolute; right: 10px; top: 8px; z-index: 2; font: 700 9px "Courier New", monospace; letter-spacing: .1em; color: #52d5ff; font-style: normal; }
+.b2-m-linha { position: absolute; left: 0; right: 0; top: -12%; height: 12%; z-index: 1; background: linear-gradient(180deg, transparent, rgba(82,213,255,.16), transparent); animation: b2mVarre 2.6s linear infinite; }
+@keyframes b2mVarre { to { top: 100% } }
+.b2-m-ruido { position: absolute; inset: 0; z-index: 3; opacity: 0; background: repeating-linear-gradient(0deg, #ffffff22 0 1px, transparent 1px 2px), repeating-linear-gradient(90deg, #ff2a1f22 0 2px, transparent 2px 5px), #0a0d14; }
+.bug-fala.on .b2-m-ruido { animation: b2mRuido .9s steps(6) forwards; }
+@keyframes b2mRuido { 0% { opacity: 1 } 40% { opacity: .9; background-position: 0 7px, 3px 0 } 100% { opacity: 0; background-position: 0 14px, 6px 0 } }
+.b2-m-mira { position: absolute; inset: 7px; z-index: 2; pointer-events: none; opacity: .75;
+  background: linear-gradient(#52d5ff,#52d5ff) 0 0/12px 1.5px, linear-gradient(#52d5ff,#52d5ff) 0 0/1.5px 12px,
+  linear-gradient(#52d5ff,#52d5ff) 100% 0/12px 1.5px, linear-gradient(#52d5ff,#52d5ff) 100% 0/1.5px 12px,
+  linear-gradient(#52d5ff,#52d5ff) 0 100%/12px 1.5px, linear-gradient(#52d5ff,#52d5ff) 0 100%/1.5px 12px,
+  linear-gradient(#52d5ff,#52d5ff) 100% 100%/12px 1.5px, linear-gradient(#52d5ff,#52d5ff) 100% 100%/1.5px 12px; background-repeat: no-repeat; }
+.bug-fala.grave .b2-m-mira { filter: hue-rotate(160deg) saturate(2.4); }
+.bug-fala > span { display: block; padding: 0 4px; min-height: 4.2em; font: 15px/1.42 "Courier New", monospace; color: #efe6d2; }
+.b2-m-onda { display: flex; gap: 3px; align-items: center; height: 14px; padding: 0 4px; }
+.b2-m-onda i { flex: 1; height: calc(3px + var(--b2boca, 0) * 11px * var(--k2, 1)); border-radius: 2px; background: #ff3b2e; box-shadow: 0 0 6px rgba(255,42,31,.6); }
+.b2-m-onda i:nth-child(3n) { --k2: .45 } .b2-m-onda i:nth-child(3n+1) { --k2: .8 } .b2-m-onda i:nth-child(4n) { --k2: 1 }
+/* o último número não pisca por cima do jogo */
+html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
+@media (prefers-reduced-motion: reduce) { .bug-fala.on .b2-mini svg, .b2-m-linha, .bug-fala.on .b2-m-ruido, .b2-m-rot i { animation: none; } }
+
   </style>
 </head>
 <body>
@@ -980,7 +1022,8 @@
   <clipPath id="b2RasgoClip"><polygon points="200,8 226,40 214,70 244,104 226,140 252,176 222,210 236,252 164,252 178,210 148,176 174,140 156,104 186,70 174,40"></polygon></clipPath>
 </defs></svg>
   <div class="b2-tp" id="b2Tp" aria-hidden="true"><svg viewBox="0 0 400 460"><use id="b2TpUse" href="#b2forma1"></use></svg></div>
-  <div class="bug-fala" id="bugFala"><div class="b2-mini" aria-hidden="true"><svg viewBox="0 0 400 460"><use id="b2FalaUse" href="#b2forma1"></use></svg></div><canvas width="52" height="42" aria-hidden="true"></canvas><span aria-hidden="true"></span><b class="sr" aria-live="polite"></b></div>
+  <div class="b2-veu" aria-hidden="true"></div>
+  <div class="bug-fala" id="bugFala"><div class="b2-mini" aria-hidden="true"><b class="b2-m-rot"><i></i>TRANSMISSÃO · BUG</b><em class="b2-m-tempo">AO VIVO</em><svg viewBox="0 0 400 460"><use id="b2FalaUse" href="#b2forma1"></use></svg><i class="b2-m-linha"></i><i class="b2-m-ruido"></i><i class="b2-m-mira"></i></div><canvas width="52" height="42" aria-hidden="true"></canvas><span aria-hidden="true"></span><div class="b2-m-onda" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><b class="sr" aria-live="polite"></b></div>
   <div class="dreno" aria-hidden="true"><span class="bat"><i></i><b>--%</b></span><span class="sinal">sem serviço</span></div>
   <div class="bug-tinta" aria-hidden="true"></div>
   <canvas class="estatica" width="96" height="170" aria-hidden="true"></canvas>
@@ -1555,6 +1598,7 @@
   setTimeout(b2boca, 0);
   function b2teleporte() {
     const tp = document.getElementById('b2Tp'); if (!tp) return;
+    if (falaBug && falaBug.classList.contains('on')) return;   // nunca dois Bugs na tela
     const W = innerWidth, H = innerHeight, w = 72, h = w * 460 / 400;
     const pontos = [[12, 70], [W - w - 12, 70], [12, H - h - 90], [W - w - 12, H - h - 90]];
     const [x, y] = pontos[Math.floor(Math.random() * pontos.length)];
@@ -1650,12 +1694,16 @@
     falaBug.querySelector('.sr').textContent = texto;
     const b2u = document.getElementById('b2FalaUse'); if (b2u) b2u.setAttribute('href', '#b2forma' + b2forma());
     falaBug.classList.toggle('grave', !!grave);
-    escreverFalhando(falaBug.querySelector('span'), texto, grave ? Math.max(nivelBug, 3) : nivelBug);
+    escreverFalhando(falaBug.querySelector('span'), texto, tipo === 'dica' ? 0 : grave ? Math.max(nivelBug, 3) : nivelBug);   // a charada sempre legível
     if (!pararFala) pararFala = animarBug(falaBug.querySelector('canvas'), () => (falaBug.classList.contains('on') ? {} : null));
+    const tpx = document.getElementById('b2Tp'); if (tpx) tpx.classList.remove('on');
     falaBug.classList.add('on'); clearTimeout(timerFala);
-    timerFala = setTimeout(() => { falaBug.classList.remove('on'); clearInterval(timerTexto); }, grave ? 7500 : 6500);
+    const dur = Math.min(9500, Math.max(grave ? 6500 : 5600, 2600 + texto.length * 55));
+    const tempo = falaBug.querySelector('.b2-m-tempo'), t0 = Date.now(); clearInterval(falaBug._rel);
+    if (tempo) { tempo.textContent = 'AO VIVO 00:00'; falaBug._rel = setInterval(() => { tempo.textContent = 'AO VIVO 00:' + String(Math.floor((Date.now() - t0) / 1000)).padStart(2, '0'); }, 300); }
+    timerFala = setTimeout(() => { falaBug.classList.remove('on'); clearInterval(timerTexto); clearInterval(falaBug._rel); }, dur);
     falaBug.dataset.prio = prioridade ? '1' : '';
-    vibrar(tipo || (prioridade ? 'telao' : 'geral'));
+    vibrar(tipo === 'dica' ? 'geral' : tipo || (prioridade ? 'telao' : 'geral'));
   }
   /* SUSTOS: com 2 números liberados o Bug começa a pular na tela de vez em
      quando; quanto mais a turma avança, mais ele se desespera e pula. */
@@ -1974,7 +2022,7 @@
     if (n > liberados && caca) {
       hud.classList.remove('pulsa'); void hud.offsetWidth; hud.classList.add('pulsa');
       if (n >= 3) setTimeout(assustar, 1600);            // a turma avançou: o Bug revida
-      setTimeout(() => falar(comNome(DICAS[n - 1], n - 1), n >= 3), n >= 3 ? 3200 : 2400);
+      setTimeout(() => falar(comNome(DICAS[n - 1], n - 1), n >= 3, false, 'dica'), n >= 3 ? 3200 : 2400);
     }
     if (n !== liberados || !timerSusto) agendarSusto();
     if (caca && !timerSabe) agendarSabe();

@@ -82,7 +82,8 @@ window.VOZ_ROBO = (() => {
     const bits = ctx.createWaveShaper(); bits.curve = curvaBits(Math.round(64 - 48 * r)); bits.oversample = 'none';
     const pico = ctx.createBiquadFilter(); pico.type = 'peaking'; pico.frequency.value = 2400; pico.Q.value = 1.2; pico.gain.value = 5 * r;
     const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -20; comp.ratio.value = 4;
-    const vol = ctx.createGain(); vol.gain.value = 1.1;
+    /* volume entra em 25 ms (sem estalo no começo) */
+    const vol = ctx.createGain(); vol.gain.setValueAtTime(0, t); vol.gain.linearRampToValueAtTime(1.1, t + 0.025);
     soma.connect(bits); bits.connect(pico); pico.connect(comp); comp.connect(vol); vol.connect(ctx.destination);
 
     // medidor para a boca mexer junto com a voz
@@ -91,7 +92,7 @@ window.VOZ_ROBO = (() => {
     osc.start(t); src.start(t);
     const dur = src.buffer.duration / src.playbackRate.value;
     fimEm = performance.now() + dur * 1000;
-    atual = { src, osc };
+    atual = { src, osc, vol };
     const passo = () => {
       if(!atual || atual.src !== src) return;
       an.getByteTimeDomainData(dados);
@@ -104,7 +105,16 @@ window.VOZ_ROBO = (() => {
     src.onended = () => { if(atual && atual.src === src){ atual = null; ouvintes.forEach(f => f(0, null)); } try { osc.stop(); } catch(e){} };
     return dur * 1000;
   }
-  function parar(){ if(atual){ try { atual.src.stop(); atual.osc.stop(); } catch(e){} atual = null; ouvintes.forEach(f => f(0, null)); } }
+  /* parar com um "fade" curto: cortar o som seco dá um estalo na caixa de som */
+  function parar(){
+    if(!atual) return;
+    const a = atual; atual = null; fimEm = 0; ouvintes.forEach(f => f(0, null));
+    try {
+      const t = ctx.currentTime;
+      a.vol.gain.cancelScheduledValues(t); a.vol.gain.setValueAtTime(a.vol.gain.value, t); a.vol.gain.linearRampToValueAtTime(0, t + 0.12);
+      a.src.stop(t + 0.13); a.osc.stop(t + 0.13);
+    } catch(e){ try { a.src.stop(); a.osc.stop(); } catch(e2){} }
+  }
   return {
     falar, parar,
     restante: () => Math.max(0, fimEm - performance.now()),

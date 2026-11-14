@@ -1505,6 +1505,55 @@ body.b2-falando .b2-veu{opacity:1}
 @keyframes apFaisca{0%,49%{opacity:0;transform:none}50%{opacity:1;transform:none}62%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.4)}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.apagao.on .ap-e,.apagao.on .ap-d,.apagao.on .ap-faisca,.apagao.on .ap-fenda{animation:none}.apagao.on .ap-fundo{animation:none;opacity:1}}
 </style>
+<style id="v26-rasgo">
+/* ===== v26: o RASGO, versão "ele abre a tela com as mãos" ===========================
+   A tela continua mostrando o slide de verdade (uma cópia dele, partida em duas metades).
+   1) a tela falha muito  2) uma rachadura de luz desce  3) dedos de robô atravessam a rachadura
+   4) as mãos fazem força e RASGAM a tela  5) ele fala lá de trás  6) a tela se fecha de uma vez */
+.apagao{--apd:7s}
+.apagao.on{animation:none!important;background:transparent!important}
+.apagao.on .ap-lado i{background:var(--ap-bg,#070b18)!important;overflow:hidden;animation:apGlitch var(--apd) linear forwards}
+.ap-lado i::after{opacity:0}
+.apagao.on .ap-lado i::after{animation:apRuidoTela var(--apd) steps(1) forwards}
+@keyframes apRuidoTela{0%,17%{opacity:1}18%,88%{opacity:0}89%,96%{opacity:1}97%,100%{opacity:0}}
+@keyframes apGlitch{0%{transform:none;filter:none}2%{transform:translateX(-10px) skewX(-3deg);filter:hue-rotate(50deg) saturate(2.2)}3.5%{transform:translateX(6px);filter:none}5%{transform:none;filter:brightness(2)}6%{filter:none}
+  8%{transform:translate(14px,-2px);filter:invert(.12) hue-rotate(-40deg)}9%{transform:none;filter:none}11%{transform:translateX(-5px) scaleY(1.02);filter:contrast(1.7) saturate(0)}12.5%{transform:none;filter:none}
+  14%{transform:translateX(9px) skewX(4deg);filter:hue-rotate(120deg)}15%{transform:none;filter:brightness(.6)}16%{filter:brightness(1.5)}17%,40%{transform:none;filter:brightness(.8) saturate(.8)}
+  41%{transform:translate(-2px,1px)}42%{transform:translate(2px,-1px)}43%{transform:translate(-3px,0)}44%{transform:translate(2px,1px)}45%,86%{transform:none}
+  89%{filter:brightness(1.8)}90.5%{transform:translateX(-12px);filter:hue-rotate(70deg) saturate(2)}92%{transform:translateX(7px);filter:none}94%{transform:none;filter:contrast(1.5)}96%,100%{transform:none;filter:none}}
+/* faixas de ruído por cima da tela inteira */
+.ap-ruido{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0;mix-blend-mode:screen;
+  background:repeating-linear-gradient(0deg,rgba(255,42,31,.0) 0 22px,rgba(255,42,31,.35) 22px 25px,rgba(0,0,0,0) 25px 61px,rgba(82,213,255,.3) 61px 63px,transparent 63px 97px),repeating-linear-gradient(0deg,rgba(255,255,255,.06) 0 1px,transparent 1px 3px)}
+.apagao.on .ap-ruido{animation:apRuido var(--apd) steps(1) forwards}
+@keyframes apRuido{0%{opacity:.9;background-position:0 0}3%{background-position:0 140px}6%{opacity:.4;background-position:0 -60px}9%{opacity:1;background-position:0 300px}12%{background-position:0 90px}15%{opacity:.6;background-position:0 -200px}18%,88%{opacity:0}90%{opacity:1;background-position:0 50px}93%{background-position:0 -120px}96%,100%{opacity:0}}
+/* a rachadura */
+@keyframes apFenda{0%,17%{opacity:0;clip-path:inset(0 0 100% 0)}18%{opacity:1}30%{clip-path:inset(0 0 0 0);opacity:1}46%{opacity:1}50%,100%{opacity:0;clip-path:inset(0 0 0 0)}}
+/* as metades: travam, fazem força e rasgam */
+@keyframes apE{0%,40%{transform:none;filter:none}32%{filter:drop-shadow(0 0 1px #ff8a7c) drop-shadow(0 0 10px rgba(255,42,31,.75))}
+  41%{transform:translateX(-3px)}42%{transform:translateX(-1px)}43%{transform:translateX(-6px) rotate(-.3deg)}44%{transform:translateX(-2px)}45%{transform:translateX(-9px) rotate(-.4deg)}
+  46%{transform:translateX(-14px) rotate(-.5deg);filter:drop-shadow(0 0 2px #ff8a7c) drop-shadow(0 0 24px rgba(255,42,31,1))}
+  53%{transform:translateX(-33vw) rotate(-1.6deg)}57%{transform:translateX(calc(-33vw + 2.5vw)) rotate(-1deg)}
+  86%{transform:translateX(calc(-33vw + 1.5vw)) rotate(-.9deg);filter:drop-shadow(0 0 2px #ff8a7c) drop-shadow(0 0 22px rgba(255,42,31,.95))}89%{transform:translateX(4px)}90.5%,100%{transform:none;filter:none}}
+@keyframes apD{0%,40%{transform:none;filter:none}32%{filter:drop-shadow(0 0 1px #8ae6ff) drop-shadow(0 0 10px rgba(82,213,255,.6))}
+  41%{transform:translateX(3px)}42%{transform:translateX(1px)}43%{transform:translateX(6px) rotate(.3deg)}44%{transform:translateX(2px)}45%{transform:translateX(9px) rotate(.4deg)}
+  46%{transform:translateX(14px) rotate(.5deg);filter:drop-shadow(0 0 2px #8ae6ff) drop-shadow(0 0 24px rgba(82,213,255,.9))}
+  53%{transform:translateX(33vw) rotate(1.6deg)}57%{transform:translateX(calc(33vw - 2.5vw)) rotate(1deg)}
+  86%{transform:translateX(calc(33vw - 1.5vw)) rotate(.9deg);filter:drop-shadow(0 0 2px #8ae6ff) drop-shadow(0 0 22px rgba(82,213,255,.8))}89%{transform:translateX(-4px)}90.5%,100%{transform:none;filter:none}}
+@keyframes apFundo{0%,46%{opacity:0;transform:scale(.7)}53%{opacity:1;transform:scale(1.08)}58%{transform:scale(1)}86%{opacity:1;transform:scale(1.03)}90%,100%{opacity:0;transform:scale(1.3)}}
+@keyframes apFaisca{0%,45.5%{opacity:0;transform:none}46%{opacity:1;transform:none}58%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.4)}100%{opacity:0}}
+@keyframes apFlash{0%,45.5%{opacity:0}46.5%{opacity:.6}51%{opacity:0}89%{opacity:0}90%{opacity:.75}94%,100%{opacity:0}}
+@keyframes apTxt{0%,59%{opacity:0}60%,86%{opacity:1}87%,100%{opacity:0}}
+/* os dedos do Bug atravessam a rachadura e agarram a borda */
+.b2-ap .ap-dedo{position:absolute!important;top:var(--y)!important;width:11vw!important;max-width:none!important;margin:0!important;height:auto!important;transform:none;z-index:3;overflow:visible;opacity:0;filter:drop-shadow(0 4px 6px rgba(0,0,0,.7))}
+.b2-ap .ap-e .ap-dedo{left:calc(var(--x) - 11vw + .6%)!important;transform-origin:100% 50%}
+.b2-ap .ap-d .ap-dedo{left:calc(var(--x) - .6%)!important;transform-origin:0 50%}
+.apagao.on .ap-dedo{animation:apDedo var(--apd) cubic-bezier(.3,.8,.3,1) forwards;animation-delay:calc(var(--k) * 70ms)}
+@keyframes apDedo{0%,30%{opacity:0;transform:scaleX(0)}31%{opacity:1}36%{transform:scaleX(1.08) rotate(-2deg)}38%{transform:scaleX(1)}41%{transform:scaleX(1) rotate(2deg)}43%{transform:scaleX(.96) rotate(-1deg)}45%{transform:scaleX(1) rotate(1.5deg)}
+  86%{opacity:1;transform:scaleX(1)}88.5%{opacity:1;transform:scaleX(0)}89%,100%{opacity:0;transform:scaleX(0)}}
+.b3-junta{fill:#ff3b2e;filter:url(#b2gBrilho)}
+.b2-ap .ap-fundo svg{height:min(66vh,58vw)}
+@media (prefers-reduced-motion:reduce){.apagao.on .ap-lado i,.apagao.on .ap-ruido,.apagao.on .ap-dedo{animation:none}.ap-dedo{opacity:0}}
+</style>
 </head>
 <body>
 
@@ -2272,7 +2321,7 @@ body.b2-falando .b2-veu{opacity:1}
 <i class="terror-fx" aria-hidden="true"></i>
 <canvas class="bug-passeio" id="bugPasseio" width="52" height="42" aria-hidden="true"></canvas>
 <div class="reinicio" id="reinicio" aria-hidden="true"><b>Lanchonete Pixel</b><i></i><span>restaurando o site…</span></div>
-<div class="apagao" id="apagao" aria-hidden="true"><canvas width="26" height="21"></canvas><div class="b2-ap"><div class="ap-fundo"><svg viewBox="0 0 400 460" aria-hidden="true"><use href="#b2forma4"></use></svg></div><div class="ap-lado ap-e"><i></i></div><div class="ap-lado ap-d"><i></i></div><svg class="ap-fenda" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline points="50,0 53,10 48,20 54,31 47,42 52,53 46,64 53,75 48,87 51,100"></polyline><polyline class="ap-ramo" points="48,20 41,24 37,31"></polyline><polyline class="ap-ramo" points="52,53 61,57 66,63"></polyline><polyline class="ap-ramo" points="53,75 45,80 43,86"></polyline><polyline class="ap-ramo" points="54,31 60,33"></polyline></svg><span class="ap-faisca" style="--y:14%;--dx:-90px;--dy:-40px;--d:0s"></span><span class="ap-faisca" style="--y:22%;--dx:110px;--dy:-70px;--d:0.05s"></span><span class="ap-faisca" style="--y:36%;--dx:-140px;--dy:20px;--d:0.02s"></span><span class="ap-faisca" style="--y:48%;--dx:130px;--dy:40px;--d:0.08s"></span><span class="ap-faisca" style="--y:55%;--dx:-70px;--dy:90px;--d:0.04s"></span><span class="ap-faisca" style="--y:63%;--dx:160px;--dy:-20px;--d:0.1s"></span><span class="ap-faisca" style="--y:72%;--dx:-120px;--dy:-60px;--d:0.06s"></span><span class="ap-faisca" style="--y:84%;--dx:90px;--dy:80px;--d:0.03s"></span><span class="ap-faisca" style="--y:30%;--dx:60px;--dy:-120px;--d:0.09s"></span><span class="ap-faisca" style="--y:68%;--dx:-50px;--dy:130px;--d:0.07s"></span></div><b>OLHEM O CARDÁPIO NO CELULAR.</b></div>
+<div class="apagao" id="apagao" aria-hidden="true"><canvas width="26" height="21"></canvas><div class="b2-ap"><div class="ap-fundo"><svg viewBox="0 0 400 460" aria-hidden="true"><use href="#b2forma4"></use></svg></div><div class="ap-lado ap-e"><i></i><svg class="ap-dedo" viewBox="0 0 130 36" style="--x:51.5%;--y:35%;--k:0" aria-hidden="true"><use href="#b3dedoE"></use></svg><svg class="ap-dedo" viewBox="0 0 130 36" style="--x:47.0%;--y:42%;--k:1" aria-hidden="true"><use href="#b3dedoE"></use></svg><svg class="ap-dedo" viewBox="0 0 130 36" style="--x:50.2%;--y:49%;--k:2" aria-hidden="true"><use href="#b3dedoE"></use></svg><svg class="ap-dedo" viewBox="0 0 130 36" style="--x:50.4%;--y:56%;--k:3" aria-hidden="true"><use href="#b3dedoE"></use></svg></div><div class="ap-lado ap-d"><i></i><svg class="ap-dedo" viewBox="0 0 130 36" style="--x:50.2%;--y:37%;--k:0" aria-hidden="true"><use href="#b3dedoD"></use></svg><svg class="ap-dedo" viewBox="0 0 130 36" style="--x:47.9%;--y:44%;--k:1" aria-hidden="true"><use href="#b3dedoD"></use></svg><svg class="ap-dedo" viewBox="0 0 130 36" style="--x:51.1%;--y:51%;--k:2" aria-hidden="true"><use href="#b3dedoD"></use></svg><svg class="ap-dedo" viewBox="0 0 130 36" style="--x:49.3%;--y:58%;--k:3" aria-hidden="true"><use href="#b3dedoD"></use></svg></div><div class="ap-ruido"></div><svg class="ap-fenda" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline points="50,0 53,10 48,20 54,31 47,42 52,53 46,64 53,75 48,87 51,100"></polyline><polyline class="ap-ramo" points="48,20 41,24 37,31"></polyline><polyline class="ap-ramo" points="52,53 61,57 66,63"></polyline><polyline class="ap-ramo" points="53,75 45,80 43,86"></polyline><polyline class="ap-ramo" points="54,31 60,33"></polyline></svg><span class="ap-faisca" style="--y:14%;--dx:-90px;--dy:-40px;--d:0s"></span><span class="ap-faisca" style="--y:22%;--dx:110px;--dy:-70px;--d:0.05s"></span><span class="ap-faisca" style="--y:36%;--dx:-140px;--dy:20px;--d:0.02s"></span><span class="ap-faisca" style="--y:48%;--dx:130px;--dy:40px;--d:0.08s"></span><span class="ap-faisca" style="--y:55%;--dx:-70px;--dy:90px;--d:0.04s"></span><span class="ap-faisca" style="--y:63%;--dx:160px;--dy:-20px;--d:0.1s"></span><span class="ap-faisca" style="--y:72%;--dx:-120px;--dy:-60px;--d:0.06s"></span><span class="ap-faisca" style="--y:84%;--dx:90px;--dy:80px;--d:0.03s"></span><span class="ap-faisca" style="--y:30%;--dx:60px;--dy:-120px;--d:0.09s"></span><span class="ap-faisca" style="--y:68%;--dx:-50px;--dy:130px;--d:0.07s"></span></div><b>OLHEM O CARDÁPIO NO CELULAR.</b></div>
 <i class="bug-tint" aria-hidden="true"></i>
 
 <!-- ===== o Bug novo: desenhos (ficam escondidos e são usados pelas aparições) ===== -->
@@ -2509,6 +2558,17 @@ body.b2-falando .b2-veu{opacity:1}
       <filter id="b3gCiano" x="-20%" y="-20%" width="140%" height="140%"><feColorMatrix type="matrix" values="0 0 0 0 .32  0 0 0 0 .84  0 0 0 0 1  0 0 0 .6 0"></feColorMatrix></filter>
       <filter id="b3gVerm" x="-20%" y="-20%" width="140%" height="140%"><feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 .16  0 0 0 0 .12  0 0 0 .6 0"></feColorMatrix></filter>
 <clipPath id="b3gFat1"><rect x="40" y="40" width="320" height="72"></rect></clipPath><clipPath id="b3gFat2"><rect x="40" y="112" width="320" height="40"></rect></clipPath><clipPath id="b3gFat3"><rect x="40" y="152" width="320" height="62"></rect></clipPath><clipPath id="b3gFat4"><rect x="40" y="214" width="320" height="38"></rect></clipPath><clipPath id="b3gFat5"><rect x="40" y="252" width="320" height="48"></rect></clipPath><clipPath id="b3gFat6"><rect x="40" y="300" width="320" height="170"></rect></clipPath>
+      
+      <!-- v26: dedo de robô (as mãos do Bug abrindo a tela) -->
+      <symbol id="b3dedoE" viewBox="0 0 130 36">
+        <polygon class="b2-f3 b2-fc" points="134,5 92,3 88,31 134,32"></polygon>
+        <polygon class="b2-f2 b2-fc" points="91,6 55,9 53,28 89,29"></polygon>
+        <polygon class="b2-f1 b2-fc" points="54,10 22,13 5,21 18,28 52,27"></polygon>
+        <path class="b2-chanfro" d="M132 6 L93 4 M89 7 L56 10 M52 11 L23 14"></path>
+        <path class="b2-luz-c" d="M53 27 L18 28 L6 21"></path>
+        <circle class="b3-junta" cx="90" cy="17" r="4.5"></circle><circle class="b3-junta" cx="54" cy="18" r="3.6"></circle>
+      </symbol>
+      <symbol id="b3dedoD" viewBox="0 0 130 36"><g transform="translate(130 0) scale(-1 1)"><use href="#b3dedoE"></use></g></symbol>
       <!-- ===== AS 4 FORMAS ===== -->
       <!-- 1 · O SINAL: só holograma -->
       <g id="b2forma1">
@@ -3984,7 +4044,7 @@ window.BUGNIVEL = (() => {
     if(indo && s.dataset.bugDelay){ aplicar(niveis[Math.max(0, cur - 1)]); atraso = setTimeout(() => { if(slides[cur] === s) aplicar(nv); }, +s.dataset.bugDelay); }
     else aplicar(nv);
     LIVE.setCodigo(codigo[cur]);
-    const espera = s.dataset.apagao ? +s.dataset.apagao + 5700 : s.dataset.bugDelay ? +s.dataset.bugDelay + 300 : 1100;
+    const espera = s.dataset.apagao ? +s.dataset.apagao + 7300 : s.dataset.bugDelay ? +s.dataset.bugDelay + 300 : 1100;
     if(indo && s.dataset.cameo !== undefined) setTimeout(() => {
       if(slides[cur] !== s) return;
       const p = s.dataset.cameoNome && window.FUGA ? FUGA.sortearPerfil() : null;   // se tiver alguém da sala, fala dele
@@ -4375,18 +4435,32 @@ window.CLIMA = (() => {
       g.gain.setValueAtTime(.25, t); g.gain.exponentialRampToValueAtTime(.0001, t + 1.3); o.start(t); o.stop(t + 1.3);
     } catch(e){}
   }
+
+  /* v26: a tela que vai rasgar é uma cópia do slide de verdade (partida em duas metades) */
+  function montarRasgo(){
+    const lados = ap.querySelectorAll('.ap-lado i'); if(!lados.length) return;
+    const deck = document.getElementById('deck'), casca = deck.cloneNode(false); casca.appendChild(slides[cur].cloneNode(true));
+    const pecas = [document.querySelector('.topbar'), casca, document.querySelector('.botbar')].filter(Boolean);
+    const cs = getComputedStyle(document.body);
+    lados.forEach(i => {
+      i.innerHTML = ''; i.style.setProperty('--ap-bg', cs.backgroundColor); i.style.backgroundImage = cs.backgroundImage;
+      pecas.forEach(p => { const c = p.cloneNode(true); c.removeAttribute('id'); c.querySelectorAll('[id]').forEach(e => e.removeAttribute('id')); c.setAttribute('aria-hidden', 'true'); i.appendChild(c); });
+    });
+  }
+  function desmontarRasgo(){ ap.querySelectorAll('.ap-lado i').forEach(i => { i.innerHTML = ''; }); }
   let esperouApagao = false;
   function apagao(){
     if(REDUCED || !ap || ocupado) return;
     const falta = window.BUGVEZ ? BUGVEZ.livre() - performance.now() : 0;
     if(falta > 60 && !esperouApagao){ esperouApagao = true; setTimeout(apagao, Math.min(falta + 300, 9000)); return; }
-    esperouApagao = false; if(window.BUGVEZ) BUGVEZ.ocupar(5800);
+    esperouApagao = false; if(window.BUGVEZ) BUGVEZ.ocupar(7400);
+    montarRasgo();
     ocupado = true; LIVE.setCardapio(true); LIVE.apagao();   // o recado "olhem o cardápio" vai junto com o apagão
     ap.classList.remove('on'); void ap.offsetWidth; ap.classList.add('on');
     t0 = performance.now(); requestAnimationFrame(loopCara);
-    rugido(2.7);                              // o som é agendado no relógio do áudio: sai junto com o pulo da cara
-    if(window.VOZ_ROBO) setTimeout(() => VOZ_ROBO.falar('apagao'), 3000);   // fala quando a tela já se abriu
-    setTimeout(() => { ap.classList.remove('on'); ocupado = false; }, 5500);
+    rugido(3.2);                              // o som é agendado no relógio do áudio: sai junto com o pulo da cara
+    if(window.VOZ_ROBO) setTimeout(() => VOZ_ROBO.falar('apagao'), 3400);   // fala quando a tela já se abriu
+    setTimeout(() => { ap.classList.remove('on'); desmontarRasgo(); ocupado = false; }, 7100);
   }
 
   /* o Bug atravessa a tela por um caminho sorteado; nos piores níveis ele esbarra no slide */

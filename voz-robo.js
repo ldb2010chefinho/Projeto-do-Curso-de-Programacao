@@ -57,17 +57,17 @@ window.VOZ_ROBO = (() => {
     parar();
     const r = intensidade, t = ctx.currentTime;
     const src = ctx.createBufferSource(); src.buffer = buffers[chave];
-    src.playbackRate.value = 1 - 0.08 * r;                       // um pouco mais lento e grave
+    src.playbackRate.value = 1 - 0.2 * r;                        // v26: bem mais grave (e um pouco mais lento, como um vilão que fala devagar)
 
     const entrada = ctx.createGain();
-    const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 110;
+    const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 55;
     src.connect(hp); hp.connect(entrada);
 
     // seco (voz original)
     const seco = ctx.createGain(); seco.gain.value = 1 - 0.65 * r;
     // modulação em anel
     const anel = ctx.createGain(); anel.gain.value = 0;
-    const osc = ctx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 48;
+    const osc = ctx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 34;
     const prof = ctx.createGain(); prof.gain.value = 1; osc.connect(prof); prof.connect(anel.gain);
     const anelMix = ctx.createGain(); anelMix.gain.value = 0.9 * r;
     entrada.connect(seco); entrada.connect(anel); anel.connect(anelMix);
@@ -79,12 +79,18 @@ window.VOZ_ROBO = (() => {
     // soma + bits + brilho metálico
     const soma = ctx.createGain();
     seco.connect(soma); anelMix.connect(soma); penteMix.connect(soma);
+    // v26: "corpo" grave: uma cópia da voz, só os graves, um instante atrasada (engrossa a voz)
+    const eco = ctx.createDelay(0.05); eco.delayTime.value = 0.018;
+    const graveF = ctx.createBiquadFilter(); graveF.type = 'lowpass'; graveF.frequency.value = 700;
+    const graveMix = ctx.createGain(); graveMix.gain.value = 0.55 * r;
+    entrada.connect(eco); eco.connect(graveF); graveF.connect(graveMix); graveMix.connect(soma);
     const bits = ctx.createWaveShaper(); bits.curve = curvaBits(Math.round(64 - 48 * r)); bits.oversample = 'none';
     const pico = ctx.createBiquadFilter(); pico.type = 'peaking'; pico.frequency.value = 2400; pico.Q.value = 1.2; pico.gain.value = 5 * r;
     const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -20; comp.ratio.value = 4;
     /* volume entra em 25 ms (sem estalo no começo) */
     const vol = ctx.createGain(); vol.gain.setValueAtTime(0, t); vol.gain.linearRampToValueAtTime(1.1, t + 0.025);
-    soma.connect(bits); bits.connect(pico); pico.connect(comp); comp.connect(vol); vol.connect(ctx.destination);
+    const peito = ctx.createBiquadFilter(); peito.type = 'lowshelf'; peito.frequency.value = 160; peito.gain.value = 7 * r;   // mais peito
+    soma.connect(bits); bits.connect(peito); peito.connect(pico); pico.connect(comp); comp.connect(vol); vol.connect(ctx.destination);
 
     // medidor para a boca mexer junto com a voz
     const an = ctx.createAnalyser(); an.fftSize = 512; vol.connect(an);

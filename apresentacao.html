@@ -3824,12 +3824,13 @@ window.INVASAO = (() => {
     const ativo = slides[cur] === slide;
     if(ativo){
       document.body.classList.add('terror');
-      LIVE.setJogo({ p: 'inv' });
+      /* o celular só mostra o Bug quando ele termina de se apresentar no telão (antes: só interferência) */
+      LIVE.setJogo({ p: slide.classList.contains('pronto') ? 'inv' : 'inv0' });
       if(!estava){
         /* o Bug fala sozinho, frase por frase, com calma (e deboche); as regras aparecem no fim */
         const say = $('#invSay'), falas = say.dataset.falas.split('|');
-        clearTimeout(say._t); slide.classList.remove('pronto'); say.innerHTML = '';
-        if(REDUCED){ say.innerHTML = '<p class="atual"></p>'; say.firstChild.textContent = falas[falas.length - 1]; slide.classList.add('pronto'); }
+        clearTimeout(say._t); slide.classList.remove('pronto'); say.innerHTML = ''; LIVE.setJogo({ p: 'inv0' });
+        if(REDUCED){ say.innerHTML = '<p class="atual"></p>'; say.firstChild.textContent = falas[falas.length - 1]; slide.classList.add('pronto'); LIVE.setJogo({ p: 'inv' }); }
         else {
           let f = 0, i = 0, p = null;
           const passo = () => {
@@ -3839,7 +3840,7 @@ window.INVASAO = (() => {
             if(i < falas[f].length) { say._t = setTimeout(passo, /[.,…?]/.test(falas[f][i - 1]) ? 260 : 34); return; }
             f++; p.querySelector('.cur')?.remove(); p = null;
             if(f < falas.length) say._t = setTimeout(passo, Math.max(900, (window.VOZ_ROBO ? VOZ_ROBO.restante() : 0) + 350));   // espera a voz terminar
-            else { say.querySelector('p:last-child').insertAdjacentHTML('beforeend', '<span class="cur"></span>'); slide.classList.add('pronto'); }
+            else { say.querySelector('p:last-child').insertAdjacentHTML('beforeend', '<span class="cur"></span>'); slide.classList.add('pronto'); LIVE.setJogo({ p: 'inv' }); }
           };
           say._t = setTimeout(passo, 700);
         }

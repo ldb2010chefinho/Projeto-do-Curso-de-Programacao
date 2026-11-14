@@ -700,6 +700,12 @@ html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
 @keyframes apFaisca{0%,49%{opacity:0;transform:none}50%{opacity:1;transform:none}62%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.4)}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.apagao.on .ap-e,.apagao.on .ap-d,.apagao.on .ap-faisca,.apagao.on .ap-fenda{animation:none}.apagao.on .ap-fundo{animation:none;opacity:1}}
 .b2-enx { width: 64px !important; aspect-ratio: 400 / 460 !important; image-rendering: auto !important; filter: drop-shadow(0 0 8px rgba(82,213,255,.45)); }
+/* v24: interferência antes do Bug aparecer (enquanto ele se apresenta no telão) */
+#jogo:has(#jogoC.inv0) { background: repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 3px), radial-gradient(ellipse at 50% 40%, #141018, #050407 70%); }
+#jogoC.inv0 { animation: inv0Treme 2.4s steps(1) infinite; }
+#jogoC.inv0 .jt { color: #ff6a5c; animation: b2mRec 1s steps(1) infinite; }
+@keyframes inv0Treme { 0%, 86%, 100% { transform: none; opacity: 1 } 88% { transform: translateX(-6px); opacity: .6 } 91% { transform: translateX(4px) } 93% { transform: none; opacity: .9 } }
+@media (prefers-reduced-motion: reduce) { #jogoC.inv0 { animation: none; } }
 </style>
 </head>
 <body>
@@ -1611,6 +1617,9 @@ html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
       return;
     }
     let h = '';
+    if (j.p === 'inv0') {                       // o Bug ainda está se apresentando no telão: aqui só interferência
+      h = '<span class="jt">Sinal interceptado</span><p class="js">Tem alguma coisa entrando no seu celular…</p><p class="inv-pz">Olhe para o telão.</p>';
+    }
     if (j.p === 'intro' || j.p === 'regras' || j.p === 'fim' || j.p === 'inv') h += '<canvas width="52" height="42" aria-hidden="true"></canvas><svg class="b2-jg" viewBox="0 0 400 460" role="img" aria-label="O Bug"><use href="#b2forma' + (j.p === 'inv' ? 1 : b2forma()) + '"></use></svg>';
     if (j.p === 'inv') h += '<span class="jt">Invasão</span><p class="js">Este site agora é meu. Tranquei o seu celular com 4 números.</p><div class="slots"><i>?</i><i>?</i><i>?</i><i>?</i></div>' +
       '<ul class="inv-r"><li>Consertem o site: os números aparecem.</li><li>Achou os 4? <b>🔒 código</b>, lá embaixo.</li><li><b>5 primeiros</b> me enfrentam. O resto fica comigo.</li></ul>' +
@@ -1638,8 +1647,11 @@ html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
       h += j.g ? '<p class="jf" style="--c:' + (/^#[0-9a-f]{6}$/i.test(j.c) ? j.c : '#43e0a6') + '"><small>' + (j.e ? 'Empate' : 'Destruiu o Bug') + '</small>' + escJ(j.g) + '</p>' : '<p class="js">A turma toda venceu.</p>';
       h += '<div class="slots ok">' + [...meuCodigo()].map((d) => '<i>' + d + '</i>').join('') + '</div><span class="jt">o seu código era</span>';
     }
+    const eraInv0 = conteudoJogo.classList.contains('inv0');
     conteudoJogo.innerHTML = h;
+    if (eraInv0 && j.p === 'inv' && !calmo) { telaJogo.classList.remove('entra'); void telaJogo.offsetWidth; telaJogo.classList.add('entra'); }   // o Bug "chega" no celular
     conteudoJogo.classList.toggle('inv', j.p === 'inv');
+    conteudoJogo.classList.toggle('inv0', j.p === 'inv0');
     telaJogo.classList.toggle('rev', !!(j.p === 'q' && j.r));
     if (telaJogo.hidden) { telaJogo.hidden = false; if (!calmo) { telaJogo.classList.remove('entra'); void telaJogo.offsetWidth; telaJogo.classList.add('entra'); } }
     if (falaBug && falaBug.classList.contains('on') && !falaBug.dataset.prio) falaBug.classList.remove('on');   // o jogo entrou: a fala sai da frente

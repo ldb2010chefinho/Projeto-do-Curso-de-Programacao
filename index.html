@@ -785,6 +785,29 @@ html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
 .b3-fantasma,.b3-bl,.b3-eco{mix-blend-mode:normal!important}
 .b3-fantasma{opacity:.4!important}
 </style>
+
+<style id="v28-calma">
+/* v28: o site continua "falhando", mas dá para LER e DIGITAR o código (nada pisca mais de 3x por segundo) */
+html[data-bug="3"] .hero h1 { animation-duration: 8s !important; }
+html[data-bug="3"] .topo { animation-duration: 12s !important; }
+html[data-bug="3"] .btn-pedido { animation: none !important; }
+html[data-bug="3"] .hero img { animation-duration: 9s !important; }
+html[data-bug="4"] .hero h1 { animation-duration: 6s !important; }
+html[data-bug="4"] :is(.topo, .hero, .layout, .rodape) { animation: pgTear 10s steps(1) infinite !important; }
+html[data-bug="4"] .hero img { animation-duration: 6s !important; }
+html[data-bug="3"] .bug-tinta { animation-duration: 9s !important; }
+html[data-bug="4"] .bug-tinta { animation-duration: 5s !important; }
+html[data-bug="2"] .bordas { animation: none !important; }
+html[data-bug="3"] .bordas { animation: bordaCalma 6s ease-in-out infinite !important; }
+html[data-bug="4"] .bordas { animation: bordaCalma 3.5s ease-in-out infinite !important; }
+@keyframes bordaCalma{50%{opacity:.45}}
+/* as faixas das bordas descem com transform (antes: background-position, que redesenha a tela inteira a cada passo) */
+.bordas{overflow:hidden}
+.bordas::before,.bordas::after{top:-220px!important;animation:bordaCorreT 3s steps(6) infinite!important}
+.bordas::after{animation-direction:reverse!important}
+@keyframes bordaCorreT{to{transform:translateY(220px)}}
+.dreno .bat.baixa, html[data-dreno="2"] .dreno .sinal { animation-duration: 2.4s !important; }
+</style>
 </head>
 <body>
   <header class="topo">

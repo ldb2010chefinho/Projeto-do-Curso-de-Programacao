@@ -492,6 +492,29 @@
 /* cada placa tem um degradê próprio (mais clara em cima), dando volume */
 .b2-f1{fill:url(#b2gF1)}.b2-f2{fill:url(#b2gF2)}.b2-f3{fill:url(#b2gF3)}.b2-f4{fill:url(#b2gF4)}.b2-f5{fill:url(#b2gF5)}.b2-f6{fill:url(#b2gF6)}
 
+/* ===== v25: expressões + forma final toda bugada ===== */
+.b2-sorriso{opacity:var(--b3feliz,1);transition:opacity .25s}
+.b3-tampa{fill:#06070a;stroke:#020304;stroke-width:1}
+.b3-sobrancelha{fill:none;stroke:#ff3b2e;stroke-width:2.2;stroke-linecap:round;filter:url(#b2gBrilho);opacity:.85}
+.b3-boca{transform:translateY(calc(var(--b2boca,0) * 5px))}
+.b3-fatia{animation:b3fatia 2.6s steps(1) infinite}
+.b3-f1{--fx:-10px;animation-delay:-.3s}.b3-f2{--fx:15px;animation-delay:-1.1s}.b3-f3{--fx:-5px;animation-duration:3.4s}
+.b3-f4{--fx:19px;animation-delay:-.7s}.b3-f5{--fx:-16px;animation-delay:-1.9s}.b3-f6,.b3-fc1{--fx:8px;animation-delay:-1.4s}
+.b3-eco{opacity:.32;mix-blend-mode:screen;--fx:34px;animation:b3fatia 1.8s steps(1) infinite}
+@keyframes b3fatia{0%,100%{transform:translateX(var(--fx))}18%{transform:translateX(calc(var(--fx) * -1.6))}22%{transform:translateX(var(--fx))}61%{transform:translateX(calc(var(--fx) * 2.4))}64%{transform:translateX(calc(var(--fx) * .3))}66%{transform:translateX(var(--fx))}}
+.b3-fantasma{opacity:.55;mix-blend-mode:screen;animation:b3fan 1.9s steps(1) infinite}
+.b3-fan-c{--gx:-11px}.b3-fan-v{--gx:11px;animation-delay:-.9s}
+@keyframes b3fan{0%,100%{transform:translate(var(--gx),0)}30%{transform:translate(calc(var(--gx) * 1.9),2px)}34%{transform:translate(var(--gx),0)}72%{transform:translate(calc(var(--gx) * .4),-2px)}76%{transform:translate(var(--gx),0)}}
+.b3-bl{mix-blend-mode:screen;animation:b3bl 1.7s steps(1) infinite}
+.b3-bl1,.b3-bl4{fill:#52d5ff}.b3-bl2,.b3-bl5{fill:#ff2a1f}.b3-bl3,.b3-bl6{fill:#ffffff;opacity:.7}
+.b3-bl2{animation-delay:-.4s}.b3-bl3{animation-delay:-.9s;animation-duration:2.3s}.b3-bl4{animation-delay:-1.2s}.b3-bl5{animation-delay:-.2s;animation-duration:1.3s}.b3-bl6{animation-delay:-1.5s}
+@keyframes b3bl{0%,100%{opacity:.9;transform:none}40%{opacity:0}55%{opacity:.8;transform:translateX(10px)}70%{opacity:0}}
+.b3-buraco{fill:url(#b2gRuido);stroke:#ff2a1f;stroke-width:1;animation:b3bl 2.1s steps(1) infinite}
+.b3-bu2{animation-delay:-1s}
+/* irritado quando começa a perder: nas transmissões graves e nos níveis finais */
+.b2-live.grave,.bug-fala.grave{--b3feliz:0;--b3irrit:1}
+@media (prefers-reduced-motion:reduce){.b3-fatia,.b3-fantasma,.b3-bl,.b3-buraco{animation:none}}
+
 /* ===== v24: robô escuro, de capacete e viseira (o mesmo rosto misterioso do sinal, agora com armadura) ===== */
 .b3-visor{fill:url(#b3gVidro);stroke:#020304;stroke-width:1.6;stroke-linejoin:round}
 .b3-visor-brilho{fill:none;stroke:#ffffff;stroke-width:1.2;opacity:.28;stroke-linecap:round}
@@ -1003,6 +1026,16 @@ html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
         <use href="#b3visor"></use><use href="#b3luz"></use>
       </g>
 
+      
+      <!-- ===== v25: EXPRESSÕES (feliz · irritado · bravo), controladas por variáveis CSS ===== -->
+      <g id="b3tampa-irrit" style="opacity: var(--b3irrit, 0)"><polygon class="b3-tampa" points="118,166 194,182 194,196 118,180"></polygon><polygon class="b3-tampa" points="282,166 206,182 206,196 282,180"></polygon></g>
+      <g id="b3tampa-brava" style="opacity: var(--b3bravo, 0)"><polygon class="b3-tampa" points="114,148 198,170 198,204 114,177"></polygon><polygon class="b3-tampa" points="286,148 202,170 202,204 286,177"></polygon><path class="b3-sobrancelha" d="M120 178 L194 202 M280 178 L206 202"></path></g>
+      <g id="b3boca-reta" style="opacity: var(--b3irrit, 0)"><g class="b3-boca"><rect class="b2-px" x="162" y="279" width="7" height="7"></rect><rect class="b2-px" x="170" y="279" width="7" height="7"></rect><rect class="b2-px" x="178" y="279" width="7" height="7"></rect><rect class="b2-px" x="186" y="279" width="7" height="7"></rect><rect class="b2-px" x="194" y="279" width="7" height="7"></rect><rect class="b2-px" x="202" y="279" width="7" height="7"></rect><rect class="b2-px" x="210" y="279" width="7" height="7"></rect><rect class="b2-px" x="218" y="279" width="7" height="7"></rect><rect class="b2-px" x="226" y="279" width="7" height="7"></rect><rect class="b2-px" x="234" y="279" width="7" height="7"></rect></g></g>
+      <g id="b3boca-brava" style="opacity: var(--b3bravo, 0)"><g class="b3-boca"><rect class="b2-px" x="154" y="288" width="7" height="7"></rect><rect class="b2-px" x="162" y="283" width="7" height="7"></rect><rect class="b2-px" x="170" y="279" width="7" height="7"></rect><rect class="b2-px" x="178" y="276" width="7" height="7"></rect><rect class="b2-px" x="186" y="275" width="7" height="7"></rect><rect class="b2-px" x="194" y="275" width="7" height="7"></rect><rect class="b2-px" x="202" y="275" width="7" height="7"></rect><rect class="b2-px" x="210" y="276" width="7" height="7"></rect><rect class="b2-px" x="218" y="279" width="7" height="7"></rect><rect class="b2-px" x="226" y="283" width="7" height="7"></rect><rect class="b2-px" x="234" y="288" width="7" height="7"></rect><rect class="b2-px" x="172" y="288" width="5" height="5"></rect><rect class="b2-px" x="179" y="291" width="5" height="5"></rect><rect class="b2-px" x="186" y="288" width="5" height="5"></rect><rect class="b2-px" x="193" y="291" width="5" height="5"></rect><rect class="b2-px" x="200" y="288" width="5" height="5"></rect><rect class="b2-px" x="207" y="291" width="5" height="5"></rect><rect class="b2-px" x="214" y="288" width="5" height="5"></rect><rect class="b2-px" x="221" y="291" width="5" height="5"></rect><rect class="b2-px" x="228" y="288" width="5" height="5"></rect></g></g>
+      <g id="b3humor"><use href="#b3tampa-irrit"></use><use href="#b3tampa-brava"></use><use href="#b3boca-reta"></use><use href="#b3boca-brava"></use></g>
+      <filter id="b3gCiano" x="-20%" y="-20%" width="140%" height="140%"><feColorMatrix type="matrix" values="0 0 0 0 .32  0 0 0 0 .84  0 0 0 0 1  0 0 0 .6 0"></feColorMatrix></filter>
+      <filter id="b3gVerm" x="-20%" y="-20%" width="140%" height="140%"><feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 .16  0 0 0 0 .12  0 0 0 .6 0"></feColorMatrix></filter>
+<clipPath id="b3gFat1"><rect x="40" y="40" width="320" height="72"></rect></clipPath><clipPath id="b3gFat2"><rect x="40" y="112" width="320" height="40"></rect></clipPath><clipPath id="b3gFat3"><rect x="40" y="152" width="320" height="62"></rect></clipPath><clipPath id="b3gFat4"><rect x="40" y="214" width="320" height="38"></rect></clipPath><clipPath id="b3gFat5"><rect x="40" y="252" width="320" height="48"></rect></clipPath><clipPath id="b3gFat6"><rect x="40" y="300" width="320" height="170"></rect></clipPath>
       <!-- ===== AS 4 FORMAS ===== -->
       <!-- 1 · O SINAL: só holograma -->
       <g id="b2forma1">
@@ -1024,7 +1057,7 @@ html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
             <use href="#b2olhos"></use>
             <g class="b2-sorriso">
               <rect class="b2-px" x="154" y="270" width="7" height="7"></rect><rect class="b2-px" x="162" y="275" width="7" height="7"></rect><rect class="b2-px" x="170" y="279" width="7" height="7"></rect><rect class="b2-px" x="178" y="281" width="7" height="7"></rect><rect class="b2-px" x="186" y="282" width="7" height="7"></rect><rect class="b2-px" x="194" y="282" width="7" height="7"></rect><rect class="b2-px" x="202" y="281" width="7" height="7"></rect><rect class="b2-px" x="210" y="280" width="7" height="7"></rect><rect class="b2-px" x="218" y="278" width="7" height="7"></rect><rect class="b2-px" x="226" y="275" width="7" height="7"></rect><rect class="b2-px" x="234" y="271" width="7" height="7"></rect><rect class="b2-px" x="242" y="265" width="7" height="7"></rect>
-            </g>
+            </g><use href="#b3humor"></use>
             <path class="b2-mira" d="M86 54 L86 72 M86 54 L104 54 M314 54 L314 72 M314 54 L296 54 M86 334 L86 316 M86 334 L104 334 M314 334 L314 316 M314 334 L296 334"></path>
           </g></g>
         </g>
@@ -1045,7 +1078,7 @@ html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
               <use href="#b2olhos"></use>
               <g class="b2-sorriso">
               <rect class="b2-px" x="154" y="270" width="7" height="7"></rect><rect class="b2-px" x="162" y="275" width="7" height="7"></rect><rect class="b2-px" x="170" y="279" width="7" height="7"></rect><rect class="b2-px" x="178" y="281" width="7" height="7"></rect><rect class="b2-px" x="186" y="282" width="7" height="7"></rect><rect class="b2-px" x="194" y="282" width="7" height="7"></rect><rect class="b2-px" x="202" y="281" width="7" height="7"></rect><rect class="b2-px" x="210" y="280" width="7" height="7"></rect><rect class="b2-px" x="218" y="278" width="7" height="7"></rect><rect class="b2-px" x="226" y="275" width="7" height="7"></rect><rect class="b2-px" x="234" y="271" width="7" height="7"></rect><rect class="b2-px" x="242" y="265" width="7" height="7"></rect>
-            </g>
+            </g><use href="#b3humor"></use>
             </g>
           </g>
         </g>
@@ -1063,41 +1096,39 @@ html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
               <use href="#b2olhos"></use>
               <g class="b2-sorriso">
               <rect class="b2-px" x="154" y="270" width="7" height="7"></rect><rect class="b2-px" x="162" y="275" width="7" height="7"></rect><rect class="b2-px" x="170" y="279" width="7" height="7"></rect><rect class="b2-px" x="178" y="281" width="7" height="7"></rect><rect class="b2-px" x="186" y="282" width="7" height="7"></rect><rect class="b2-px" x="194" y="282" width="7" height="7"></rect><rect class="b2-px" x="202" y="281" width="7" height="7"></rect><rect class="b2-px" x="210" y="280" width="7" height="7"></rect><rect class="b2-px" x="218" y="278" width="7" height="7"></rect><rect class="b2-px" x="226" y="275" width="7" height="7"></rect><rect class="b2-px" x="234" y="271" width="7" height="7"></rect><rect class="b2-px" x="242" y="265" width="7" height="7"></rect>
-            </g>
+            </g><use href="#b3humor"></use>
               <path class="b2-borda-luz" d="M266 220 L258 238 L264 252 L256 268"></path>
             </g>
           </g>
         </g>
       </g>
 
-      <!-- 4 · O COLAPSO: as placas se soltam e o holograma do começo aparece por baixo -->
-      <g id="b2forma4">
+      <!-- 4 · A FORMA FINAL: toda bugada. A imagem dele se parte em faixas, as cores se separam, e ele está BRAVO -->
+      <g id="b2forma4" style="--b3feliz: 0; --b3irrit: 0; --b3bravo: 1">
+        <defs><g id="b3rosto4"><use href="#b3holo"></use><use href="#b3capacete"></use><use href="#b2olhos"></use><g class="b2-sorriso">
+              <rect class="b2-px" x="154" y="270" width="7" height="7"></rect><rect class="b2-px" x="162" y="275" width="7" height="7"></rect><rect class="b2-px" x="170" y="279" width="7" height="7"></rect><rect class="b2-px" x="178" y="281" width="7" height="7"></rect><rect class="b2-px" x="186" y="282" width="7" height="7"></rect><rect class="b2-px" x="194" y="282" width="7" height="7"></rect><rect class="b2-px" x="202" y="281" width="7" height="7"></rect><rect class="b2-px" x="210" y="280" width="7" height="7"></rect><rect class="b2-px" x="218" y="278" width="7" height="7"></rect><rect class="b2-px" x="226" y="275" width="7" height="7"></rect><rect class="b2-px" x="234" y="271" width="7" height="7"></rect><rect class="b2-px" x="242" y="265" width="7" height="7"></rect>
+            </g><use href="#b3humor"></use>
+              <path class="b2-borda-luz" d="M250 148 L236 172 L252 186 L232 206 L244 222 M236 172 L214 178"></path></g></defs>
         <g transform="translate(200 230) scale(.96) translate(-200 -230)">
           <g class="b2-respira">
-            <use href="#b2corpo"></use>
+            <g class="b3-fatia b3-fc1" style="clip-path: url(#b3gFat6)"><use href="#b2corpo"></use></g>
             <use href="#b2nucleo"></use>
             <g class="b2-cabeca">
-              <use href="#b3aleta-e"></use>
-              <use href="#b3holo"></use>
-              <use href="#b3m"></use><use href="#b3c1"></use><use href="#b3q1"></use><use href="#b3q2"></use>
-              <use href="#b3t1"></use><use href="#b3t3"></use><use href="#b3t5"></use>
-              <use href="#b3visor"></use>
-              <path class="b2-luz-v" d="M158 70 L122 96 L104 140 L100 200 L112 250 L140 290 L170 314"></path>
-              <path class="b2-chanfro" d="M198 61 L160 72 L131 98 M153 120 L198 115"></path>
-              <!-- viseira trincada -->
-              <path class="b2-borda" d="M250 148 L236 172 L252 186 L232 206 L244 222"></path>
-              <path class="b2-borda-luz" d="M250 148 L236 172 L252 186 L232 206 L244 222 M236 172 L214 178 M252 186 L284 192"></path>
-              <use href="#b2olhos"></use>
-              <g class="b2-sorriso">
-              <rect class="b2-px" x="154" y="270" width="7" height="7"></rect><rect class="b2-px" x="162" y="275" width="7" height="7"></rect><rect class="b2-px" x="170" y="279" width="7" height="7"></rect><rect class="b2-px" x="178" y="281" width="7" height="7"></rect><rect class="b2-px" x="186" y="282" width="7" height="7"></rect><rect class="b2-px" x="194" y="282" width="7" height="7"></rect><rect class="b2-px" x="202" y="281" width="7" height="7"></rect><rect class="b2-px" x="210" y="280" width="7" height="7"></rect><rect class="b2-px" x="218" y="278" width="7" height="7"></rect><rect class="b2-px" x="226" y="275" width="7" height="7"></rect><rect class="b2-px" x="234" y="271" width="7" height="7"></rect><rect class="b2-px" x="242" y="265" width="7" height="7"></rect>
-            </g>
-              <!-- placas que se soltaram e flutuam -->
-              <g class="b2-solta-1"><use href="#b3t2"></use><use href="#b3t4"></use></g>
-              <g class="b2-solta-2"><use href="#b3c2"></use></g>
-              <g class="b2-rajada"><rect class="b2-bv" x="214" y="118" width="96" height="4"></rect><rect class="b2-bc" x="236" y="252" width="70" height="3"></rect></g>
+              <use href="#b3aleta-e"></use><use href="#b3aleta-d"></use>
+              <g class="b3-fantasma b3-fan-c"><use href="#b3capacete" style="filter: url(#b3gCiano)"></use></g>
+              <g class="b3-fantasma b3-fan-v"><use href="#b3capacete" style="filter: url(#b3gVerm)"></use></g>
+              <g class="b3-fatia b3-f1" style="clip-path: url(#b3gFat1)"><use href="#b3rosto4"></use></g><g class="b3-fatia b3-f2" style="clip-path: url(#b3gFat2)"><use href="#b3rosto4"></use></g><g class="b3-fatia b3-f3" style="clip-path: url(#b3gFat3)"><use href="#b3rosto4"></use></g><g class="b3-fatia b3-f4" style="clip-path: url(#b3gFat4)"><use href="#b3rosto4"></use></g><g class="b3-fatia b3-f5" style="clip-path: url(#b3gFat5)"><use href="#b3rosto4"></use></g><g class="b3-fatia b3-f6" style="clip-path: url(#b3gFat6)"><use href="#b3rosto4"></use></g>
+              <g class="b3-eco" style="clip-path: url(#b3gFat3)"><use href="#b3rosto4"></use></g>
+              <g class="b3-blocos">
+                <rect class="b3-bl b3-bl1" x="96" y="128" width="34" height="8"></rect><rect class="b3-bl b3-bl2" x="246" y="232" width="52" height="6"></rect>
+                <rect class="b3-bl b3-bl3" x="150" y="96" width="18" height="18"></rect><rect class="b3-bl b3-bl4" x="262" y="104" width="40" height="5"></rect>
+                <rect class="b3-bl b3-bl5" x="118" y="258" width="26" height="12"></rect><rect class="b3-bl b3-bl6" x="214" y="296" width="30" height="7"></rect>
+                <rect class="b3-buraco b3-bu1" x="268" y="150" width="22" height="22"></rect><rect class="b3-buraco b3-bu2" x="112" y="226" width="16" height="16"></rect><rect class="b3-buraco" x="176" y="118" width="28" height="12"></rect><rect class="b3-buraco b3-bu2" x="232" y="270" width="18" height="10"></rect>
+              </g>
               <g class="b2-cacos">
-                <rect class="b2-caco" x="306" y="214" width="8" height="8"></rect><rect class="b2-caco-c" x="318" y="244" width="5" height="5"></rect>
-                <rect class="b2-caco" x="300" y="120" width="6" height="6"></rect><rect class="b2-caco-c" x="86" y="282" width="5" height="5"></rect>
+                <rect class="b2-caco" x="318" y="214" width="8" height="8"></rect><rect class="b2-caco-c" x="330" y="244" width="5" height="5"></rect>
+                <rect class="b2-caco" x="74" y="196" width="6" height="6"></rect><rect class="b2-caco-c" x="86" y="282" width="5" height="5"></rect>
+                <rect class="b2-caco" x="322" y="120" width="6" height="6"></rect><rect class="b2-caco-c" x="70" y="110" width="4" height="4"></rect>
               </g>
             </g>
           </g>

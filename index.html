@@ -808,6 +808,23 @@ html[data-bug="4"] .bordas { animation: bordaCalma 3.5s ease-in-out infinite !im
 @keyframes bordaCorreT{to{transform:translateY(220px)}}
 .dreno .bat.baixa, html[data-dreno="2"] .dreno .sinal { animation-duration: 2.4s !important; }
 </style>
+
+<style id="v29-celular">
+/* ===== v29 (skills mobile-native, emil-design-eng, break-ui) ===== */
+/* sem o "flash" cinza ao tocar, e sem o atraso de toque duplo */
+html{-webkit-tap-highlight-color:transparent}
+a,button,input,label,summary,[role="button"]{touch-action:manipulation}
+/* puxar a tela para baixo não recarrega a página no meio do jogo */
+html,body{overscroll-behavior-y:none}
+/* botões "afundam" ao tocar: o celular confirma que ouviu */
+button{transition:transform 160ms cubic-bezier(.23,1,.32,1)}
+button:active:not(:disabled){transform:scale(.97)}
+button{-webkit-user-select:none;user-select:none}
+/* altura real da tela (a barra do navegador não corta o fim) */
+@supports (height:100dvh){html{--vh:100dvh}}
+/* nome do vencedor com 16 letras sem espaço não estoura a tela */
+.jogo .jf{overflow-wrap:anywhere;font-size:clamp(28px,11vw,44px)}
+</style>
 </head>
 <body>
   <header class="topo">

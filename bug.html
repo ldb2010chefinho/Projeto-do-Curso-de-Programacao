@@ -780,6 +780,15 @@ html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
 .b2-ap .ap-fundo svg{height:min(56vh,108vw)}
 @media (prefers-reduced-motion:reduce){.apagao.on .ap-lado i,.apagao.on .ap-ruido,.apagao.on .ap-dedo{animation:none}.ap-dedo{opacity:0}}
 </style>
+
+<style id="v27-leve">
+.b2-px{filter:none!important}
+.b2-sorriso,.b3-boca{filter:url(#b2gBrilho)}
+.b2-tp:not(.on){display:none!important}
+.bug-fala:not(.on) .b2-mini *{animation-play-state:paused!important}
+.b3-fantasma,.b3-bl,.b3-eco{mix-blend-mode:normal!important}
+.b3-fantasma{opacity:.4!important}
+</style>
 </head>
 <body>
   <header class="topo">
@@ -1166,7 +1175,7 @@ html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
 
       <!-- 4 · A FORMA FINAL: toda bugada. A imagem dele se parte em faixas, as cores se separam, e ele está BRAVO -->
       <g id="b2forma4" style="--b3feliz: 0; --b3irrit: 0; --b3bravo: 1">
-        <defs><g id="b3rosto4"><use href="#b3holo"></use><use href="#b3capacete"></use><use href="#b2olhos"></use><g class="b2-sorriso">
+        <defs><g id="b3rosto4"><use href="#b3capacete"></use><use href="#b2olhos"></use><g class="b2-sorriso">
               <rect class="b2-px" x="154" y="270" width="7" height="7"></rect><rect class="b2-px" x="162" y="275" width="7" height="7"></rect><rect class="b2-px" x="170" y="279" width="7" height="7"></rect><rect class="b2-px" x="178" y="281" width="7" height="7"></rect><rect class="b2-px" x="186" y="282" width="7" height="7"></rect><rect class="b2-px" x="194" y="282" width="7" height="7"></rect><rect class="b2-px" x="202" y="281" width="7" height="7"></rect><rect class="b2-px" x="210" y="280" width="7" height="7"></rect><rect class="b2-px" x="218" y="278" width="7" height="7"></rect><rect class="b2-px" x="226" y="275" width="7" height="7"></rect><rect class="b2-px" x="234" y="271" width="7" height="7"></rect><rect class="b2-px" x="242" y="265" width="7" height="7"></rect>
             </g><use href="#b3humor"></use>
               <path class="b2-borda-luz" d="M250 148 L236 172 L252 186 L232 206 L244 222 M236 172 L214 178"></path></g></defs>
@@ -1178,6 +1187,7 @@ html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
               <use href="#b3aleta-e"></use><use href="#b3aleta-d"></use>
               <g class="b3-fantasma b3-fan-c"><use href="#b3capacete" style="filter: url(#b3gCiano)"></use></g>
               <g class="b3-fantasma b3-fan-v"><use href="#b3capacete" style="filter: url(#b3gVerm)"></use></g>
+              <use href="#b3holo"></use>
               <g class="b3-fatia b3-f1" style="clip-path: url(#b3gFat1)"><use href="#b3rosto4"></use></g><g class="b3-fatia b3-f2" style="clip-path: url(#b3gFat2)"><use href="#b3rosto4"></use></g><g class="b3-fatia b3-f3" style="clip-path: url(#b3gFat3)"><use href="#b3rosto4"></use></g><g class="b3-fatia b3-f4" style="clip-path: url(#b3gFat4)"><use href="#b3rosto4"></use></g><g class="b3-fatia b3-f5" style="clip-path: url(#b3gFat5)"><use href="#b3rosto4"></use></g><g class="b3-fatia b3-f6" style="clip-path: url(#b3gFat6)"><use href="#b3rosto4"></use></g>
               <g class="b3-eco" style="clip-path: url(#b3gFat3)"><use href="#b3rosto4"></use></g>
               <g class="b3-blocos">
@@ -1539,7 +1549,7 @@ html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
       if (agora - ultimo > 100) {
         ultimo = agora;
         var o = typeof op === 'function' ? op() : op;
-        if (o) desenharBug(cv, calmo ? 1000 : agora - t0, o);
+        if (o && cv.getClientRects().length) desenharBug(cv, calmo ? 1000 : agora - t0, o);
       }
       requestAnimationFrame(loop);
     }
@@ -1780,10 +1790,12 @@ html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
 
   /* ===== o Bug novo no celular ===== */
   function b2forma() { return nivelBug >= 3 ? 4 : atual >= 7 ? 3 : atual >= 2 ? 2 : 1; }
-  function b2boca() {
+  let bocaAntes = -1;
+  function b2boca() {   // só muda a variável onde o Bug aparece, e só quando o valor muda
     const fb = document.getElementById('bugFala'), falando = fb && fb.classList.contains('on');
     let v = 0; if (falando) { const t = performance.now() / 1000; v = Math.max(0, Math.sin(t * 13) * .5 + Math.sin(t * 7.3) * .35) * .9; }
-    document.documentElement.style.setProperty('--b2boca', v.toFixed(3));
+    v = Math.round(v * 20) / 20;
+    if (v !== bocaAntes) { bocaAntes = v; [fb, document.getElementById('jogo')].forEach((a) => a && a.style.setProperty('--b2boca', v)); }
     requestAnimationFrame(b2boca);
   }
   setTimeout(b2boca, 0);
@@ -1985,7 +1997,7 @@ html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
   function agendarSabe() {
     clearTimeout(timerSabe);
     if (!caca) return;
-    const faixa = [[80, 120], [80, 120], [50, 75], [32, 48], [20, 30]][nivelBug];
+    const faixa = [[150, 200], [150, 200], [120, 160], [100, 140], [80, 110]][nivelBug];   // v27: provoca menos (a turma precisa olhar para a frente)
     timerSabe = setTimeout(() => { falaQueSabe(); agendarSabe(); }, (faixa[0] + Math.random() * (faixa[1] - faixa[0])) * 1000);
   }
 
@@ -2200,7 +2212,7 @@ html:has(#jogo:not([hidden])) .pista-4 { display: none !important; }
     clearTimeout(timerSusto);
     const n = contarLiberados();
     if (!caca || n < 2) return;
-    const faixa = { 2: [45000, 80000], 3: [25000, 45000], 4: [12000, 22000] }[n];
+    const faixa = { 2: [100000, 150000], 3: [80000, 120000], 4: [60000, 90000] }[n];   // v27: sustos bem mais raros
     timerSusto = setTimeout(() => { assustar(); setTimeout(falaQueSabe, 1600); agendarSusto(); }, faixa[0] + Math.random() * (faixa[1] - faixa[0]));
   }
 

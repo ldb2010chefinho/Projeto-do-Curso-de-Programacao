@@ -1554,6 +1554,37 @@ body.b2-falando .b2-veu{opacity:1}
 .b2-ap .ap-fundo svg{height:min(66vh,58vw)}
 @media (prefers-reduced-motion:reduce){.apagao.on .ap-lado i,.apagao.on .ap-ruido,.apagao.on .ap-dedo{animation:none}.ap-dedo{opacity:0}}
 </style>
+
+<style id="v27-leve">
+/* ===== v27: mais leve ===== */
+/* brilho aplicado no sorriso inteiro, não em cada pixel (eram dezenas de filtros) */
+.b2-px{filter:none!important}
+.b2-sorriso,.b3-boca{filter:url(#b2gBrilho)}
+/* nada anima dentro de slides que não estão na tela */
+.slide:not(.is-active):not(.is-leaving) *{animation-play-state:paused!important}
+/* o Bug escondido não fica animando por trás */
+.b2-tp:not(.on),.b2-live:not(.on){display:none!important}
+/* misturas de cor custam caro para o navegador: só opacidade */
+.cr-bloco,.b3-fantasma,.b3-bl,.b3-eco{mix-blend-mode:normal!important}
+.b3-fantasma{opacity:.4!important}
+</style>
+
+<style id="v27-foco">
+/* ===== v27: a tela falhando, mas sem roubar a atenção da explicação =====
+   (o centro fica sempre limpo; o que se mexe nas bordas aparece só no fim, e devagar) */
+body:is([data-clima="2"],[data-clima="3"]) .cr-varre{opacity:0!important;animation:none!important}
+body:is([data-clima="4"],[data-clima="5"]) .cr-varre{animation-duration:10s!important}
+body:is([data-clima="2"],[data-clima="3"]) .cr-bloco{display:none!important}
+body:is([data-clima="4"],[data-clima="5"]) .cr-bloco{animation-duration:9s!important}
+body[data-clima="3"] .cr-coluna{display:none!important}
+body:is([data-clima="4"],[data-clima="5"]) .cr-coluna{opacity:.1!important}
+.cr-coluna span{animation-duration:70s!important}
+body:is([data-clima="3"],[data-clima="4"]) .slide.is-active :is(h1,h2){animation:none!important}
+body[data-clima="5"] .slide.is-active :is(h1,h2){animation-duration:12s!important}
+body[data-clima="4"] .slide.is-active > .inner{animation:none!important}
+body[data-clima="5"] .slide.is-active > .inner{animation-duration:16s!important}
+.cr-d1 b{animation:none!important}
+</style>
 </head>
 <body>
 
@@ -2638,7 +2669,7 @@ body.b2-falando .b2-veu{opacity:1}
 
       <!-- 4 · A FORMA FINAL: toda bugada. A imagem dele se parte em faixas, as cores se separam, e ele está BRAVO -->
       <g id="b2forma4" style="--b3feliz: 0; --b3irrit: 0; --b3bravo: 1">
-        <defs><g id="b3rosto4"><use href="#b3holo"></use><use href="#b3capacete"></use><use href="#b2olhos"></use><g class="b2-sorriso">
+        <defs><g id="b3rosto4"><use href="#b3capacete"></use><use href="#b2olhos"></use><g class="b2-sorriso">
               <rect class="b2-px" x="154" y="270" width="7" height="7"></rect><rect class="b2-px" x="162" y="275" width="7" height="7"></rect><rect class="b2-px" x="170" y="279" width="7" height="7"></rect><rect class="b2-px" x="178" y="281" width="7" height="7"></rect><rect class="b2-px" x="186" y="282" width="7" height="7"></rect><rect class="b2-px" x="194" y="282" width="7" height="7"></rect><rect class="b2-px" x="202" y="281" width="7" height="7"></rect><rect class="b2-px" x="210" y="280" width="7" height="7"></rect><rect class="b2-px" x="218" y="278" width="7" height="7"></rect><rect class="b2-px" x="226" y="275" width="7" height="7"></rect><rect class="b2-px" x="234" y="271" width="7" height="7"></rect><rect class="b2-px" x="242" y="265" width="7" height="7"></rect>
             </g><use href="#b3humor"></use>
               <path class="b2-borda-luz" d="M250 148 L236 172 L252 186 L232 206 L244 222 M236 172 L214 178"></path></g></defs>
@@ -2650,6 +2681,7 @@ body.b2-falando .b2-veu{opacity:1}
               <use href="#b3aleta-e"></use><use href="#b3aleta-d"></use>
               <g class="b3-fantasma b3-fan-c"><use href="#b3capacete" style="filter: url(#b3gCiano)"></use></g>
               <g class="b3-fantasma b3-fan-v"><use href="#b3capacete" style="filter: url(#b3gVerm)"></use></g>
+              <use href="#b3holo"></use>
               <g class="b3-fatia b3-f1" style="clip-path: url(#b3gFat1)"><use href="#b3rosto4"></use></g><g class="b3-fatia b3-f2" style="clip-path: url(#b3gFat2)"><use href="#b3rosto4"></use></g><g class="b3-fatia b3-f3" style="clip-path: url(#b3gFat3)"><use href="#b3rosto4"></use></g><g class="b3-fatia b3-f4" style="clip-path: url(#b3gFat4)"><use href="#b3rosto4"></use></g><g class="b3-fatia b3-f5" style="clip-path: url(#b3gFat5)"><use href="#b3rosto4"></use></g><g class="b3-fatia b3-f6" style="clip-path: url(#b3gFat6)"><use href="#b3rosto4"></use></g>
               <g class="b3-eco" style="clip-path: url(#b3gFat3)"><use href="#b3rosto4"></use></g>
               <g class="b3-blocos">
@@ -3632,7 +3664,7 @@ function animarBug(cv, op) {
     if (agora - ultimo > 100) {
       ultimo = agora;
       var o = typeof op === 'function' ? op() : op;
-      if (o) desenharBug(cv, calmo ? 1000 : agora - t0, o);
+      if (o && cv.getClientRects().length) desenharBug(cv, calmo ? 1000 : agora - t0, o);   // escondido: não desenha
     }
     requestAnimationFrame(loop);
   }
@@ -3746,10 +3778,10 @@ window.JOGO = (() => {
   function digitar(el){
     const txt = el.dataset.text; let i = 0; clearInterval(el._t);
     const vozDe = { jgSay1: 'jogo1', jgSay2: 'jogo2', jgSay3: 'derrota' }[el.id];
-    if(vozDe && window.VOZ_ROBO) VOZ_ROBO.falar(vozDe);
+    const ms = vozDe && window.VOZ_ROBO ? VOZ_ROBO.falar(vozDe) : 0;
     if(REDUCED){ el.textContent = txt; return; }
     el.innerHTML = '<span class="cur"></span>';
-    el._t = setInterval(() => { i++; el.innerHTML = esc2(txt.slice(0, i)) + '<span class="cur"></span>'; if(i >= txt.length) clearInterval(el._t); }, 36);
+    DIGITA(el, txt, ms ? ms * .9 : txt.length * 36, null, true);
   }
   /* finalistas de verdade (quem digitou o código) ou, sem internet, "Finalista 1..5" */
   function lista(){ const f = window.FUGA ? FUGA.finalistas() : []; return f.length ? f : GRUPOS; }
@@ -3929,10 +3961,14 @@ window.INVASAO = (() => {
           let f = 0, i = 0, p = null;
           const passo = () => {
             if(slides[cur] !== slide) return;
-            if(!p){ say.innerHTML = ''; if(window.VOZ_ROBO) VOZ_ROBO.falar('inv' + (f + 1)); p = document.createElement('p'); p.className = 'atual'; say.appendChild(p); i = 0; }
-            i++; p.textContent = falas[f].slice(0, i); p.insertAdjacentHTML('beforeend', '<span class="cur"></span>');
-            if(i < falas[f].length) { say._t = setTimeout(passo, /[.,…?]/.test(falas[f][i - 1]) ? 260 : 34); return; }
-            f++; p.querySelector('.cur')?.remove(); p = null;
+            say.innerHTML = ''; const ms = window.VOZ_ROBO ? VOZ_ROBO.falar('inv' + (f + 1)) : 0;
+            p = document.createElement('p'); p.className = 'atual'; say.appendChild(p);
+            DIGITA(p, falas[f], ms ? ms * .9 : falas[f].length * 40, () => {   // o texto termina junto com a voz
+              if(slides[cur] !== slide) return;
+              f++; p.querySelector('.cur')?.remove(); p = null; depois();
+            }, true);
+          };
+          const depois = () => {
             if(f < falas.length) say._t = setTimeout(passo, Math.max(900, (window.VOZ_ROBO ? VOZ_ROBO.restante() : 0) + 350));   // espera a voz terminar
             else { say.querySelector('p:last-child').insertAdjacentHTML('beforeend', '<span class="cur"></span>'); slide.classList.add('pronto'); LIVE.setJogo({ p: 'inv' }); }
           };
@@ -3958,6 +3994,18 @@ window.INVASAO = (() => {
    ========================================================= */
 /* UM BUG DE CADA VEZ: fala, evolução, apagão e susto nunca se atropelam
    (antes uma fala cortava a outra no meio e o Bug aparecia duas vezes ao mesmo tempo) */
+/* Escreve o texto aos poucos, pelo RELÓGIO (não por contagem de passos):
+   se o computador engasgar, o texto se alinha com a voz no quadro seguinte, em vez de atrasar. */
+window.DIGITA = (el, texto, msTotal, aoFim, cursor) => {
+  if(el._dig) cancelAnimationFrame(el._dig);
+  const t0 = performance.now(), n = texto.length; let ultimo = -1;
+  const quadro = agora => {
+    const i = Math.min(n, Math.floor((agora - t0) / Math.max(1, msTotal) * n));
+    if(i !== ultimo){ ultimo = i; if(cursor){ el.textContent = texto.slice(0, i); el.insertAdjacentHTML('beforeend', '<span class="cur"></span>'); } else el.textContent = texto.slice(0, i); }
+    if(i < n) el._dig = requestAnimationFrame(quadro); else { el._dig = null; if(aoFim) aoFim(); }
+  };
+  el._dig = requestAnimationFrame(quadro);
+};
 window.BUGVEZ = {
   ate: 0,
   ocupar(ms){ this.ate = Math.max(this.ate, performance.now() + ms); },
@@ -4009,17 +4057,12 @@ window.BUGNIVEL = (() => {
     const c = +(document.body.dataset.clima || 0);
     if(window.B2) B2.transmitir(dur * 1000, c >= 3);
     if(!fala) return;
-    clearInterval(fala._dig); clearTimeout(fala._ini);
+    clearTimeout(fala._ini); if(fala._dig) cancelAnimationFrame(fala._dig);
     if(REDUCED){ fala.textContent = texto; return; }
-    /* digita no ritmo da voz (sem voz, num ritmo de leitura) */
-    const total = msVoz ? msVoz * .88 : Math.min(2800, texto.length * 40);
-    const passo = Math.max(18, total / texto.length); let i = 0; fala.textContent = '';
-    fala._ini = setTimeout(() => {
-      fala._dig = setInterval(() => {
-        i++; fala.textContent = texto.slice(0, i);
-        if(i >= texto.length) clearInterval(fala._dig);
-      }, passo);
-    }, 520);
+    /* digita no ritmo da voz (sem voz, num ritmo de leitura); a voz já começou, então desconta o atraso */
+    const total = msVoz ? msVoz * .9 - 300 : Math.min(2800, texto.length * 40);
+    fala.textContent = '';
+    fala._ini = setTimeout(() => DIGITA(fala, texto, Math.max(600, total)), 300);
   }
   const susto = $('#bugSusto');
   if(susto) animarBug($('canvas', susto), () => susto.classList.contains('on') ? { falha: true } : null);
@@ -4027,7 +4070,7 @@ window.BUGNIVEL = (() => {
     if(REDUCED || !susto || slides[cur].classList.contains('jogo-slide')) return;
     BUGVEZ.ocupar(1800);
     if(window.CLIMA) CLIMA.rugido(0);
-    if(window.VOZ_ROBO) setTimeout(() => { if(!slides[cur].classList.contains('jogo-slide')) VOZ_ROBO.falar('susto'); }, 250);
+    /* v27: o susto não fala (o recado do último número vem logo depois) */
     susto.classList.remove('on'); void susto.offsetWidth; susto.classList.add('on');
     setTimeout(() => susto.classList.remove('on'), 1300);
   }
@@ -4261,9 +4304,11 @@ window.CAOS = (() => {
   }
   function setClima(c){
     if(c === clima) return; clima = c;
-    agendar('rajada', { 3: [26, 40], 4: [12, 20], 5: [6, 11] }[c], rajada);
-    agendar('janela', { 3: [40, 60], 4: [18, 28], 5: [12, 18] }[c], () => clima >= 5 ? cascata(3 + Math.floor(Math.random() * 3)) : janela(0));
-    agendar('enxame', { 5: [16, 26] }[c], enxame);
+    /* v27: bem mais espaçado. Antes, no fim, a tela tremia a cada 6-11 s e abria janelas de erro a cada 12-18 s:
+       ficava impossível prestar atenção na explicação. */
+    agendar('rajada', { 3: [80, 110], 4: [50, 75], 5: [40, 60] }[c], rajada);
+    agendar('janela', { 4: [80, 110], 5: [60, 85] }[c], () => clima >= 5 ? cascata(2) : janela(0));
+    agendar('enxame', { 5: [70, 100] }[c], enxame);
     mudouSlide();
     if(!c) $$('.erro-win, .bug-enxame').forEach(e => e.remove());
   }
@@ -4280,10 +4325,15 @@ window.B2 = (() => {
   let nivelAudio = 0, falandoAte = 0, txTimer = null, ultimo = -1, evoluiu = {};
   if(window.VOZ_ROBO) VOZ_ROBO.aoNivel(n => { nivelAudio = n; });
   /* a boca: com áudio, segue o volume; sem áudio (só texto), mexe em ritmo de fala */
+  /* antes isto mudava uma variável na página INTEIRA a cada quadro (o navegador recalculava tudo, 60x por segundo).
+     Agora só muda nos lugares onde o Bug aparece, e só quando o valor muda. */
+  const alvosBoca = [$('#b2Live'), $('#b2Evo'), $('#b2Tp'), $('.jogo-slide'), $('.inv-slide')].filter(Boolean);
+  let bocaAntes = -1;
   (function boca(){
     let v = nivelAudio;
     if(v < .02 && performance.now() < falandoAte){ const t = performance.now() / 1000; v = Math.max(0, Math.sin(t * 13) * .5 + Math.sin(t * 7.3) * .35) * .9; }
-    raiz.style.setProperty('--b2boca', v.toFixed(3));
+    v = Math.round(v * 20) / 20;
+    if(v !== bocaAntes){ bocaAntes = v; alvosBoca.forEach(a => a.style.setProperty('--b2boca', v)); }
     requestAnimationFrame(boca);
   })();
   /* forma do Bug pelo ponto da apresentação: sinal, montagem, corpo, colapso */
@@ -4530,7 +4580,7 @@ window.CLIMA = (() => {
   function agendar(){
     clearTimeout(timerPasseio);
     if(!clima) return;
-    const faixa = [null, null, null, [80, 120], [60, 90], [50, 75]][clima];   // aparições silenciosas, raras
+    const faixa = null;   // v27: o Bug não aparece do nada durante as explicações (só nos momentos da história)
     if(!faixa) return;
     timerPasseio = setTimeout(() => { passear(); agendar(); }, (faixa[0] + Math.random() * (faixa[1] - faixa[0])) * 1000);
   }
@@ -4794,12 +4844,16 @@ document.addEventListener('pointermove', e => {
   function size(){
     dpr = 1; W = c.width = innerWidth*dpr; H = c.height = innerHeight*dpr;
     c.style.width = innerWidth+'px'; c.style.height = innerHeight+'px';
-    const n = Math.round(Math.min(56, innerWidth*innerHeight/26000));
+    const n = Math.round(Math.min(38, innerWidth*innerHeight/34000));
     pts = Array.from({length:n}, () => ({ x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.28*dpr, vy:(Math.random()-.5)*.28*dpr }));
   }
   size(); addEventListener('resize', size);
   addEventListener('pointermove', e => { mx = e.clientX*dpr; my = e.clientY*dpr; }, { passive:true });
-  function frame(){
+  let ultimoQ = 0;
+  function frame(agora){
+    requestAnimationFrame(frame);
+    if(document.hidden || agora - ultimoQ < 33) return;   // 30 quadros por segundo bastam
+    ultimoQ = agora;
     x.clearRect(0,0,W,H); const L = 150*dpr;
     for(const p of pts){
       p.x += p.vx; p.y += p.vy;
@@ -4816,9 +4870,8 @@ document.addEventListener('pointermove', e => {
     }
     x.fillStyle = 'rgba(160,195,255,.5)';
     for(const p of pts){ x.beginPath(); x.arc(p.x,p.y,1.4*dpr,0,6.283); x.fill(); }
-    requestAnimationFrame(frame);
   }
-  frame();
+  requestAnimationFrame(frame);
 })();
 
 /* cronômetro geral, régua da janela e régua de breakpoints da capa */
@@ -4838,7 +4891,7 @@ go(isNaN(startN)?0:startN, 1);
     const c = +(document.body.dataset.clima || 0); if(c < 2) return;
     d1.textContent = '0x' + Math.floor(Math.random() * 65535).toString(16).toUpperCase().padStart(4, '0');
     d2.textContent = c + '/5' + (c >= 4 ? ' · CRÍTICO' : '');
-  }, 650);
+  }, 4000);
 })();
 </script>
 

@@ -1674,6 +1674,29 @@ body.ui-quieto .botbar{border-top-color:transparent;background:transparent}
 .b2-evo{display:none!important}
 .b2-ap .ap-fundo{background:radial-gradient(ellipse at 50% 45%,#3d0707,#140202 45%,#000 72%)!important}
 </style>
+
+<style id="v32-zoom">
+/* slide 11 (acessibilidade): a regra, o teste e o código certo × errado, em ordem */
+.zc{display:grid;gap:10px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:rgba(10,16,32,.6)}
+.zc-linha{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+.zc-linha code{font-family:var(--f-mono);font-size:clamp(.82rem,.7rem + .35vw,1rem);line-height:1.5;color:var(--muted);overflow-wrap:anywhere}
+.zc-sel{font-weight:700;font-size:var(--fs-xs);padding:3px 10px;border-radius:999px;white-space:nowrap}
+.zc-mal .zc-sel{background:rgba(255,77,77,.16);color:#ff7a7a}
+.zc-bem .zc-sel{background:rgba(46,213,115,.16);color:#5be59a}
+.zc-bem code{color:var(--text,#e6ebf2)}
+.zc mark{background:rgba(255,77,77,.2);color:#ff8a8a;text-decoration:line-through;text-decoration-color:#ff5a5a;padding:0 3px;border-radius:4px}
+.zc-legenda{margin:0 0 4px;padding:0 0 0 84px;list-style:none;display:grid;gap:4px;font-size:var(--fs-sm);color:var(--muted)}
+.zc-legenda code{font-family:var(--f-mono);color:#ff8a8a;margin-right:6px}
+.zd-controls{justify-items:center;text-align:center;gap:8px!important}
+.zoomdemo{gap:12px!important}
+.zd-phone{--pw:min(clamp(150px,13vw,210px),calc((100vh - 470px) * .486))!important}
+.zd-passo{margin:0;font-size:var(--fs-sm);color:var(--muted)}
+.zd-passo b{display:inline-grid;place-items:center;width:1.6em;height:1.6em;margin-right:6px;border-radius:50%;background:var(--cyan,#52d5ff);color:#04121a;font-size:.85em}
+.zd-rot{display:flex;flex-direction:column;align-items:flex-start;line-height:1.25;font-weight:600}
+.zd-rot code{font-weight:400;font-size:.85em}
+.zd-status{margin:2px 0 0;font-size:var(--fs-sm);font-weight:600}
+.zd-ok{color:#5be59a}.zd-mal{color:#ff7a7a}
+</style>
 </head>
 <body>
 
@@ -1927,20 +1950,25 @@ body.ui-quieto .botbar{border-top-color:transparent;background:transparent}
     <div class="stack" style="gap:20px">
       <div class="eyebrow"><span class="tag bad">Cuidado</span> Acessibilidade</div>
       <p class="big-q">Não tire o zoom de ninguém.</p>
-<pre class="code"><span class="t-c">&lt;!-- NÃO utilizar --&gt;</span>
-<s style="text-decoration-color:var(--bad)">user-scalable=no</s>
-<s style="text-decoration-color:var(--bad)">maximum-scale=1</s></pre>
-      <p class="lead">Pessoas com <strong>baixa visão</strong> precisam poder dar zoom.</p>
+      <p class="lead">Quem tem <strong>baixa visão</strong> amplia a tela com os dedos para conseguir ler. A meta viewport pode <strong>proibir</strong> isso, e não deve.</p>
+      <div class="zc" data-frag="1">
+        <div class="zc-linha zc-mal"><span class="zc-sel">✗ Errado</span><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1, <mark>user-scalable=no</mark>, <mark>maximum-scale=1</mark>"&gt;</code></div>
+        <ul class="zc-legenda"><li><code>user-scalable=no</code> proíbe o zoom</li><li><code>maximum-scale=1</code> zoom máximo de 100%, ou seja, nenhum</li></ul>
+        <div class="zc-linha zc-bem"><span class="zc-sel">✓ Certo</span><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></div>
+      </div>
     </div>
     <div style="display:grid;place-items:center">
       <div class="zoomdemo">
         <div class="phone zd-phone"><div class="screen zd-screen">
           <div class="zd-page" id="zdPage"><div class="zd-top">Lanchonete Pixel</div><h4>Cardápio</h4><p>Pixel Burger<br><b>R$ 29,90</b></p><p>Cheese Byte<br><b>R$ 32,90</b></p><p>Batata 8-bit<br><b>R$ 16,90</b></p></div>
-          <div class="zd-block" id="zdBlock" hidden>Zoom bloqueado</div>
+          <div class="zd-block" id="zdBlock" hidden>🔒 Zoom bloqueado</div>
         </div></div>
         <div class="zd-controls">
-          <label class="zd-switch"><input type="checkbox" id="zdLock"><span class="knob"></span><code>user-scalable=no</code></label>
+          <p class="zd-passo"><b>1</b> Dê zoom no celular:</p>
           <div class="row" role="group" aria-label="Zoom"><button class="btn" data-zoom="1" aria-pressed="true">100%</button><button class="btn" data-zoom="2" aria-pressed="false">200%</button><button class="btn" data-zoom="4" aria-pressed="false">400%</button></div>
+          <p class="zd-passo"><b>2</b> Agora ligue a trava e tente de novo:</p>
+          <label class="zd-switch"><input type="checkbox" id="zdLock"><span class="knob"></span><span class="zd-rot">Trava do zoom <code>user-scalable=no</code></span></label>
+          <p class="zd-status" id="zdStatus" aria-live="polite"><span class="zd-ok">✓ Zoom liberado: dá para ampliar e ler</span></p>
         </div>
       </div>
     </div>
@@ -3234,7 +3262,13 @@ HOOKS.shrink = () => {
     }
     setZ(z);
   });
-  lock.onchange = () => { if(lock.checked) setZ(1); };
+  const status = $('#zdStatus');
+  lock.onchange = () => {
+    if(lock.checked) setZ(1);
+    if(status) status.innerHTML = lock.checked
+      ? '<span class="zd-mal">✗ Zoom bloqueado: quem precisa ampliar não consegue ler</span>'
+      : '<span class="zd-ok">✓ Zoom liberado: dá para ampliar e ler</span>';
+  };
 })();
 
 /* peças arrastáveis */

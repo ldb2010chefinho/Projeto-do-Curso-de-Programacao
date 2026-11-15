@@ -1676,26 +1676,33 @@ body.ui-quieto .botbar{border-top-color:transparent;background:transparent}
 </style>
 
 <style id="v32-zoom">
-/* slide 11 (acessibilidade): a regra, o teste e o código certo × errado, em ordem */
-.zc{display:grid;gap:10px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:rgba(10,16,32,.6)}
-.zc-linha{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
-.zc-linha code{font-family:var(--f-mono);font-size:clamp(.82rem,.7rem + .35vw,1rem);line-height:1.5;color:var(--muted);overflow-wrap:anywhere}
-.zc-sel{font-weight:700;font-size:var(--fs-xs);padding:3px 10px;border-radius:999px;white-space:nowrap}
-.zc-mal .zc-sel{background:rgba(255,77,77,.16);color:#ff7a7a}
-.zc-bem .zc-sel{background:rgba(46,213,115,.16);color:#5be59a}
-.zc-bem code{color:var(--text,#e6ebf2)}
-.zc mark{background:rgba(255,77,77,.2);color:#ff8a8a;text-decoration:line-through;text-decoration-color:#ff5a5a;padding:0 3px;border-radius:4px}
-.zc-legenda{margin:0 0 4px;padding:0 0 0 84px;list-style:none;display:grid;gap:4px;font-size:var(--fs-sm);color:var(--muted)}
-.zc-legenda code{font-family:var(--f-mono);color:#ff8a8a;margin-right:6px}
-.zd-controls{justify-items:center;text-align:center;gap:8px!important}
-.zoomdemo{gap:12px!important}
-.zd-phone{--pw:min(clamp(150px,13vw,210px),calc((100vh - 470px) * .486))!important}
-.zd-passo{margin:0;font-size:var(--fs-sm);color:var(--muted)}
-.zd-passo b{display:inline-grid;place-items:center;width:1.6em;height:1.6em;margin-right:6px;border-radius:50%;background:var(--cyan,#52d5ff);color:#04121a;font-size:.85em}
-.zd-rot{display:flex;flex-direction:column;align-items:flex-start;line-height:1.25;font-weight:600}
-.zd-rot code{font-weight:400;font-size:.85em}
-.zd-status{margin:2px 0 0;font-size:var(--fs-sm);font-weight:600}
-.zd-ok{color:#5be59a}.zd-mal{color:#ff7a7a}
+/* slide 11 (acessibilidade): regra à esquerda; à direita, celular + painel de 2 passos */
+.zc{display:grid;gap:10px;max-width:560px}
+.zc-card{margin:0;border:1px solid var(--line);border-left:4px solid var(--c);border-radius:12px;background:rgba(8,14,28,.72);overflow:hidden}
+.zc-mal{--c:var(--bad)}.zc-bem{--c:var(--ok)}
+.zc-card figcaption{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:var(--fs-xs);color:var(--muted);border-bottom:1px solid var(--line-soft,rgba(255,255,255,.06));background:color-mix(in srgb,var(--c) 7%,transparent)}
+.zc-sel{font-weight:700;padding:2px 10px;border-radius:999px;background:color-mix(in srgb,var(--c) 18%,transparent);color:var(--c)}
+.zc-code{margin:0;padding:10px 16px 12px;font-family:var(--f-mono);font-size:clamp(.8rem,.66rem + .38vw,1rem);line-height:1.6;color:var(--text);white-space:pre;overflow:hidden}
+.zc-mal .zc-code{color:var(--muted)}
+.zc mark{background:color-mix(in srgb,var(--bad) 18%,transparent);color:var(--bad);text-decoration:line-through;text-decoration-thickness:2px;padding:0 4px;border-radius:4px}
+.zc-nota{font-family:var(--f-body);font-size:.86em;color:var(--bad);margin-left:12px;font-weight:600}
+/* lado direito: celular e painel lado a lado */
+.zoomdemo{grid-template-columns:auto minmax(230px,300px);align-items:center;gap:clamp(18px,2.4vw,34px)!important}
+.zd-phone{--pw:min(clamp(170px,15vw,230px),calc((100vh - 300px) * .486))!important}
+.zd-controls{display:grid;gap:0!important;justify-items:stretch!important;text-align:left;border:1px solid var(--line);border-radius:14px;background:rgba(8,14,28,.72);overflow:hidden}
+.zd-passo{display:grid;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.zd-passo p{margin:0;display:flex;align-items:center;gap:10px;font-weight:600;font-size:var(--fs-sm)}
+.zd-passo b{flex:none;display:grid;place-items:center;width:1.7em;height:1.7em;border-radius:50%;background:var(--cyan);color:#04121a;font-size:.85em}
+.zd-seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.zd-seg .btn{padding:6px 0;min-height:0;border:0;border-radius:7px;background:transparent;font-size:var(--fs-sm);justify-content:center}
+.zd-seg .btn:focus:not(:focus-visible){outline:none;box-shadow:none}
+.zd-seg .btn[aria-pressed="true"]{background:var(--cyan);color:#04121a}
+.zd-rot{display:flex;flex-direction:column;align-items:flex-start;line-height:1.25;font-weight:600;font-size:var(--fs-sm)}
+.zd-rot code{font-weight:400;font-size:.82em}
+.zd-status{margin:0;padding:12px 16px;font-size:var(--fs-sm);font-weight:600;line-height:1.35;background:color-mix(in srgb,var(--ok) 10%,transparent);transition:background-color .2s ease}
+.zd-status:has(.zd-mal){background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.zd-ok{color:var(--ok)}.zd-mal{color:var(--bad)}
+@media (max-width:900px){.zoomdemo{grid-template-columns:1fr;justify-items:center}}
 </style>
 </head>
 <body>
@@ -1952,9 +1959,18 @@ body.ui-quieto .botbar{border-top-color:transparent;background:transparent}
       <p class="big-q">Não tire o zoom de ninguém.</p>
       <p class="lead">Quem tem <strong>baixa visão</strong> amplia a tela com os dedos para conseguir ler. A meta viewport pode <strong>proibir</strong> isso, e não deve.</p>
       <div class="zc" data-frag="1">
-        <div class="zc-linha zc-mal"><span class="zc-sel">✗ Errado</span><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1, <mark>user-scalable=no</mark>, <mark>maximum-scale=1</mark>"&gt;</code></div>
-        <ul class="zc-legenda"><li><code>user-scalable=no</code> proíbe o zoom</li><li><code>maximum-scale=1</code> zoom máximo de 100%, ou seja, nenhum</li></ul>
-        <div class="zc-linha zc-bem"><span class="zc-sel">✓ Certo</span><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></div>
+        <figure class="zc-card zc-mal">
+          <figcaption><span class="zc-sel">✗ Errado</span> trava o zoom</figcaption>
+<pre class="zc-code">&lt;meta name="viewport" content="
+  width=device-width, initial-scale=1,
+  <mark>user-scalable=no</mark>,<span class="zc-nota">← proíbe o zoom</span>
+  <mark>maximum-scale=1</mark>"&gt;<span class="zc-nota">← limita a 100%</span></pre>
+        </figure>
+        <figure class="zc-card zc-bem">
+          <figcaption><span class="zc-sel">✓ Certo</span> só o necessário</figcaption>
+<pre class="zc-code">&lt;meta name="viewport" content="
+  width=device-width, initial-scale=1"&gt;</pre>
+        </figure>
       </div>
     </div>
     <div style="display:grid;place-items:center">
@@ -1964,10 +1980,14 @@ body.ui-quieto .botbar{border-top-color:transparent;background:transparent}
           <div class="zd-block" id="zdBlock" hidden>🔒 Zoom bloqueado</div>
         </div></div>
         <div class="zd-controls">
-          <p class="zd-passo"><b>1</b> Dê zoom no celular:</p>
-          <div class="row" role="group" aria-label="Zoom"><button class="btn" data-zoom="1" aria-pressed="true">100%</button><button class="btn" data-zoom="2" aria-pressed="false">200%</button><button class="btn" data-zoom="4" aria-pressed="false">400%</button></div>
-          <p class="zd-passo"><b>2</b> Agora ligue a trava e tente de novo:</p>
-          <label class="zd-switch"><input type="checkbox" id="zdLock"><span class="knob"></span><span class="zd-rot">Trava do zoom <code>user-scalable=no</code></span></label>
+          <div class="zd-passo">
+            <p><b>1</b> Dê zoom no celular</p>
+            <div class="zd-seg" role="group" aria-label="Zoom"><button class="btn" data-zoom="1" aria-pressed="true">100%</button><button class="btn" data-zoom="2" aria-pressed="false">200%</button><button class="btn" data-zoom="4" aria-pressed="false">400%</button></div>
+          </div>
+          <div class="zd-passo">
+            <p><b>2</b> Ligue a trava e tente de novo</p>
+            <label class="zd-switch"><input type="checkbox" id="zdLock"><span class="knob"></span><span class="zd-rot">Trava do zoom <code>user-scalable=no</code></span></label>
+          </div>
           <p class="zd-status" id="zdStatus" aria-live="polite"><span class="zd-ok">✓ Zoom liberado: dá para ampliar e ler</span></p>
         </div>
       </div>

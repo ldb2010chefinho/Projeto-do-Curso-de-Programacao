@@ -2371,34 +2371,6 @@ code[data-an]::before{font-size:.7em;vertical-align:.2em}
   </div>
 </section>
 
-<!-- ================= FRAMEWORKS ================= -->
-<section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2">
-  <div class="inner">
-    <div class="eyebrow"><span class="tag warn">Levantem a mão</span> Frameworks CSS</div>
-    <p class="big-q" style="font-size:var(--fs-md);max-width:none">Quem já ouviu falar de Bootstrap? E de Tailwind?</p>
-    <div class="split" style="align-items:start">
-      <div class="stack" style="gap:0">
-        <div class="fw-code fw-solo">
-<pre class="code" data-lang="html" id="fw-tw">&lt;div class="grid grid-cols-1 md:grid-cols-2 gap-4"&gt;
-  &lt;div&gt;Cardápio&lt;/div&gt;
-  &lt;div&gt;Promoções&lt;/div&gt;
-&lt;/div&gt;</pre>
-        </div>
-        <p class="lead" style="margin-top:16px">Frameworks trazem <strong>breakpoints e grades prontos</strong> e economizam tempo.</p>
-      </div>
-      <div class="stack" style="gap:16px">
-        <div class="live-view fw-view">
-          <div class="bar"><span>Mesmo layout de duas colunas</span><span class="sp"></span><output id="fwOut">900px</output></div>
-          <div class="stage" id="fwStage"></div>
-          <label class="range"><span>Largura</span><input type="range" id="fwRange" min="320" max="1200" value="900"><output id="fwOut2">900px</output></label>
-        </div>
-        <div class="under"><span class="muted">Por baixo:</span><span class="chip">Flexbox</span><span class="chip">Grid</span><span class="chip">media queries</span></div>
-        <p class="punch" data-frag="1">“Quem entende o CSS entende qualquer framework.”</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ================= COMO TESTAR ================= -->
 <section class="slide" data-act="Ato 3 · Os detalhes" data-stage="3" data-bug="3" data-apagao="1200">
   <div class="inner">
@@ -4548,7 +4520,7 @@ window.B2 = (() => {
     requestAnimationFrame(boca);
   })();
   /* forma do Bug pelo ponto da apresentação: sinal, montagem, corpo, colapso */
-  const forma = () => cur < 12 ? 1 : cur < 19 ? 2 : cur < 26 ? 3 : 4;
+  const forma = () => cur < 12 ? 1 : cur < 19 ? 2 : cur < 25 ? 3 : 4;   // v36: slide de frameworks removido, os de depois andaram uma casa
   const live = $('#b2Live'), liveUse = $('#b2LiveUse'), tempo = $('#b2LiveTempo');
   let relogio = null, fimTimer = null;
   function transmitir(ms, grave){

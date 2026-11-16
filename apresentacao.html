@@ -93,7 +93,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 /* ---------- slides ---------- */
 .deck{position:fixed;inset:0}
-.slide{position:absolute;top:calc(var(--top-h) + env(safe-area-inset-top,0px));bottom:calc(var(--bot-h) + env(safe-area-inset-bottom,0px));left:0;right:0;overflow-y:auto;overflow-x:hidden;padding-inline:var(--gutter);padding-block:clamp(14px,3.2vh,40px);display:grid;align-content:center;
+.slide{position:absolute;top:calc(var(--top-h) + env(safe-area-inset-top,0px));bottom:calc(var(--bot-h) + env(safe-area-inset-bottom,0px));left:0;right:0;overflow-y:auto;overflow-x:hidden;padding-inline:var(--gutter);padding-block:clamp(14px,3.2vh,40px);display:grid;align-content:safe center;
   visibility:hidden;z-index:1}
 .slide.is-active{visibility:visible;z-index:3;will-change:opacity,transform}
 .slide.is-leaving{visibility:visible;z-index:2;pointer-events:none;will-change:opacity,transform}
@@ -1737,6 +1737,29 @@ code[data-an]::before{font-size:.7em;vertical-align:.2em}
 /* no Grid, o código ganha mais espaço para a linha longa não ser cortada */
 [data-live="grid"] .live{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
 </style>
+<style id="v34-mf2">
+/* slide 18: os dois mobile-first, cada um com o seu exemplo */
+.mf2{gap:clamp(10px,1.8vh,22px)!important}
+.mf2-tit{font-size:var(--fs-lg)!important;margin:0}
+.mf2 .twin{gap:10px;padding:clamp(14px,1.6vw,24px)}
+.mf2 .twin h3{margin:0}
+.mf2 .twin .muted{margin:0}
+.mf2 .code{font-size:clamp(.78rem,.66rem + .38vw,1rem);padding:12px 14px}
+.mf2-passos,.mf2-fluxo{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:var(--fs-sm)}
+.mf2-passos li{display:flex;align-items:baseline}
+.mf2-fluxo{grid-template-columns:repeat(3,1fr);gap:8px;counter-reset:f}
+.mf2-fluxo li{position:relative;display:grid;gap:8px;align-content:start;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--navy);line-height:1.35}
+.mf2-fluxo li:not(:last-child)::after{content:"→";position:absolute;right:-12px;top:22px;color:var(--cyan);font-weight:700;z-index:1}
+.mf2-fluxo svg{width:28px;height:28px;fill:none;stroke:var(--cyan);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.mf2-fluxo b,.mf2-passos b{color:var(--text)}
+.mf2-alerta{margin:0;padding:10px 14px;border-left:3px solid var(--warn);background:color-mix(in srgb,var(--warn) 9%,transparent);border-radius:0 10px 10px 0;font-size:var(--fs-sm);font-weight:600}
+.mf2-muda{margin:auto 0 0;padding-top:10px;border-top:1px dashed var(--line);font-size:var(--fs-sm);color:var(--muted)}
+.mf2-muda b{color:var(--ok)}
+.mf2-comum{margin:0;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 20px;font-size:var(--fs-md)}
+.mf2-comum b{color:var(--cyan)}
+.mf2-fonte{font-family:var(--f-mono);font-size:var(--fs-xs);color:var(--muted)}
+.mf2 .twin{align-content:stretch;grid-template-rows:auto auto auto auto auto 1fr}
+</style>
 </head>
 <body>
 
@@ -2144,13 +2167,40 @@ code[data-an]::before{font-size:.7em;vertical-align:.2em}
 
 <!-- ================= DOIS MOBILE-FIRST ================= -->
 <section class="slide" data-act="Ato 2 · A estrutura" data-stage="1">
-  <div class="inner">
+  <div class="inner mf2">
     <div class="eyebrow">Não confundir os dois “mobile-first”</div>
+    <p class="big-q mf2-tit">Mesmo nome, duas coisas diferentes.</p>
     <div class="twins">
-      <div class="twin"><span class="who">Quem faz: você</span><h3>Mobile-first CSS</h3><p class="muted">Uma forma de escrever CSS começando pela tela pequena.</p><pre class="code" data-lang="css">@media (min-width: 768px) { … }</pre></div>
+      <div class="twin">
+        <span class="who">Quem faz: você · no código</span>
+        <h3>Mobile-first CSS</h3>
+        <p class="muted">Uma forma de escrever CSS começando pela tela pequena.</p>
+<pre class="code" data-lang="css" data-marks='[{"t":"grid-template-columns: 1fr;","n":1},{"t":"@media (min-width: 768px)","n":2}]'>.layout { grid-template-columns: 1fr; }
+
+@media (min-width: 768px) {
+  .layout { grid-template-columns: 1fr 3fr; }
+}</pre>
+        <ol class="mf2-passos">
+          <li data-an="1">Primeiro, o celular: uma coluna só.</li>
+          <li data-an="2">Tela com 768px ou mais: acrescenta a segunda coluna.</li>
+        </ol>
+        <p class="mf2-muda"><b>Muda:</b> como o site se adapta à tela.</p>
+      </div>
       <div class="vs">≠</div>
-      <div class="twin"><span class="who">Quem faz: o Google</span><h3>Indexação mobile-first</h3><p class="muted">O Google usa a versão mobile do site para fazer a indexação e o ranking.</p></div>
+      <div class="twin">
+        <span class="who">Quem faz: o Google · na busca</span>
+        <h3>Indexação mobile-first</h3>
+        <p class="muted">O Google usa a versão mobile do site para fazer a indexação e o ranking.</p>
+        <ol class="mf2-fluxo" aria-label="Como o Google lê o site">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg><span>O robô do Google visita o site <b>como um celular</b></span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10l4 4v12H5z"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4"/></svg><span>Lê a <b>versão de celular</b> da página</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg><span>Decide a <b>posição na busca</b></span></li>
+        </ol>
+        <p class="mf2-alerta">Só o conteúdo que aparece no celular é usado na indexação.</p>
+        <p class="mf2-muda"><b>Muda:</b> como o site é encontrado na busca.</p>
+      </div>
     </div>
+    <p class="mf2-comum"><span>Em comum: <b>o celular vem primeiro.</b></span><span class="mf2-fonte">Fonte: Google Search Central · Mobile-first indexing best practices</span></p>
   </div>
 </section>
 
@@ -2869,7 +2919,6 @@ rem rem rem rem rem
   <button class="navbtn" id="nextBtn" aria-label="Próximo slide">→</button>
   <span class="counter" id="counter">1 / 1</span>
   <span class="voz" id="voz" aria-hidden="true" title="Cor de quem conduz agora · anel: quem conduz o próximo"><i class="agora"></i><i class="prox"></i></span>
-  <button class="timer" id="timer" title="Cronômetro da apresentação">⏱ 00:00</button>
   <button class="navbtn sm" id="ovBtn" title="Ver todos os slides (G)">Slides</button>
   <button class="navbtn sm" id="fsBtn" title="Tela cheia (F)">Tela cheia</button>
   <div class="ruler" aria-label="Largura atual da janela"><i></i><span id="winW">— px</span></div>
@@ -5017,11 +5066,40 @@ document.addEventListener('pointermove', e => {
 })();
 
 /* cronômetro geral, régua da janela e régua de breakpoints da capa */
-let tT=null, tS=0; const tBtn=$('#timer');
-tBtn.onclick = () => { if(tT){ clearInterval(tT); tT=null; tBtn.classList.remove('running'); } else { tT=setInterval(()=>{ tS++; tBtn.textContent='⏱ '+String(Math.floor(tS/60)).padStart(2,'0')+':'+String(tS%60).padStart(2,'0'); },1000); tBtn.classList.add('running'); } };
 const winW=$('#winW');
 const paintW=()=>{ winW.textContent=innerWidth+' px'; const bn=$('#bpNow'); bn.style.left = Math.min(100, innerWidth/1920*100)+'%'; bn.querySelector('b').textContent = 'esta tela: '+innerWidth+'px'; };
 addEventListener('resize',paintW); paintW();
+
+/* v34 · todo slide cabe na tela: se o conteúdo for mais alto ou mais largo que a área do slide, ele é reduzido por inteiro (zoom), nunca cortado */
+(() => {
+  const ajustar = s => {
+    const inn = s.querySelector(':scope > .inner'); if(!inn) return;
+    const cs = getComputedStyle(s);
+    const ah = s.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    const aw = s.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    if(ah <= 0 || aw <= 0) return;
+    const antes = inn.style.zoom; inn.style.zoom = '';
+    const h = inn.scrollHeight, w = inn.scrollWidth;
+    let z = Math.min(1, ah / h, aw / Math.max(w, 1));
+    // confere de novo com o zoom aplicado: o texto pode quebrar diferente e há peças que saem da caixa (a rolagem do slide pega tudo)
+    for(let k = 0; k < 4; k++){
+      inn.style.zoom = z < 1 ? z : '';
+      const sobra = Math.max(s.scrollHeight - s.clientHeight, inn.getBoundingClientRect().height - ah);
+      if(sobra <= 1) break;
+      z = Math.min(z, 1) * ah / (ah + sobra);
+    }
+    z = Math.max(.5, Math.floor(z * 1000) / 1000);
+    inn.style.zoom = z < .995 ? z : '';
+    if(inn.style.zoom !== antes) dispatchEvent(new Event('slidezoom'));
+  };
+  let fila = new Set(), agendado = false;
+  const agendar = s => { fila.add(s); if(agendado) return; agendado = true; requestAnimationFrame(() => { agendado = false; const f = fila; fila = new Set(); f.forEach(ajustar); }); };
+  const ro = new ResizeObserver(es => es.forEach(e => { const s = e.target.closest('.slide'); if(s) agendar(s); }));
+  document.querySelectorAll('.slide').forEach(s => { ro.observe(s); const inn = s.querySelector(':scope > .inner'); if(inn) [...inn.children].forEach(c => ro.observe(c)); });
+  addEventListener('resize', () => document.querySelectorAll('.slide').forEach(agendar));
+  document.fonts && document.fonts.ready.then(() => document.querySelectorAll('.slide').forEach(agendar));
+  window.ajustarSlides = () => document.querySelectorAll('.slide').forEach(ajustar);
+})();
 
 const startN = parseInt((location.hash.match(/^#s(\d+)$/)||[])[1]||'1',10)-1;
 go(isNaN(startN)?0:startN, 1);

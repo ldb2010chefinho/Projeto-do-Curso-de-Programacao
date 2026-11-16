@@ -1760,6 +1760,21 @@ code[data-an]::before{font-size:.7em;vertical-align:.2em}
 .mf2-fonte{font-family:var(--f-mono);font-size:var(--fs-xs);color:var(--muted)}
 .mf2 .twin{align-content:stretch;grid-template-rows:auto auto auto auto auto 1fr}
 </style>
+<style id="v35-cq">
+/* slide 25: problema → por que media query não serve → solução */
+.cq3{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.cq3 li{position:relative;padding:12px 16px;border:1px solid var(--line);border-left:3px solid var(--c);border-radius:12px;background:var(--navy);display:grid;gap:6px;align-content:start}
+.cq3 li:not(:last-child)::after{content:"→";position:absolute;right:-12px;top:50%;translate:0 -50%;color:var(--muted);font-weight:700;z-index:1}
+.cq3-mal{--c:var(--bad)}.cq3-meio{--c:var(--warn)}.cq3-bem{--c:var(--ok)}
+.cq3-tag{font-family:var(--f-mono);font-size:var(--fs-xs);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--c)}
+.cq3 p{margin:0;font-size:var(--fs-sm);line-height:1.4;color:color-mix(in srgb,var(--text) 80%,var(--muted))}
+.cq3 strong{color:var(--text)}
+.cq3-leg{grid-template-columns:repeat(3,minmax(0,1fr))}
+[data-live="cq"].live-sm .live{min-height:clamp(330px,47vh,440px)}
+[data-live="cq"] .ed pre,[data-live="cq"] .ed textarea{line-height:1.5;padding-block:12px}
+.cq3-leg code{font-size:var(--fs-xs)!important;white-space:nowrap}
+@media (max-width:760px){.cq3,.cq3-leg{grid-template-columns:1fr}.cq3 li::after{display:none}}
+</style>
 </head>
 <body>
 
@@ -2342,12 +2357,17 @@ code[data-an]::before{font-size:.7em;vertical-align:.2em}
 <section class="slide" data-act="Ato 3 · Os detalhes" data-stage="2" data-fix="7">
   <div class="inner">
     <div class="eyebrow"><span class="tag ok">Conserto 3</span> Container queries · o mesmo card em dois lugares</div>
-    <div class="twins" style="grid-template-columns:1fr 1fr">
-      <div class="note"><span><strong>Media query</strong> pergunta: qual é o tamanho da <strong>TELA</strong>?</span></div>
-      <div class="note" data-an="1"><span><strong>Container query</strong> pergunta: qual é o tamanho da <strong>CAIXA</strong> onde esse card está?</span></div>
-    </div>
+    <ol class="cq3">
+      <li class="cq3-mal"><span class="cq3-tag">✗ O problema</span><p>O <strong>mesmo card</strong> aparece em dois lugares da <strong>mesma tela</strong>: no conteúdo principal (largo) e na barra lateral (estreita).</p></li>
+      <li class="cq3-meio"><span class="cq3-tag">Media query não resolve</span><p>Ela pergunta o tamanho da <strong>TELA</strong>. A tela é a mesma para os dois cards, então os dois ficariam iguais.</p></li>
+      <li class="cq3-bem"><span class="cq3-tag">✓ Container query resolve</span><p>Ela pergunta o tamanho da <strong>CAIXA</strong> onde o card está. Cada card se arruma conforme o espaço que tem.</p></li>
+    </ol>
     <div data-live="cq" class="live-sm"></div>
-    <p class="muted" data-frag="1">O componente se adapta ao lugar onde está inserido: largo no conteúdo principal, empilhado na barra lateral.</p>
+    <div class="params cq3-leg" data-frag="1">
+      <div class="param" data-an="1"><code>container-type: inline-size</code><p>Marca a caixa que vai ser medida (pela largura).</p></div>
+      <div class="param" data-an="2"><code>@container (min-width: 400px)</code><p>Se essa caixa tiver 400px ou mais…</p></div>
+      <div class="param" data-an="3"><code>grid-template-columns: 1fr 2fr</code><p>…foto ao lado do texto. Senão, fica empilhado.</p></div>
+    </div>
   </div>
 </section>
 
@@ -3104,7 +3124,7 @@ const EDITORES = {
     html:`<div class="box"><img src="${IMG.burger}" width="900" height="560" alt="Hambúrguer artesanal da Lanchonete Pixel"><p>Pixel Burger</p></div>` },
   clamp:{ file:'titulo.css', w:[320,1600,900], marks:[{t:'1.5rem',n:1},{t:'5vw',n:2},{t:'3rem',n:3}], code:`h1 {\n  font-size: clamp(1.5rem, 5vw, 3rem);\n}`,
     base:`h1{margin:0;line-height:1.05;color:#c9302c}p{color:#7a5a44}`, html:`<h1>Lanchonete Pixel</h1><p>O título cresce e encolhe junto com a tela.</p>`, onWidth:w=>drawClamp(w) },
-  cq:{ file:'card.css', w:[600,1300,1100], marks:[{t:'@container (min-width: 400px)',n:1}], code:`.area-do-card {\n  container-type: inline-size;\n}\n\n@container (min-width: 400px) {\n  .card-promo {\n    display: grid;\n    grid-template-columns: 1fr 2fr;\n  }\n}`,
+  cq:{ file:'card.css', w:[600,1300,1100], marks:[{t:'container-type: inline-size',n:1},{t:'@container (min-width: 400px)',n:2},{t:'grid-template-columns: 1fr 2fr',n:3}], code:`.area-do-card {\n  container-type: inline-size;\n}\n\n@container (min-width: 400px) {\n  .card-promo {\n    display: grid;\n    grid-template-columns: 1fr 2fr;\n  }\n}`,
     base:`.pagina{display:grid;grid-template-columns:2fr 1fr;gap:14px}.col-label{font:700 12px monospace;color:#7a5a44;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
 .card-promo{background:#2b1a0f;color:#ffe9b8;border-radius:12px;padding:12px;gap:12px}.card-promo img{width:100%;height:auto;display:block;border-radius:8px}.card-promo h3{margin:8px 0 4px;color:#ffc93c}.card-promo p{margin:0}`,
     html:(()=>{const c=`<article class="card-promo"><img src="${IMG.burger}" alt="Hambúrguer artesanal da Lanchonete Pixel"><div><h3>Promoção do dia</h3><p>Combo Pixel: burger + batata + refri</p></div></article>`;return `<div class="pagina"><div><div class="col-label">Conteúdo principal (largo)</div><div class="area-do-card">${c}</div></div><div><div class="col-label">Barra lateral (estreita)</div><div class="area-do-card">${c}</div></div></div>`})() }

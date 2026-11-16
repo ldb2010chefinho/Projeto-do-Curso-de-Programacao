@@ -1704,6 +1704,39 @@ body.ui-quieto .botbar{border-top-color:transparent;background:transparent}
 .zd-ok{color:var(--ok)}.zd-mal{color:var(--bad)}
 @media (max-width:900px){.zoomdemo{grid-template-columns:1fr;justify-items:center}}
 </style>
+<style id="v33-anotacoes">
+/* ===== v33 · código explicado: cada trecho importante tem número e cor iguais aos do cartão que o explica ===== */
+.an-1,[data-an="1"]{--anc:#c792ea}
+.an-2,[data-an="2"]{--anc:#ffcb6b}
+.an-3,[data-an="3"]{--anc:#7fdbca}
+.an-bad{--anc:var(--bad)}
+mark.an{color:inherit;background:color-mix(in srgb,var(--anc) 26%,transparent);box-shadow:inset 0 -2px 0 var(--anc);border-radius:0;position:relative;transition:background-color .15s ease}
+mark.an *{color:inherit}
+mark.an-1 *,mark.an-2 *,mark.an-3 *{color:color-mix(in srgb,var(--anc) 55%,#fff)}
+mark.an-bad{text-decoration:line-through;text-decoration-color:var(--bad)}
+mark.an[data-n]::after{content:attr(data-n);position:absolute;left:-8px;top:-11px;width:16px;height:16px;border-radius:50%;background:var(--anc);color:#0a0f1c;font:800 10.5px/16px var(--f-body);text-align:center;box-shadow:0 0 0 2px #081122;pointer-events:none}
+mark.an.on{background:color-mix(in srgb,var(--anc) 40%,transparent)}
+/* cartões e textos que explicam */
+.param[data-an],.note[data-an]{border-left:3px solid var(--anc)}
+.note[data-an]{border-left-width:3px}
+[data-an]:not(mark)::before{content:attr(data-an);display:inline-grid;place-items:center;flex:none;width:1.45em;height:1.45em;margin-right:.5em;border-radius:50%;background:var(--anc);color:#0a0f1c;font:800 .78em/1 var(--f-body);vertical-align:.12em}
+.param[data-an] code{color:var(--anc)}
+.mq-anatomia li[data-an]::before{font-size:.7em}
+code[data-an]{color:var(--anc)}
+code[data-an]::before{font-size:.7em;vertical-align:.2em}
+[data-an].on{background:color-mix(in srgb,var(--anc) 10%,var(--navy))}
+/* legibilidade: as explicações ficam tão visíveis quanto o código */
+.param p{font-size:var(--fs-sm);color:color-mix(in srgb,var(--text) 78%,var(--muted));line-height:1.4}
+.note{color:color-mix(in srgb,var(--text) 70%,var(--muted))}
+.activity dt{font-size:.8rem}
+.activity dd{font-size:clamp(.86rem,.8rem + .22vw,1rem)}
+/* antes × depois na meta viewport: a linha nova ganha um + na margem */
+.code .ln{position:relative}
+.code .ln.hl-line::before{content:"+";position:absolute;left:-1.1ch;color:var(--ok);font-weight:700}
+.code .ln.missing::before{content:"!";position:absolute;left:-1.1ch;color:var(--bad);font-weight:700}
+/* no Grid, o código ganha mais espaço para a linha longa não ser cortada */
+[data-live="grid"] .live{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
+</style>
 </head>
 <body>
 
@@ -1934,8 +1967,8 @@ body.ui-quieto .botbar{border-top-color:transparent;background:transparent}
       <div class="eyebrow"><span class="tag ok">Conserto 1</span> Meta viewport</div>
 <pre class="code head-code" id="headCode"></pre>
       <div class="params">
-        <div class="param"><code>width=device-width</code><p>Usa a largura real da tela.</p></div>
-        <div class="param"><code>initial-scale=1</code><p>Começa sem zoom, com escala 1.</p></div>
+        <div class="param" data-an="1"><code>width=device-width</code><p>Usa a largura real da tela.</p></div>
+        <div class="param" data-an="2"><code>initial-scale=1</code><p>Começa sem zoom, com escala 1.</p></div>
       </div>
       <dl class="activity">
         <div><dt>Façam</dt><dd>Olhem o site no celular. Não precisa tocar em nada.</dd></div>
@@ -2048,7 +2081,7 @@ body.ui-quieto .botbar{border-top-color:transparent;background:transparent}
   <div class="inner">
     <div class="eyebrow"><span class="tag ok">Conserto 2</span> Flexbox ao vivo · o menu</div>
     <div data-live="flex"></div>
-    <p class="note"><span><code>flex-wrap</code> deixa os itens passarem para a linha seguinte quando não cabem. Arraste a largura e veja.</span></p>
+    <p class="note" data-an="1"><span><code>flex-wrap</code> deixa os itens passarem para a linha seguinte quando não cabem. Arraste a largura e veja.</span></p>
   </div>
 </section>
 
@@ -2059,8 +2092,8 @@ body.ui-quieto .botbar{border-top-color:transparent;background:transparent}
     <div data-live="grid"></div>
     <div class="split" style="align-items:start">
       <div class="params">
-        <div class="param"><code>minmax(220px, 1fr)</code><p>Cada card tem no mínimo 220px e divide o espaço restante.</p></div>
-        <div class="param"><code>auto-fit</code><p>O navegador calcula quantas colunas cabem.</p></div>
+        <div class="param" data-an="1"><code>minmax(220px, 1fr)</code><p>Cada card tem no mínimo 220px e divide o espaço restante.</p></div>
+        <div class="param" data-an="2"><code>auto-fit</code><p>O navegador calcula quantas colunas cabem.</p></div>
       </div>
       <div class="stack" style="gap:10px">
         <div class="note warn"><span><strong>“Virem o celular de lado.”</strong> O cardápio passa de uma para duas ou três colunas.</span></div>
@@ -2079,8 +2112,8 @@ body.ui-quieto .botbar{border-top-color:transparent;background:transparent}
     <div class="mq-anatomia" data-frag="1" aria-label="As partes de uma media query">
       <code><b class="a1">@media</b> <b class="a2">(min-width: 768px)</b> <b class="a3">{ … }</b></code>
       <ol>
-        <li class="a1"><b>@media</b> “só aplique se…”</li>
-        <li class="a2"><b>(min-width: 768px)</b> a condição: tela com <em>768px ou mais</em></li>
+        <li class="a1" data-an="1"><b>@media</b> “só aplique se…”</li>
+        <li class="a2" data-an="2"><b>(min-width: 768px)</b> a condição: tela com <em>768px ou mais</em></li>
         <li class="a3"><b>{ … }</b> o que muda quando a condição é verdadeira</li>
       </ol>
     </div>
@@ -2148,8 +2181,8 @@ body.ui-quieto .botbar{border-top-color:transparent;background:transparent}
     <div class="eyebrow"><span class="tag ok">Conserto 3</span> A imagem estourando</div>
     <div data-live="img"></div>
     <div class="params">
-      <div class="param"><code>max-width: 100%</code><p>A imagem nunca fica mais larga que a caixa.</p></div>
-      <div class="param"><code>height: auto</code><p>Mantém a proporção.</p></div>
+      <div class="param" data-an="1"><code>max-width: 100%</code><p>A imagem nunca fica mais larga que a caixa.</p></div>
+      <div class="param" data-an="2"><code>height: auto</code><p>Mantém a proporção.</p></div>
     </div>
   </div>
 </section>
@@ -2163,12 +2196,14 @@ body.ui-quieto .botbar{border-top-color:transparent;background:transparent}
     <div class="eyebrow"><span class="tag ok">Conserto 3</span> srcset e sizes · DevTools › Network</div>
     <div class="split" style="align-items:start">
       <div class="stack" style="gap:14px">
-<pre class="code" data-lang="html">&lt;img
+<pre class="code" data-lang="html" data-marks='[{"t":"srcset","n":1},{"t":"sizes=\"100vw\"","n":2}]'>&lt;img
   src="burger-800.jpg"
-  srcset="burger-400.jpg 400w, burger-800.jpg 800w, burger-1600.jpg 1600w"
+  srcset="burger-400.jpg 400w,
+          burger-800.jpg 800w,
+          burger-1600.jpg 1600w"
   sizes="100vw"
   alt="Hambúrguer artesanal da Lanchonete Pixel"&gt;</pre>
-        <p class="lead"><code>srcset</code> oferece <strong>o mesmo desenho em tamanhos diferentes</strong>, e o navegador escolhe o arquivo adequado. <code>sizes="100vw"</code> diz que a imagem ocupa a largura da tela.</p>
+        <p class="lead"><code data-an="1">srcset</code> oferece <strong>o mesmo desenho em tamanhos diferentes</strong>, e o navegador escolhe o arquivo adequado. <code data-an="2">sizes="100vw"</code> diz que a imagem ocupa a largura da tela.</p>
         <p class="lead" style="margin-top:6px">E o <code>&lt;picture&gt;</code> vai além: troca a <strong>foto inteira</strong> conforme a tela (close no celular, foto larga no computador).</p>
       </div>
       <div class="stack" style="gap:14px">
@@ -2244,9 +2279,9 @@ body.ui-quieto .botbar{border-top-color:transparent;background:transparent}
     <div data-live="clamp" class="live-sm"></div>
     <div class="split" style="align-items:center">
       <div class="params" style="grid-template-columns:repeat(3,1fr)">
-        <div class="param"><code>1.5rem</code><p>mínimo</p></div>
-        <div class="param"><code>5vw</code><p>valor ideal</p></div>
-        <div class="param"><code>3rem</code><p>máximo</p></div>
+        <div class="param" data-an="1"><code>1.5rem</code><p>mínimo</p></div>
+        <div class="param" data-an="2"><code>5vw</code><p>valor ideal</p></div>
+        <div class="param" data-an="3"><code>3rem</code><p>máximo</p></div>
       </div>
       <svg class="clamp-graph" id="clampGraph" viewBox="0 0 420 130" role="img" aria-label="Tamanho do título conforme a largura da tela"></svg>
     </div>
@@ -2259,7 +2294,7 @@ body.ui-quieto .botbar{border-top-color:transparent;background:transparent}
     <div class="eyebrow"><span class="tag ok">Conserto 3</span> Container queries · o mesmo card em dois lugares</div>
     <div class="twins" style="grid-template-columns:1fr 1fr">
       <div class="note"><span><strong>Media query</strong> pergunta: qual é o tamanho da <strong>TELA</strong>?</span></div>
-      <div class="note"><span><strong>Container query</strong> pergunta: qual é o tamanho da <strong>CAIXA</strong> onde esse card está?</span></div>
+      <div class="note" data-an="1"><span><strong>Container query</strong> pergunta: qual é o tamanho da <strong>CAIXA</strong> onde esse card está?</span></div>
     </div>
     <div data-live="cq" class="live-sm"></div>
     <p class="muted" data-frag="1">O componente se adapta ao lugar onde está inserido: largo no conteúdo principal, empilhado na barra lateral.</p>
@@ -2977,8 +3012,27 @@ function hl(src, lang){
   }
   return out + esc(src.slice(last));
 }
+/* anotações: realça trechos do código com o mesmo número e cor do cartão que explica (só visual: não muda o código) */
+function marcar(html, src, marks){
+  if(!marks || !marks.length) return html;
+  const rs = []; marks.forEach(m => { const i = src.indexOf(m.t); if(i >= 0) rs.push({ s:i, e:i + m.t.length, m }); });
+  if(!rs.length) return html;
+  rs.sort((a,b) => a.s - b.s);
+  let out = '', k = 0, open = null, first = false;
+  const abre = r => `<mark class="an an-${r.m.n || r.m.cls}"${first ? ` data-n="${r.m.n || ''}"` : ''}>`;
+  for(let i = 0; i < html.length; ){
+    if(open && k === open.e){ out += '</mark>'; open = null; }
+    if(!open){ const r = rs.find(r => r.s === k); if(r){ open = r; first = !!r.m.n; out += abre(r); first = false; } }
+    const c = html[i];
+    if(c === '<'){ const j = html.indexOf('>', i) + 1; if(open) out += '</mark>' + html.slice(i, j) + abre(open); else out += html.slice(i, j); i = j; continue; }
+    if(c === '&'){ const j = html.indexOf(';', i) + 1; out += html.slice(i, j); i = j; k++; continue; }
+    out += c; i++; k++;
+  }
+  if(open) out += '</mark>';
+  return out.replace(/<mark[^>]*><\/mark>/g, '');
+}
 const wrapLines = h => h.split('\n').map(l => `<span class="ln">${l || ' '}</span>`).join('');
-document.querySelectorAll('pre.code[data-lang]').forEach(p => p.innerHTML = wrapLines(hl(p.textContent, p.dataset.lang)));
+document.querySelectorAll('pre.code[data-lang]').forEach(p => { const src = p.textContent; p.innerHTML = wrapLines(marcar(hl(src, p.dataset.lang), src, p.dataset.marks ? JSON.parse(p.dataset.marks) : null)); });
 document.querySelectorAll('pre.code:not([data-lang]):not(#headCode)').forEach(p => p.innerHTML = p.innerHTML.split('\n').map(l => `<span class="ln">${l || ' '}</span>`).join(''));
 
 /* =========================================================
@@ -2989,19 +3043,19 @@ const DEMO_BASE = `*{box-sizing:border-box}body{margin:0;padding:16px;font-famil
 .card{background:#fff;border:2px solid #f0dcc2;border-radius:12px;padding:14px}.card h3{margin:0 0 4px;font-size:17px}.card p{margin:0;color:#7a5a44;font-size:14px}.preco{font-weight:800;color:#c9302c!important}`;
 const cards = ITEMS.map(i=>`<article class="card"><h3>${i[0]}</h3><p>${i[1]}</p><p class="preco">${i[2]}</p></article>`).join('');
 const EDITORES = {
-  flex:{ file:'menu.css', w:[260,1000,760], code:`.menu {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 1rem;\n}`,
+  flex:{ file:'menu.css', w:[260,1000,760], marks:[{t:'flex-wrap: wrap',n:1}], code:`.menu {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 1rem;\n}`,
     html:`<nav class="menu"><a href="#">Início</a><a href="#">Cardápio</a><a href="#">Promoções</a><a href="#">Contato</a><a href="#">Fazer pedido</a></nav>` },
-  grid:{ file:'cardapio.css', w:[280,1300,900], code:`.cardapio {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n  gap: 1rem;\n}`,
+  grid:{ file:'cardapio.css', w:[280,1300,900], marks:[{t:'minmax(220px, 1fr)',n:1},{t:'auto-fit',n:2}], code:`.cardapio {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n  gap: 1rem;\n}`,
     html:`<h2 style="margin:0 0 12px">Cardápio</h2><div class="cardapio">${cards}</div>` },
-  mq:{ file:'layout.css', w:[320,1200,900], code:`.layout {\n  display: grid;\n  grid-template-columns: 1fr;\n}\n\n@media (min-width: 768px) {\n  .layout {\n    grid-template-columns: 1fr 3fr;\n  }\n}`,
+  mq:{ file:'layout.css', w:[320,1200,900], marks:[{t:'@media',n:1},{t:'(min-width: 768px)',n:2}], code:`.layout {\n  display: grid;\n  grid-template-columns: 1fr;\n}\n\n@media (min-width: 768px) {\n  .layout {\n    grid-template-columns: 1fr 3fr;\n  }\n}`,
     base:`.layout{gap:12px}.layout>*{border-radius:12px;padding:16px;min-height:90px}.lat{background:#2b1a0f;color:#ffe9b8}.cont{background:#fff;border:2px solid #f0dcc2}`,
     html:`<div class="layout"><aside class="lat"><b>Menu lateral</b><p>Início<br>Cardápio<br>Promoções</p></aside><section class="cont"><b>Conteúdo</b><p>Cardápio da Lanchonete Pixel.</p></section></div>`, mark:768 },
-  img:{ file:'imagens.css', w:[300,900,420], code:`img {\n  max-width: 100%;\n  height: auto;\n}`, broken:`img {\n  /* sem conserto ainda */\n}`,
+  img:{ file:'imagens.css', w:[300,900,420], marks:[{t:'max-width: 100%',n:1},{t:'height: auto',n:2},{t:'/* sem conserto ainda */',cls:'bad'}], code:`img {\n  max-width: 100%;\n  height: auto;\n}`, broken:`img {\n  /* sem conserto ainda */\n}`,
     base:`.box{border:3px dashed #c9302c;border-radius:12px;padding:10px;max-width:520px}.box p{margin:8px 0 0;font-weight:700}`,
     html:`<div class="box"><img src="${IMG.burger}" width="900" height="560" alt="Hambúrguer artesanal da Lanchonete Pixel"><p>Pixel Burger</p></div>` },
-  clamp:{ file:'titulo.css', w:[320,1600,900], code:`h1 {\n  font-size: clamp(1.5rem, 5vw, 3rem);\n}`,
+  clamp:{ file:'titulo.css', w:[320,1600,900], marks:[{t:'1.5rem',n:1},{t:'5vw',n:2},{t:'3rem',n:3}], code:`h1 {\n  font-size: clamp(1.5rem, 5vw, 3rem);\n}`,
     base:`h1{margin:0;line-height:1.05;color:#c9302c}p{color:#7a5a44}`, html:`<h1>Lanchonete Pixel</h1><p>O título cresce e encolhe junto com a tela.</p>`, onWidth:w=>drawClamp(w) },
-  cq:{ file:'card.css', w:[600,1300,1100], code:`.area-do-card {\n  container-type: inline-size;\n}\n\n@container (min-width: 400px) {\n  .card-promo {\n    display: grid;\n    grid-template-columns: 1fr 2fr;\n  }\n}`,
+  cq:{ file:'card.css', w:[600,1300,1100], marks:[{t:'@container (min-width: 400px)',n:1}], code:`.area-do-card {\n  container-type: inline-size;\n}\n\n@container (min-width: 400px) {\n  .card-promo {\n    display: grid;\n    grid-template-columns: 1fr 2fr;\n  }\n}`,
     base:`.pagina{display:grid;grid-template-columns:2fr 1fr;gap:14px}.col-label{font:700 12px monospace;color:#7a5a44;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
 .card-promo{background:#2b1a0f;color:#ffe9b8;border-radius:12px;padding:12px;gap:12px}.card-promo img{width:100%;height:auto;display:block;border-radius:8px}.card-promo h3{margin:8px 0 4px;color:#ffc93c}.card-promo p{margin:0}`,
     html:(()=>{const c=`<article class="card-promo"><img src="${IMG.burger}" alt="Hambúrguer artesanal da Lanchonete Pixel"><div><h3>Promoção do dia</h3><p>Combo Pixel: burger + batata + refri</p></div></article>`;return `<div class="pagina"><div><div class="col-label">Conteúdo principal (largo)</div><div class="area-do-card">${c}</div></div><div><div class="col-label">Barra lateral (estreita)</div><div class="area-do-card">${c}</div></div></div>`})() }
@@ -3025,7 +3079,7 @@ function mountLive(host){
   ta.value = willType ? '' : initial;
   const html = cfg.html;
   const frame = makeFrame(stage, doc(DEMO_BASE + (cfg.base||''), html, ta.value), start, 'shrink');
-  const paint = (typing) => { pre.innerHTML = hl(ta.value,'css') + (typing ? '<span class="caret"></span>' : '') + '\n '; };
+  const paint = (typing) => { const h = hl(ta.value,'css'); pre.innerHTML = (typing ? h : marcar(h, ta.value, cfg.marks)) + (typing ? '<span class="caret"></span>' : '') + '\n '; };
   let t, rt; const apply = () => { if(!frame.setUserCSS(ta.value)){ clearTimeout(rt); rt = setTimeout(run, 260); } };
   const run = () => { frame.setDoc(doc(DEMO_BASE + (cfg.base||''), html, ta.value)); };
   paint();
@@ -3110,11 +3164,12 @@ $('#shrinkReplay').onclick = () => HOOKS.shrink();
 
 /* meta viewport: antes/depois */
 const HEAD_BEFORE = `<head>\n  <meta charset="utf-8">\n  <title>Lanchonete Pixel</title>\n  <!-- falta uma linha aqui -->\n</head>`;
-const HEAD_AFTER  = `<head>\n  <meta charset="utf-8">\n  <title>Lanchonete Pixel</title>\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n</head>`;
+const HEAD_AFTER  = `<head>\n  <meta charset="utf-8">\n  <title>Lanchonete Pixel</title>\n  <meta name="viewport"\n        content="width=device-width, initial-scale=1">\n</head>`;
+const HEAD_MARKS = [{t:'width=device-width',n:1},{t:'initial-scale=1',n:2}];
 function paintHead(fixed){
-  const lines = (fixed?HEAD_AFTER:HEAD_BEFORE).split('\n').map((l,i)=> `<span class="ln${i===3?(fixed?' hl-line':' missing'):''}">${hl(l,'html')}</span>`);
+  const lines = (fixed?HEAD_AFTER:HEAD_BEFORE).split('\n').map((l,i)=> `<span class="ln${(i===3||(fixed&&i===4))?(fixed?' hl-line':' missing'):''}">${fixed ? marcar(hl(l,'html'), l, HEAD_MARKS) : hl(l,'html')}</span>`);
   $('#headCode').innerHTML = lines.join('');
-  if(fixed && !REDUCED) $('#headCode .hl-line').animate([{opacity:0,translate:'-14px 0',background:'rgba(67,224,166,.45)'},{opacity:1,translate:'0 0'}],{duration:700,easing:'cubic-bezier(.2,.7,.2,1)'});
+  if(fixed && !REDUCED) $$('#headCode .hl-line').forEach(el => el.animate([{opacity:0,translate:'-14px 0',background:'rgba(67,224,166,.45)'},{opacity:1,translate:'0 0'}],{duration:700,easing:'cubic-bezier(.2,.7,.2,1)'}));
 }
 paintHead(false);
 /* o celular do slide e a linha do código mudam sozinhos quando o conserto é enviado */
@@ -3269,6 +3324,14 @@ HOOKS.shrink = () => {
   note.animate([{opacity:0},{opacity:0,offset:.85},{opacity:1}],{duration:3300,fill:'forwards'});
 };
 
+/* anotações: passar o mouse num cartão acende o trecho do código (e vice-versa) */
+document.addEventListener('pointerover', e => {
+  const t = e.target.closest('[data-an],mark.an'); const sl = e.target.closest('.slide');
+  if(sl) $$('.on', sl).forEach(x => x.matches('mark.an,[data-an]') && x.classList.remove('on'));
+  if(!t || !sl) return;
+  const n = t.dataset.an || (t.className.match(/an-(\d)/) || [])[1]; if(!n) return;
+  $$(`mark.an-${n},[data-an="${n}"]`, sl).forEach(x => x.classList.add('on'));
+});
 /* zoom bloqueado */
 (function(){
   const page = $('#zdPage'), lock = $('#zdLock'), block = $('#zdBlock'), btns = $$('[data-zoom]'); let bt;
